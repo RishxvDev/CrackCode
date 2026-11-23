@@ -73,6 +73,7 @@ import androidx.compose.ui.platform.LocalContext
 import android.provider.Settings
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.channels.Channel
@@ -1265,7 +1266,7 @@ private class MascotSim(private val d: Float) {
 // Drawing: Piku's six pixel sprites, rasterized once at an exact integer cell size (crisp, no seams).
 // ---------------------------------------------------------------------------------------------------------------
 
-private class MascotArt(val d: Float, context: Context) {
+private class MascotArt(val d: Float, private val context: Context) {
     val r = 24f * d
 
     /** Integer pixels per sprite cell: the pixel art is never scaled by a fraction. */
@@ -1362,7 +1363,10 @@ private fun DrawScope.drawMascot(s: MascotSim, a: MascotArt) {
     }) {
         drawImage(
             image = sprite,
-            topLeft = Offset(-a.spriteW / 2f, -a.spriteH / 2f + 1.5f * d),
+            srcOffset = IntOffset.Zero,
+            srcSize = IntSize(a.spriteW, a.spriteH),
+            dstOffset = IntOffset((-a.spriteW / 2f).roundToInt(), (-a.spriteH / 2f + 1.5f * d).roundToInt()),
+            dstSize = IntSize(a.spriteW, a.spriteH),
             filterQuality = FilterQuality.None
         )
     }
