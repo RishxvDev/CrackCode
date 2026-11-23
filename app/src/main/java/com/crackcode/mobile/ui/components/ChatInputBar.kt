@@ -609,12 +609,12 @@ fun ChatInputBar(
 
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background
+        color = com.crackcode.mobile.ui.piku.PikuUi.Screen
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 6.dp)
+                .padding(horizontal = 18.dp, vertical = 8.dp)
         ) {
             QueuedMessagesCard(
                 messages = queuedMessages,
@@ -623,15 +623,16 @@ fun ChatInputBar(
                 modifier = Modifier.padding(bottom = 6.dp)
             )
 
-            // Claude-style unified rounded input card
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                color = com.crackcode.mobile.theme.AppColors.card,
-                border = BorderStroke(
-                    1.dp,
-                    if (isDark) Color.White.copy(alpha = 0.08f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-                )
+            // Piku input card: grey gradient, 28dp corners
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(
+                        androidx.compose.ui.graphics.Brush.verticalGradient(
+                            listOf(com.crackcode.mobile.ui.piku.PikuUi.InputTop, com.crackcode.mobile.ui.piku.PikuUi.InputBottom)
+                        )
+                    )
             ) {
                 if (isRecordingAudio) {
                     val infiniteTransition = rememberInfiniteTransition(label = "recPulse")
@@ -791,7 +792,7 @@ fun ChatInputBar(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 6.dp, vertical = 6.dp)
+                            .padding(horizontal = 12.dp, vertical = 10.dp)
                     ) {
                         // Live Dictation Listening Banner with Pause / Resume and Stop
                         if (isLiveDictating) {
@@ -907,9 +908,9 @@ fun ChatInputBar(
                         state = textFieldState,
                         placeholder = {
                             Text(
-                                text = "Reply to ${selectedModel.displayName.split(" ").firstOrNull() ?: "Gemini"}...",
+                                text = "Reply to Piku...",
                                 fontSize = 15.sp,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.42f)
+                                color = Color.White.copy(alpha = 0.65f)
                             )
                         },
                         modifier = Modifier
@@ -922,9 +923,9 @@ fun ChatInputBar(
                             disabledContainerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            cursorColor = ClaudeTerracotta
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            cursorColor = com.crackcode.mobile.ui.piku.PikuUi.Accent
                         ),
                         textStyle = TextStyle(
                             fontSize = 15.sp,
@@ -1142,23 +1143,22 @@ fun ChatInputBar(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 4.dp, end = 4.dp, bottom = 2.dp, top = 2.dp),
+                            .padding(start = 2.dp, end = 0.dp, bottom = 0.dp, top = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // [+] Attachment Button
                         Surface(
                             onClick = onAttachClick,
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.background,
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
-                            modifier = Modifier.size(34.dp)
+                            color = com.crackcode.mobile.ui.piku.PikuUi.PlusBg,
+                            modifier = Modifier.size(40.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Outlined.Add,
                                     contentDescription = "Add attachments",
-                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-                                    modifier = Modifier.size(19.dp)
+                                    tint = com.crackcode.mobile.ui.piku.PikuUi.Ink,
+                                    modifier = Modifier.size(22.dp)
                                 )
                             }
                         }
@@ -1176,29 +1176,25 @@ fun ChatInputBar(
                                     keyboardController?.hide()
                                     onOpenModelSelector()
                                 },
-                                shape = RoundedCornerShape(18.dp),
-                                color = MaterialTheme.colorScheme.background,
-                                border = BorderStroke(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-                                )
+                                shape = RoundedCornerShape(20.dp),
+                                color = com.crackcode.mobile.ui.piku.PikuUi.ChipBg
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Icon(
                                         imageVector = Icons.Outlined.AutoAwesome,
                                         contentDescription = null,
-                                        tint = familyColor,
-                                        modifier = Modifier.size(13.dp)
+                                        tint = com.crackcode.mobile.ui.piku.PikuUi.Ink,
+                                        modifier = Modifier.size(14.dp)
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
                                         text = selectedModel.displayName,
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = com.crackcode.mobile.ui.piku.PikuUi.Ink,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         modifier = Modifier.weight(1f, fill = false)
@@ -1230,7 +1226,7 @@ fun ChatInputBar(
                                     Icon(
                                         imageVector = Icons.Default.KeyboardArrowDown,
                                         contentDescription = "Switch Model",
-                                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                        tint = com.crackcode.mobile.ui.piku.PikuUi.Ink.copy(alpha = 0.6f),
                                         modifier = Modifier.size(14.dp)
                                     )
                                 }
@@ -1297,8 +1293,8 @@ fun ChatInputBar(
                             Surface(
                                 onClick = onStopStreaming,
                                 shape = CircleShape,
-                                color = ClaudeTerracotta,
-                                modifier = Modifier.size(36.dp)
+                                color = com.crackcode.mobile.theme.AppColors.danger,
+                                modifier = Modifier.size(50.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Icon(
@@ -1313,40 +1309,46 @@ fun ChatInputBar(
                             // can't send yet (signed out, offline, attachments loading): the same faint circle as the inactive
                             // Send, so the arrow (textSecondary) stays visible; it used to be textSecondary on textSecondary
                             val sendBlocked = !isAuth || !isOnline || attachmentsBusy
-                            val sendBtnColor = if (sendBlocked) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f) else if (isBackgroundActive) com.crackcode.mobile.theme.AppColors.warning else ClaudeTerracotta
-                            Surface(
-                                onClick = {
-                                    val trimmed = textFieldState.text.toString().trim()
+                            val sendBrush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                                listOf(com.crackcode.mobile.ui.piku.PikuUi.Accent, com.crackcode.mobile.ui.piku.PikuUi.AccentEnd)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        if (sendBlocked) androidx.compose.ui.graphics.SolidColor(Color.White.copy(alpha = 0.18f))
+                                        else if (isBackgroundActive) androidx.compose.ui.graphics.SolidColor(com.crackcode.mobile.theme.AppColors.warning)
+                                        else sendBrush
+                                    )
+                                    .clickable {
+                                        val trimmed = textFieldState.text.toString().trim()
                                         if (!isAuth) {
                                             Toast.makeText(context, "Please sign in first to send messages.", Toast.LENGTH_SHORT).show()
-                                            return@Surface
+                                            return@clickable
                                         }
                                         if (attachmentsBusy) {
                                             Toast.makeText(context, "Wait until the attachments are ready.", Toast.LENGTH_SHORT).show()
-                                            return@Surface
+                                            return@clickable
                                         }
                                         if (!isOnline) {
                                             Toast.makeText(context, offlineMessage, Toast.LENGTH_SHORT).show()
-                                            return@Surface
+                                            return@clickable
                                         }
                                         if (isLiveDictating) {
                                             stopLiveDictation()
                                         }
                                         onSendMessage(trimmed)
                                         textFieldState.clearText()
-                                },
-                                shape = CircleShape,
-                                color = sendBtnColor,
-                                modifier = Modifier.size(36.dp)
+                                    },
+                                contentAlignment = Alignment.Center
                             ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        imageVector = Icons.Default.ArrowUpward,
-                                        contentDescription = "Send",
-                                        tint = if (sendBlocked) com.crackcode.mobile.theme.AppColors.textSecondary else if (isBackgroundActive) com.crackcode.mobile.theme.AppColors.onBackground else Color.White,
-                                        modifier = Modifier.size(19.dp)
-                                    )
-                                }
+                                Icon(
+                                    imageVector = Icons.Default.ArrowUpward,
+                                    contentDescription = "Send",
+                                    tint = if (sendBlocked) Color.White.copy(alpha = 0.55f) else com.crackcode.mobile.ui.piku.PikuUi.OnAccent,
+                                    modifier = Modifier.size(24.dp)
+                                )
                             }
                         } else if (!voiceEnabled) {
                             // no voice input for this agent: an inactive Send until something is typed
@@ -1354,15 +1356,15 @@ fun ChatInputBar(
                                 onClick = {},
                                 enabled = false,
                                 shape = CircleShape,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-                                modifier = Modifier.size(36.dp)
+                                color = Color.White.copy(alpha = 0.18f),
+                                modifier = Modifier.size(50.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Icon(
                                         imageVector = Icons.Default.ArrowUpward,
                                         contentDescription = "Send",
-                                        tint = com.crackcode.mobile.theme.AppColors.textSecondary,
-                                        modifier = Modifier.size(19.dp)
+                                        tint = Color.White.copy(alpha = 0.55f),
+                                        modifier = Modifier.size(24.dp)
                                     )
                                 }
                             }

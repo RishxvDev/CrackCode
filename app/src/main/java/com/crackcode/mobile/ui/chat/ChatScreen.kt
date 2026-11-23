@@ -82,6 +82,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.crackcode.mobile.ui.components.ActiveContextSummaryCard
 import com.crackcode.mobile.ui.components.AttachmentSelectorBottomSheet
 import com.crackcode.mobile.ui.components.ChatInputBar
+import com.crackcode.mobile.ui.piku.PikuChatHeader
 import com.crackcode.mobile.ui.components.ChatTelemetryDialog
 import com.crackcode.mobile.ui.components.LiveSummarizingCard
 import com.crackcode.mobile.ui.components.MessageBubble
@@ -1650,200 +1651,112 @@ fun ChatScreen(
         Scaffold(
             snackbarHost = {},
             topBar = {
-                // The chat's title on the left, the agents' status dot with the project on the right. A thin line shows
-                // under the bar only once messages scroll beneath it.
-                val scrolledUnder by remember(listState) { derivedStateOf { listState.canScrollBackward } }
-                val topBarLineAlpha by androidx.compose.animation.core.animateFloatAsState(
-                    targetValue = if (scrolledUnder && messages.isNotEmpty()) 1f else 0f,
-                    animationSpec = tween(180),
-                    label = "top_bar_line"
-                )
-                val topBarLineColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-                TopAppBar(
-                    // shorter than Material's 64dp: one line of title and the small project pill need less
-                    expandedHeight = 52.dp,
-                    modifier = Modifier.drawWithContent {
-                        drawContent()
-                        if (topBarLineAlpha > 0f) {
-                            drawLine(
-                                color = topBarLineColor.copy(alpha = topBarLineColor.alpha * topBarLineAlpha),
-                                start = androidx.compose.ui.geometry.Offset(0f, size.height - 0.5f),
-                                end = androidx.compose.ui.geometry.Offset(size.width, size.height - 0.5f),
-                                strokeWidth = 1f
+                // Piku header: about 8% of the screen, rounded bottom corners, hamburger on the left, the chat
+                // title in condensed ALL-CAPS and the dark scalloped new-chat badge on the right.
+                val displayedChatTitle = remember(currentConv?.title, conversations, currentConv?.id) {
+                    val fromList = conversations.firstOrNull { it.id == currentConv?.id }
+                    val listTitle = fromList?.title?.takeIf {
+                        it.isNotBlank() && it != "New Chat" && it != "Conversation"
+                    }
+                    val activeTitle = currentConv?.title?.takeIf {
+                        it.isNotBlank() && it != "New Chat" && it != "Conversation"
+                    }
+                    listTitle ?: activeTitle ?: currentConv?.title?.takeIf { it.isNotBlank() } ?: "Antigravity Chat"
+                }
+
+                val startNewChatFromHeader = {
+                    val currentId = currentConv?.id
+                    if (!currentId.isNullOrBlank() && feedItems.isNotEmpty()) {
+                        ConversationScrollCache.save(currentId, listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset, isAtBottom)
+                    }
+                    conversationBackStack.clear()
+                    viewModel.startNewChat()
+                }
+
+                // shortcut icons chosen in Settings > Appearance > Chat Header Icons: New chat is the badge,
+                // so only IDE and Run can appear here
+                val headerShortcuts = chatHeaderItems.filter { id ->
+                    when (id) {
+                        "ide" -> true
+                        // the Run panel lives in the main window, not in the floating chat
+                        "run" -> !isInFloatingWindow
+                        else -> false
+                    }
+                }
+                val runsGoing by com.crackcode.mobile.data.run.RunManager.runs.collectAsState()
+                val anyRunGoing = runsGoing.any { it.status == com.crackcode.mobile.data.run.RunStatus.RUNNING }
+
+                PikuChatHeader(
+                    title = displayedChatTitle,
+                    onMenu = { scope.launch { drawerState.open() } },
+                    onNewChat = { startNewChatFromHeader() },
+                    showBack = conversationBackStack.isNotEmpty(),
+                    onBack = navigateBackConversation,
+                ) {
+                    headerShortcuts.forEach { id ->
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    when (id) {
+                                        "ide" -> onNavigateToIde()
+                                        "run" -> com.crackcode.mobile.data.run.RunPanel.show()
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (id == "run" && anyRunGoing) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(30.dp),
+                                    strokeWidth = 2.dp,
+                                    color = com.crackcode.mobile.ui.piku.PikuUi.Ink
+                                )
+                            }
+                            Icon(
+                                imageVector = when (id) {
+                                    "run" -> Icons.Outlined.PlayCircle
+                                    "ide" -> Icons.Outlined.Code
+                                    else -> Icons.Outlined.AddComment
+                                },
+                                contentDescription = when (id) {
+                                    "ide" -> "Open IDE"
+                                    "run" -> if (anyRunGoing) "Run (a command is running)" else "Open Run panel"
+                                    else -> "Shortcut"
+                                },
+                                tint = com.crackcode.mobile.ui.piku.PikuUi.Ink,
+                                modifier = Modifier.size(20.dp)
                             )
                         }
-                    },
-                    title = {
-                        val displayedChatTitle = remember(currentConv?.title, conversations, currentConv?.id) {
-                            val fromList = conversations.firstOrNull { it.id == currentConv?.id }
-                            val listTitle = fromList?.title?.takeIf {
-                                it.isNotBlank() && it != "New Chat" && it != "Conversation"
-                            }
-                            val activeTitle = currentConv?.title?.takeIf {
-                                it.isNotBlank() && it != "New Chat" && it != "Conversation"
-                            }
-                            listTitle ?: activeTitle ?: currentConv?.title?.takeIf { it.isNotBlank() } ?: "Antigravity Chat"
+                    }
+                    if (isInFloatingWindow) {
+                        IconButton(onClick = onMinimizeWindow) {
+                            Icon(
+                                imageVector = Icons.Default.Remove,
+                                contentDescription = "Minimize to Bubble",
+                                tint = com.crackcode.mobile.ui.piku.PikuUi.Ink
+                            )
                         }
-
-                        // Chat title only: no project selector in the header.
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(end = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // the real title fades in when the chat gets one (instead of jumping from "New Chat")
-                            Crossfade(
-                                targetState = displayedChatTitle,
-                                animationSpec = tween(250),
-                                label = "chat_title",
-                                modifier = Modifier.weight(1f)
-                            ) { chatTitle ->
-                                Text(
-                                    text = chatTitle,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                            // shortcut icons chosen in Settings > Appearance > Chat Header Icons (default: just New chat)
-                            val headerShortcuts = chatHeaderItems.filter { id ->
-                                when (id) {
-                                    "newchat", "ide" -> true
-                                    // the Run panel lives in the main window, not in the floating chat
-                                    "run" -> !isInFloatingWindow
-                                    // terminal, browser, notes and files entries are hidden (Step 2)
-                                    else -> false
-                                }
-                            }
-                            val runsGoing by com.crackcode.mobile.data.run.RunManager.runs.collectAsState()
-                            val anyRunGoing = runsGoing.any { it.status == com.crackcode.mobile.data.run.RunStatus.RUNNING }
-                            if (headerShortcuts.isNotEmpty()) Spacer(modifier = Modifier.width(4.dp))
-                            headerShortcuts.forEach { id ->
-                                Box(
-                                    modifier = Modifier
-                                        .size(34.dp)
-                                        .clip(CircleShape)
-                                        .clickable {
-                                            when (id) {
-                                                "newchat" -> {
-                                                    // same as the sidebar's New chat
-                                                    val currentId = currentConv?.id
-                                                    if (!currentId.isNullOrBlank() && feedItems.isNotEmpty()) {
-                                                        ConversationScrollCache.save(currentId, listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset, isAtBottom)
-                                                    }
-                                                    conversationBackStack.clear()
-                                                    viewModel.startNewChat()
-                                                }
-                                                "ide" -> onNavigateToIde()
-                                                "browser" -> onNavigateToBrowser()
-                                                "notes" -> onNavigateToNotes?.invoke()
-                                                "files" -> onNavigateToFiles?.invoke()
-                                                "run" -> com.crackcode.mobile.data.run.RunPanel.show()
-                                                "terminal" -> {
-                                                    // like the floating switcher: needs SSH, server mode or the local Linux tools
-                                                    val ready = useSshTerminal || AuthPreferences.currentRemoteMode ||
-                                                        (isLocalToolsInstalled && isLocalToolsEnabled)
-                                                    when {
-                                                        ready -> onNavigateToTerminal()
-                                                        isLocalToolsInstalled -> {
-                                                            viewModel.setLocalToolsEnabled(true)
-                                                            onNavigateToTerminal()
-                                                        }
-                                                        else -> showLocalToolsInstallDialog = true
-                                                    }
-                                                }
-                                            }
-                                        },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    // a command running: a ring around the Run icon
-                                    if (id == "run" && anyRunGoing) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.size(30.dp),
-                                            strokeWidth = 2.dp,
-                                            color = ClaudeTerracotta
-                                        )
-                                    }
-                                    Icon(
-                                        imageVector = when (id) {
-                                            "run" -> Icons.Outlined.PlayCircle
-                                            "ide" -> Icons.Outlined.Code
-                                            "terminal" -> Icons.Outlined.Terminal
-                                            "browser" -> Icons.Outlined.Language
-                                            "notes" -> Icons.Outlined.EditNote
-                                            "files" -> Icons.Outlined.FolderOpen
-                                            else -> Icons.Outlined.AddComment
-                                        },
-                                        contentDescription = when (id) {
-                                            "ide" -> "Open IDE"
-                                            "terminal" -> "Open Terminal"
-                                            "browser" -> "Open Browser"
-                                            "notes" -> "Open Notes"
-                                            "files" -> "Open Files"
-                                            "run" -> if (anyRunGoing) "Run (a command is running)" else "Open Run panel"
-                                            else -> "New chat"
-                                        },
-                                        tint = if (id == "run" && anyRunGoing) ClaudeTerracotta else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                                        modifier = Modifier.size(19.dp)
-                                    )
-                                }
-                            }
+                        IconButton(onClick = onOpenFullScreen) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+                                contentDescription = "Open Full Screen",
+                                tint = com.crackcode.mobile.ui.piku.PikuUi.Ink
+                            )
                         }
-                    },
-                    navigationIcon = {
-                        if (conversationBackStack.isNotEmpty()) {
-                            IconButton(onClick = navigateBackConversation) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Back",
-                                    tint = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        } else {
-                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Open Drawer",
-                                    tint = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
+                    }
+                    if (isDevModeEnabled) {
+                        IconButton(onClick = { showChatTelemetryDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Analytics,
+                                contentDescription = "Chat Telemetry & Tokens",
+                                tint = com.crackcode.mobile.ui.piku.PikuUi.Ink
+                            )
                         }
-                    },
-                    actions = {
-                        // Browser, Terminal and the IDE are in the floating switcher (always on)
-                        if (isInFloatingWindow) {
-                            IconButton(onClick = onMinimizeWindow) {
-                                Icon(
-                                    imageVector = Icons.Default.Remove,
-                                    contentDescription = "Minimize to Bubble",
-                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
-                                )
-                            }
-                            IconButton(onClick = onOpenFullScreen) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
-                                    contentDescription = "Open Full Screen",
-                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f)
-                                )
-                            }
-                        }
-                        if (isDevModeEnabled) {
-                            IconButton(onClick = { showChatTelemetryDialog = true }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Analytics,
-                                    contentDescription = "Chat Telemetry & Tokens",
-                                    tint = ClaudeTerracotta
-                                )
-                            }
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    )
-                )
+                    }
+                }
             },
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = com.crackcode.mobile.ui.piku.PikuUi.Screen,
             contentWindowInsets = WindowInsets.statusBars
         ) { paddingValues ->
             // Synchronized container that moves seamlessly with the IME keyboard
