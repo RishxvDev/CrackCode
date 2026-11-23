@@ -1,6 +1,4 @@
 import groovy.json.JsonSlurper
-import java.io.FileOutputStream
-import java.net.URL
 
 val versionFile = rootProject.file("version.json")
 val parsedVersion = if (versionFile.exists()) {
@@ -368,32 +366,13 @@ val copyScriptsToAssets = tasks.register<Copy>("copyScriptsToAssets") {
 }
 
 // STEP 6: download the pinned minimal bootstrap once (Gradle output cache), then package it as an app asset.
-val downloadBundledBootstrap = tasks.register("downloadBundledBootstrap") {
+// Exec (not a script doLast lambda) keeps this configuration-cache safe.
+val downloadBundledBootstrap = tasks.register<Exec>("downloadBundledBootstrap") {
   val outFile = bundledBootstrapDir.get().file(bundledBootstrapAsset).asFile
   outputs.file(outFile)
-  doLast {
-    if (!outFile.exists() || outFile.length() < 10L * 1024 * 1024) {
-      outFile.parentFile.mkdirs()
-      var done = false
-      repeat(3) {
-        if (done) return@repeat
-        try {
-          val conn = URL(bundledBootstrapUrl).openConnection()
-          conn.connectTimeout = 30_000
-          conn.readTimeout = 300_000
-          conn.getInputStream().use { input ->
-            FileOutputStream(outFile).use { output -> input.copyTo(output) }
-          }
-          done = true
-        } catch (t: Throwable) {
-          if (outFile.exists()) outFile.delete()
-        }
-      }
-      if (!done || !outFile.exists() || outFile.length() < 10L * 1024 * 1024) {
-        error("STEP 6: could not download the preinstalled bootstrap from $bundledBootstrapUrl")
-      }
-    }
-  }
+  commandLine("sh", "-c",
+    "mkdir -p \"$(dirname \"$1\")\" && curl -fsSL --retry 3 --connect-timeout 30 --max-time 900 -o \"$1\" \"$2\" || { rm -f \"$1\"; exit 1; }",
+    "sh", outFile.absolutePath, bundledBootstrapUrl)
 }
 
 tasks.named("preBuild") {
