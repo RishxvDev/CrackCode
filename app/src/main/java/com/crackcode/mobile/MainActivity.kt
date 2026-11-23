@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         instanceRef = java.lang.ref.WeakReference(this)
+        com.crackcode.mobile.ui.piku.PikuPaletteManager.init(this)
         com.crackcode.mobile.data.jarvis.JarvisPreferences.init(this)
         com.crackcode.mobile.data.context.GlobalContext.init(this)
         com.crackcode.mobile.data.memory.AgentMemory.init(this)

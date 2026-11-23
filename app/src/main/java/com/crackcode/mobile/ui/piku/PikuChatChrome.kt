@@ -38,21 +38,21 @@ import androidx.compose.ui.unit.sp
 import com.crackcode.mobile.R
 
 /**
- * Step 3 Piku palette (the neutral green set). Step 4 turns these into the three selectable themes.
- * Everything the chat chrome (header, composer, buttons) draws comes from here.
+ * The chat chrome's current Piku palette (Settings → Themes → Piku palette).
+ * Everything the header, composer and screen background draw comes from here.
  */
 object PikuUi {
-    val Header = Color(0xFFB5FFA8)
-    val Screen = Color(0xFFECFFE9)
-    val Accent = Color(0xFFA5FF52)
-    val AccentEnd = Color(0xFF81EE77)
-    val InputTop = Color(0xFF6F6F6F)
-    val InputBottom = Color(0xFF939393)
-    val PlusBg = Color(0xFFE8FFE5)
-    val ChipBg = Color(0xFFEBFFDA)
-    val Badge = Color(0xFF424242)
-    val Ink = Color(0xFF000000)
-    val OnAccent = Color.White
+    val Header: Color get() = PikuPaletteManager.current.header
+    val Screen: Color get() = PikuPaletteManager.current.screen
+    val Accent: Color get() = PikuPaletteManager.current.accent
+    val AccentEnd: Color get() = PikuPaletteManager.current.accentEnd
+    val InputTop: Color get() = PikuPaletteManager.current.inputTop
+    val InputBottom: Color get() = PikuPaletteManager.current.inputBottom
+    val PlusBg: Color get() = PikuPaletteManager.current.plusBg
+    val ChipBg: Color get() = PikuPaletteManager.current.chipBg
+    val Badge: Color get() = PikuPaletteManager.current.badge
+    val Ink: Color get() = PikuPaletteManager.current.ink
+    val OnAccent: Color get() = PikuPaletteManager.current.onAccent
 }
 
 /** Bebas Neue (OFL), bundled from google/fonts. */

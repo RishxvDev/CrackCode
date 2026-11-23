@@ -1494,6 +1494,54 @@ private fun ThemesSubScreen(
 
         // Which light theme and which dark theme (built-in and custom ones)
         ThemeGallery(cardBg = cardBg, themeMode = themeMode, onSetThemeMode = onSetThemeMode)
+
+        // Piku's own chat palette: header, composer and chat background (independent of light/dark mode)
+        Text(
+            text = "Piku palette",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            com.crackcode.mobile.ui.piku.PikuPalette.values().forEach { palette ->
+                val isSelected = com.crackcode.mobile.ui.piku.PikuPaletteManager.current == palette
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { com.crackcode.mobile.ui.piku.PikuPaletteManager.select(palette) },
+                    shape = RoundedCornerShape(12.dp),
+                    color = palette.header,
+                    border = BorderStroke(
+                        1.5.dp,
+                        if (isSelected) palette.accent else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(vertical = 14.dp, horizontal = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(26.dp)
+                                .clip(CircleShape)
+                                .background(palette.accent)
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = palette.label,
+                            fontSize = 11.5.sp,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                            color = palette.ink
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
