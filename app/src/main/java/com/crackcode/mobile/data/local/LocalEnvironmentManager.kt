@@ -2233,7 +2233,7 @@ All files created here persist inside the application.
                 pb.environment()["PREFIX"] = prefixDir.absolutePath
                 pb.environment()["HOME"] = homeDir.absolutePath
                 pb.environment()["PATH"] = "${binDir.absolutePath}:/system/bin"
-                pb.environment()["LD_LIBRARY_PATH"] = libDir.absolutePath
+                pb.environment()["LD_LIBRARY_PATH"] = File(prefixDir, "lib").absolutePath
                 val process = pb.start()
                 process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
                 log("Generated fresh OpenSSH host keys via ssh-keygen -A")
