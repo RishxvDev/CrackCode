@@ -120,6 +120,7 @@ private const val P_SPARKLE = 1
 private const val P_Z = 2
 private const val P_GLINT = 3 // slow sparkle rising from the antenna while the agent works
 private const val SLEEP_AFTER_S = 60f // falls asleep after this long untouched
+private const val PIKU_ART_SCALE = 0.7f // whole mascot size: change this one value
 
 private val MascotInk = PikuOutline
 private val MascotText = Color(0xFF424242)
@@ -1267,10 +1268,10 @@ private class MascotSim(private val d: Float) {
 // ---------------------------------------------------------------------------------------------------------------
 
 private class MascotArt(val d: Float, private val context: Context) {
-    val r = 24f * d
+    val r = 24f * d * PIKU_ART_SCALE
 
     /** Integer pixels per sprite cell: the pixel art is never scaled by a fraction. */
-    val cell = max(1, (8f * d).roundToInt())
+    val cell = max(1, (8f * d * PIKU_ART_SCALE).roundToInt())
     val spriteW = 18 * cell
     val spriteH = 13 * cell
 

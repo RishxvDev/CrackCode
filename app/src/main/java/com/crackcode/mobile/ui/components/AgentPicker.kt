@@ -38,7 +38,7 @@ val OpenCodeAccent = Color(0xFF10B981)
 val CodexAccent = Color(0xFF8B5CF6)
 
 fun AgentKind.label(): String = when (this) {
-    AgentKind.AGY -> "Antigravity"
+    AgentKind.AGY -> "CrackCode"
     AgentKind.CLAUDE -> "Claude Code"
     AgentKind.OPENCODE -> "OpenCode"
     AgentKind.CODEX -> "Codex"
@@ -63,7 +63,8 @@ fun AgentPicker(
     agents: Collection<AgentKind> = AgentKind.entries,
     statusColors: Map<AgentKind, Color> = emptyMap()
 ) {
-    if (agents.size < 2) return
+    val visible = agents.filter { it == AgentKind.AGY } // CrackCode only
+    if (visible.isEmpty()) return
     val shape = RoundedCornerShape(20.dp)
     Row(
         modifier = modifier
@@ -74,7 +75,7 @@ fun AgentPicker(
         horizontalArrangement = Arrangement.spacedBy(3.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AgentKind.entries.filter { it in agents }.forEach { agent ->
+        AgentKind.entries.filter { it in visible }.forEach { agent ->
             val isSelected = agent == selected
             val accent = agent.accent()
             Row(

@@ -57,23 +57,8 @@ private data class AgentOption(val agent: AgentKind, val title: String, val desc
 private val AGENT_OPTIONS = listOf(
     AgentOption(
         AgentKind.AGY,
-        "Antigravity",
-        "Google's coding agent through the agy hub: Gemini and Claude models on your Google plan."
-    ),
-    AgentOption(
-        AgentKind.CLAUDE,
-        "Claude Code",
-        "Anthropic's Claude Code CLI on this device: your Claude subscription or Anthropic Console account."
-    ),
-    AgentOption(
-        AgentKind.OPENCODE,
-        "OpenCode",
-        "Open-source coding agent: 200+ providers with your own keys, any OpenAI-compatible API, and free models."
-    ),
-    AgentOption(
-        AgentKind.CODEX,
-        "Codex",
-        "OpenAI's Codex CLI on this device: sign in with your ChatGPT account (or an API key)."
+        "CrackCode",
+        "CrackCode's built-in coding agent: Gemini and Claude models on your plan."
     )
 )
 
@@ -143,10 +128,7 @@ fun AgentChoiceDialog(step: Int = 1, total: Int = 1, onConfirm: (Set<AgentKind>)
         icon = {
             // one mark per agent, two by two (fits the round icon)
             Box(Modifier.size(52.dp)) {
-                val corners = listOf(Alignment.TopStart, Alignment.TopEnd, Alignment.BottomStart, Alignment.BottomEnd)
-                AgentKind.entries.take(corners.size).forEachIndexed { i, agent ->
-                    AgentMark(agent, size = 28.dp, modifier = Modifier.align(corners[i]))
-                }
+                AgentMark(AgentKind.AGY, size = 44.dp, modifier = Modifier.align(Alignment.Center))
             }
         },
         title = "Choose your agents",
