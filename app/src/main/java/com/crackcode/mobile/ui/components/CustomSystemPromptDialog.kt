@@ -181,7 +181,7 @@ Available slash commands: /goal, /schedule, /browser, /plan, /grill-me, /teamwor
                         IconButton(
                             onClick = {
                                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val clip = ClipData.newPlainText("Antigravity System Prompt", defaultSystemPrompt)
+                                val clip = ClipData.newPlainText("CrackCode System Prompt", defaultSystemPrompt)
                                 clipboard.setPrimaryClip(clip)
                                 Toast.makeText(context, "System prompt copied to clipboard", Toast.LENGTH_SHORT).show()
                             },

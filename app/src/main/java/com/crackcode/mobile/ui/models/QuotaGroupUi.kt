@@ -197,7 +197,7 @@ fun EditGroupsBanner(accent: Color, modifier: Modifier = Modifier, onDone: () ->
     }
 }
 
-/** "⇄ Gemini 4 Argon ▾": moves a model to another quota group, or back to the automatic one. */
+/** "⇄ CrackCode 4 Argon ▾": moves a model to another quota group, or back to the automatic one. */
 @Composable
 fun GroupMoveButton(
     current: QuotaGroup?,

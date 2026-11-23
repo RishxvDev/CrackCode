@@ -103,20 +103,20 @@ enum class SettingsSection(val title: String, val subtitle: String) {
     DATA_PROTECTION("Data Loss Protection", "Uninstall shield & App Info clear data protection"),
     PROJECT_CHECKPOINTS("Project checkpoints", "Go back to before any chat message: files restored with a preview"),
     COMMANDS("Commands & Permissions", "Auto-run policy, sandbox mode, and tool approvals"),
-    ANTIGRAVITY("Antigravity", "Account & CLI, MCP servers, skills & plugins, commands & permissions"),
+    ANTIGRAVITY("CrackCode", "Account & CLI, MCP servers, skills & plugins, commands & permissions"),
     AGY_CLI("Account & CLI", "Google sign-in, agy version and install, on this device or the server"),
-    AGY_CLOUD("Cloud agents", "Antigravity chats on a Google cloud machine (Remote Agents)"),
+    AGY_CLOUD("Cloud agents", "CrackCode chats on a Google cloud machine (Remote Agents)"),
     AGY_VOICE("Voice calls", "The Voice call tile and shortcut, and the floating call window"),
-    CLAUDE("Claude Code", "Account, models, permissions, MCP, plugins & memory"),
+    CLAUDE("CrackCode", "Account, models, permissions, MCP, plugins & memory"),
     /** One Claude Code page (which one: the dialog's claudePage); not a page of its own for Jarvis. */
-    CLAUDE_PAGE("Claude Code", "Account, models, permissions, MCP, plugins & memory"),
-    OPENCODE("OpenCode", "CLI, providers, custom OpenAI-compatible endpoints & approvals"),
+    CLAUDE_PAGE("CrackCode", "Account, models, permissions, MCP, plugins & memory"),
+    OPENCODE("CrackCode", "CLI, providers, custom OpenAI-compatible endpoints & approvals"),
     /** One OpenCode page (which one: the dialog's openCodePage). */
-    OPENCODE_PAGE("OpenCode", "CLI, providers, endpoints, MCP & approvals"),
-    CODEX("Codex", "Account & CLI, usage limits, permissions, MCP"),
+    OPENCODE_PAGE("CrackCode", "CLI, providers, endpoints, MCP & approvals"),
+    CODEX("CrackCode", "Account & CLI, usage limits, permissions, MCP"),
     /** One Codex page (which one: the dialog's codexPage). */
-    CODEX_PAGE("Codex", "Account & CLI, usage limits, permissions, MCP"),
-    AGENTS("Agents", "Run Antigravity, Claude Code, OpenCode, Codex or several"),
+    CODEX_PAGE("CrackCode", "Account & CLI, usage limits, permissions, MCP"),
+    AGENTS("Agents", "Run CrackCode on this phone or on your server"),
     GLOBAL_CONTEXT("Global context", "What every chat is told about this app, and your own instructions"),
     AGENT_MEMORY("Agent memory & history", "Memories every agent keeps across chats, and past chats they can look up"),
     AGENT_HISTORY("Saved chats", "The chat history the agents can look up: read, edit or remove it"),
@@ -397,8 +397,8 @@ fun SettingsDialog(
                     val isCodexPage = currentSection == SettingsSection.CODEX_PAGE && codex != null
                     Column {
                         Text(
-                            text = if (isClaudePage) "Claude Code · ${claudePage.title}" else if (isOpenCodePage) "OpenCode · ${openCodePage.title}"
-                                else if (isCodexPage) "Codex · ${codexPage.title}" else currentSection.title,
+                            text = if (isClaudePage) "CrackCode · ${claudePage.title}" else if (isOpenCodePage) "CrackCode · ${openCodePage.title}"
+                                else if (isCodexPage) "CrackCode · ${codexPage.title}" else currentSection.title,
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -958,16 +958,16 @@ private fun MainSettingsMenu(
                     enabledAgents.size == 2 -> com.crackcode.mobile.domain.model.AgentKind.entries.filter { it in enabledAgents }
                         .joinToString(" + ") {
                             when (it) {
-                                com.crackcode.mobile.domain.model.AgentKind.AGY -> "AGY"
-                                com.crackcode.mobile.domain.model.AgentKind.CLAUDE -> "Claude"
-                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "OpenCode"
-                                com.crackcode.mobile.domain.model.AgentKind.CODEX -> "Codex"
+                                com.crackcode.mobile.domain.model.AgentKind.AGY -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.CLAUDE -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.CODEX -> "CrackCode"
                             }
                         }
-                    claudeOn -> "Claude Code"
-                    openCodeOn -> "OpenCode"
-                    codexOn -> "Codex"
-                    else -> "Antigravity"
+                    claudeOn -> "CrackCode"
+                    openCodeOn -> "CrackCode"
+                    codexOn -> "CrackCode"
+                    else -> "CrackCode"
                 }),
                 if (agyOn) row(SettingsSection.ANTIGRAVITY, Icons.Outlined.RocketLaunch, GeminiBlue,
                     if (activeMcp > 0) "$activeMcp MCP" else null) else null,
@@ -1492,10 +1492,13 @@ private fun ThemesSubScreen(
             }
         }
 
-        // Which light theme and which dark theme (built-in and custom ones)
-        ThemeGallery(cardBg = cardBg, themeMode = themeMode, onSetThemeMode = onSetThemeMode)
+        // Custom theme gallery hidden: only System / Light / Dark are offered
+        if (com.crackcode.mobile.UiToggles.THEME_GALLERY) {
+            ThemeGallery(cardBg = cardBg, themeMode = themeMode, onSetThemeMode = onSetThemeMode)
+        }
 
-        // Piku's own chat palette: header, composer and chat background (independent of light/dark mode)
+        // Piku palette selector hidden: the app keeps the green CrackCode look
+        if (com.crackcode.mobile.UiToggles.PIKU_PALETTE_PICKER) {
         Text(
             text = "Piku palette",
             fontSize = 14.sp,
@@ -1543,6 +1546,7 @@ private fun ThemesSubScreen(
             }
         }
     }
+        }
 }
 
 // ==========================================
@@ -1575,6 +1579,7 @@ private fun AppearanceSubScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        if (com.crackcode.mobile.UiToggles.CHAT_TEXT_SCALING) {
         // Font Scaling Section
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -1697,7 +1702,7 @@ private fun AppearanceSubScreen(
                         color = ClaudeTerracotta.copy(alpha = 0.15f)
                     ) {
                         Text(
-                            text = "How does CrackCode connect to AGY Hub?",
+                            text = "How does CrackCode connect to its Hub?",
                             fontSize = (13 * chatFontScale).sp,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
@@ -1728,6 +1733,7 @@ private fun AppearanceSubScreen(
             }
         }
 
+        }
         // Group Agent Steps Switch: runs of a reply's thinking and tool calls fold into one progress pill
         Surface(
             shape = RoundedCornerShape(12.dp),
@@ -1806,6 +1812,7 @@ private fun AppearanceSubScreen(
             }
         }
 
+        if (com.crackcode.mobile.UiToggles.CHAT_HEADER_ICONS) {
         // Chat Header Icons Card: shortcut buttons in the chat's top bar, next to the project
         ChatHeaderIconsCard(
             items = chatHeaderItems,
@@ -1814,6 +1821,7 @@ private fun AppearanceSubScreen(
             onSetItems = onSetChatHeaderItems
         )
 
+        }
         // Floating App Switcher Card
         if (com.crackcode.mobile.UiToggles.FLOATING_SWITCHER) {
         Surface(
@@ -2248,7 +2256,7 @@ private fun AppearanceSubScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     com.crackcode.mobile.ui.components.AppIconImage(
-                                        contentDescription = "AntiTerm",
+                                        contentDescription = "CrackCode",
                                         modifier = Modifier.matchParentSize()
                                     )
                                 }
@@ -2257,7 +2265,7 @@ private fun AppearanceSubScreen(
 
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "AntiTerm",
+                                        text = "CrackCode",
                                         fontSize = 13.sp,
                                         fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.onSurface
@@ -2961,7 +2969,7 @@ private fun McpSubScreen(
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Could not retrieve MCP server states. Ensure the Antigravity daemon is running on this device or accessible at the configured Hub URL.",
+                            text = "Could not retrieve MCP server states. Ensure the CrackCode daemon is running on this device or accessible at the configured Hub URL.",
                             fontSize = 11.5.sp,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             textAlign = TextAlign.Center
@@ -3448,7 +3456,7 @@ private fun McpSubScreen(
             srv.spec?.takeIf { it.serverUrl.isBlank() && com.crackcode.mobile.data.rea.ReaManager.isReaCommand(it.command) }?.let { srv.name to it }
         }.toMap()
         ReaServerDialog(
-            agent = "Antigravity",
+            agent = "CrackCode",
             existing = reaServers.mapValues { it.value.env },
             takenNames = mcpServers.map { it.name }.toSet(),
             canReplace = true,
@@ -8689,7 +8697,7 @@ private fun AboutSubScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Antigravity Mobile Hub & AI Pair Programmer",
+                    text = "AI coding partner for your phone",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center

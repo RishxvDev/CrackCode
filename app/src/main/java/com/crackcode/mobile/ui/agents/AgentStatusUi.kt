@@ -94,12 +94,12 @@ fun agyStatusEntry(
     return when {
         serverRestarting -> entry("Restarting…", SystemStatus.STARTING.dotColor, "The local server is restarting.", pending = true)
         // like Claude Code, OpenCode and Codex: an Install button, not the hub's "agy is not installed at <path>…"
-        notInstalled -> entry("Not installed", detail = "Antigravity (agy) is not installed yet. The app can install it for you.", action = AgentStatusAction("Install", onInstall))
+        notInstalled -> entry("Not installed", detail = "CrackCode is not installed yet. The app can install it for you.", action = AgentStatusAction("Install", onInstall))
         isAuthBusy -> entry("Signing in…", SystemStatus.ACQUIRING_CSRF.dotColor, "Finish signing in with Google in your browser.", AgentStatusAction("Check", onCheckAuth), pending = true)
         status == SystemStatus.OFFLINE && inStartupGrace -> entry("Starting…", SystemStatus.STARTING.dotColor, "Starting the local server.", pending = true)
         status == SystemStatus.OFFLINE && state is SystemConnectionState.Connected -> entry(
             "Offline",
-            detail = "The Antigravity hub is stopped.",
+            detail = "The CrackCode hub is stopped.",
             action = AgentStatusAction("Restart", onRestartServer)
         )
         status == SystemStatus.OFFLINE -> entry(
@@ -107,12 +107,12 @@ fun agyStatusEntry(
             detail = "The local server is not running.",
             action = AgentStatusAction("Start", onRestartServer)
         )
-        status == SystemStatus.STARTING -> entry("Starting…", detail = "The Antigravity hub is starting.", pending = true)
+        status == SystemStatus.STARTING -> entry("Starting…", detail = "The CrackCode hub is starting.", pending = true)
         status == SystemStatus.ACQUIRING_CSRF -> entry("Connecting…", detail = "Getting a session token from the hub.", pending = true)
         status == SystemStatus.CHECKING_AUTH -> entry("Checking sign-in…", pending = true)
         status == SystemStatus.UNAUTHENTICATED -> entry(
             "Sign in required",
-            detail = "Sign in with Google to chat with Antigravity.",
+            detail = "Sign in with Google to chat with CrackCode.",
             action = AgentStatusAction("Sign in", onSignIn)
         ).copy(isSignedOut = true)
         status == SystemStatus.READY -> entry(
@@ -157,11 +157,11 @@ fun claudeStatusEntry(
         isSignedOut = state == ClaudeStatus.SIGNED_OUT
     )
     return when (state) {
-        ClaudeStatus.CHECKING -> entry("Looking for the Claude Code CLI and its sign-in.")
+        ClaudeStatus.CHECKING -> entry("Looking for the CrackCode CLI and its sign-in.")
         ClaudeStatus.BRIDGE_OFFLINE -> entry(error ?: "The local server is not running.", AgentStatusAction("Start", onRestartServer))
         ClaudeStatus.BRIDGE_OUTDATED -> entry(error, AgentStatusAction("Restart", onRestartServer))
-        ClaudeStatus.NOT_INSTALLED -> entry("The claude CLI is not installed on this device.", AgentStatusAction("Set up", onSetup))
-        ClaudeStatus.SIGNED_OUT -> entry("Sign in with your Claude subscription or an Anthropic Console account.", AgentStatusAction("Sign in", onSignIn))
+        ClaudeStatus.NOT_INSTALLED -> entry("The CrackCode CLI is not installed on this device.", AgentStatusAction("Set up", onSetup))
+        ClaudeStatus.SIGNED_OUT -> entry("Sign in with your CrackCode subscription or an Anthropic Console account.", AgentStatusAction("Sign in", onSignIn))
         ClaudeStatus.SIGNING_IN -> entry("Finish signing in in your browser.", AgentStatusAction("Open", onSignIn))
         ClaudeStatus.READY -> entry(
             listOfNotNull(auth?.email, auth?.subscriptionType?.let { claudePlanLabel(it) }, status?.version?.substringBefore(" "))
@@ -195,10 +195,10 @@ fun openCodeStatusEntry(
     )
     return when (state) {
         OpenCodeState.CHECKING -> entry("Starting… waiting for the server.")
-        OpenCodeState.READY -> entry(listOfNotNull(status?.version?.let { "OpenCode $it" }, if (status?.running == true) "running" else "starts with the first message").joinToString(" · "))
-        OpenCodeState.NOT_INSTALLED -> entry("OpenCode is not installed yet. The app can install it for you.", AgentStatusAction("Install", onSetup))
-        OpenCodeState.DISABLED -> entry("The server was started with OpenCode off.", AgentStatusAction("Restart", onRestartServer))
-        OpenCodeState.OUTDATED -> entry("This server has no OpenCode support yet. Update it.", AgentStatusAction("Restart", onRestartServer))
+        OpenCodeState.READY -> entry(listOfNotNull(status?.version?.let { "CrackCode $it" }, if (status?.running == true) "running" else "starts with the first message").joinToString(" · "))
+        OpenCodeState.NOT_INSTALLED -> entry("CrackCode is not installed yet. The app can install it for you.", AgentStatusAction("Install", onSetup))
+        OpenCodeState.DISABLED -> entry("The server was started with CrackCode off.", AgentStatusAction("Restart", onRestartServer))
+        OpenCodeState.OUTDATED -> entry("This server has no CrackCode support yet. Update it.", AgentStatusAction("Restart", onRestartServer))
         OpenCodeState.OFFLINE -> entry("The server is not running.", AgentStatusAction("Start", onRestartServer))
         OpenCodeState.ERROR -> entry(status?.error, AgentStatusAction("Retry", onRetry))
     }
@@ -233,17 +233,17 @@ fun codexStatusEntry(
     return when (state) {
         CodexState.CHECKING -> entry("Starting… waiting for the server.")
         CodexState.READY -> entry(
-            listOfNotNull(account?.email, account?.plan?.replaceFirstChar { it.uppercase() }, status?.version?.let { "Codex $it" })
+            listOfNotNull(account?.email, account?.plan?.replaceFirstChar { it.uppercase() }, status?.version?.let { "CrackCode $it" })
                 .joinToString(" · ").ifBlank { null }
         )
-        CodexState.SIGNED_OUT -> entry("Sign in with your ChatGPT account to use Codex.", AgentStatusAction("Sign in", onSignIn))
+        CodexState.SIGNED_OUT -> entry("Sign in with your ChatGPT account to use CrackCode.", AgentStatusAction("Sign in", onSignIn))
         CodexState.NOT_INSTALLED -> entry(
             if (status?.termux_package == true) "Codex is not installed yet (pkg install codex). The app can install it for you."
-            else "Codex is not installed yet. The app can install it for you.",
+            else "CrackCode is not installed yet. The app can install it for you.",
             AgentStatusAction("Install", onSetup)
         )
-        CodexState.DISABLED -> entry("The server was started with Codex off.", AgentStatusAction("Restart", onRestartServer))
-        CodexState.OUTDATED -> entry("This server has no Codex support yet. Update it.", AgentStatusAction("Restart", onRestartServer))
+        CodexState.DISABLED -> entry("The server was started with CrackCode off.", AgentStatusAction("Restart", onRestartServer))
+        CodexState.OUTDATED -> entry("This server has no CrackCode support yet. Update it.", AgentStatusAction("Restart", onRestartServer))
         CodexState.OFFLINE -> entry("The server is not running.", AgentStatusAction("Start", onRestartServer))
         CodexState.ERROR -> entry(status?.error, AgentStatusAction("Retry", onRetry))
     }

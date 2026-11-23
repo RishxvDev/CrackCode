@@ -245,7 +245,8 @@ class MainActivity : ComponentActivity() {
             var hasSkippedInstaller by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
 
             // Remote mode runs everything on the server: nothing to install on the phone
-            val showFullScreenInstaller = !isInstalledState && !hasSkippedInstaller &&
+            val showFullScreenInstaller = com.crackcode.mobile.UiToggles.FIRST_RUN_INSTALLER &&
+                !isInstalledState && !hasSkippedInstaller &&
                 !com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode
 
             GeminiTheme(darkTheme = useDarkTheme) {

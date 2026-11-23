@@ -79,8 +79,8 @@ fun openCodeApprovalItems(pending: List<OpenCodeTranscript.Permission>, backend:
             },
             primary = ApprovalChoice("Allow") { backend.replyPermission(p.id, "once") },
             always = if (p.save.isEmpty()) listOf(ApprovalChoice("Always allow ${p.action}") { backend.replyPermission(p.id, "always") })
-            else listOf(ApprovalChoice("Always allow " + p.save.joinToString(", "), "OpenCode remembers this for the project") { backend.replyPermission(p.id, "always") }),
-            denyPlaceholder = "Tell OpenCode what to do instead (optional)",
+            else listOf(ApprovalChoice("Always allow " + p.save.joinToString(", "), "CrackCode remembers this for the project") { backend.replyPermission(p.id, "always") }),
+            denyPlaceholder = "Tell CrackCode what to do instead (optional)",
             onDeny = { backend.replyPermission(p.id, "reject", it) }
         )
     }
@@ -99,13 +99,13 @@ private fun permissionTitle(action: String): Pair<ImageVector, String> = when (a
 
 fun openCodeModeLabel(mode: String): String = when (mode) {
     OpenCodePreferences.MODE_AUTO -> "Allow all"
-    OpenCodePreferences.MODE_DEFAULT -> "OpenCode rules"
+    OpenCodePreferences.MODE_DEFAULT -> "CrackCode rules"
     else -> "Ask first"
 }
 
 fun openCodeModeDescription(mode: String): String = when (mode) {
     OpenCodePreferences.MODE_AUTO -> "Commands, edits and web access run without asking."
-    OpenCodePreferences.MODE_DEFAULT -> "OpenCode's own rules from its config (by default most tools run without asking)."
+    OpenCodePreferences.MODE_DEFAULT -> "CrackCode's own rules from its config (by default most tools run without asking)."
     else -> "Ask before commands, file changes and web access. Reading the project is allowed."
 }
 
@@ -133,7 +133,7 @@ fun openCodeAgentIcon(id: String): ImageVector = when (id) {
 private fun openCodeAgentDescription(a: com.crackcode.mobile.data.agent.opencode.OpenCodeAgent): String = when (a.id) {
     "build" -> "Makes changes: edits files and runs commands to get the job done."
     "plan" -> "Read-only: explores the code and plans the work, without changing files."
-    else -> a.description.ifBlank { "Your own agent from the OpenCode config." }
+    else -> a.description.ifBlank { "Your own agent from the CrackCode config." }
 }
 
 /** OpenCode chat controls above the input: agent (Build / Plan), approval mode, and the retry / compaction notice. */
@@ -189,11 +189,11 @@ fun OpenCodeControlsStrip(backend: OpenCodeChatBackend) {
                     onClick = { backend.selectAgent(a.id); agentSheet = false }
                 )
             }
-            SheetNote("Switching applies to the next message of this chat. New chats use the agent from Settings → OpenCode → Permissions.")
+            SheetNote("Switching applies to the next message of this chat. New chats use the agent from Settings → CrackCode → Permissions.")
         }
     }
     if (modeSheet) {
-        com.crackcode.mobile.ui.claude.ClaudePickerSheet("Approvals", "what OpenCode asks before doing", { modeSheet = false }, agent = AgentKind.OPENCODE) {
+        com.crackcode.mobile.ui.claude.ClaudePickerSheet("Approvals", "what CrackCode asks before doing", { modeSheet = false }, agent = AgentKind.OPENCODE) {
             listOf(OpenCodePreferences.MODE_ASK, OpenCodePreferences.MODE_AUTO, OpenCodePreferences.MODE_DEFAULT).forEach { m ->
                 com.crackcode.mobile.ui.claude.PickerOption(
                     title = openCodeModeLabel(m),

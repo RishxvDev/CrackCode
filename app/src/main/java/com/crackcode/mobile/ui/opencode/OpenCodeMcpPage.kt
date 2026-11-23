@@ -336,7 +336,7 @@ private fun McpServerDialog(initial: McpDraft, onDismiss: () -> Unit, onSave: (M
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(d.env, { d = d.copy(env = it) }, label = { Text("Environment (one per line, KEY=value)") },
                         minLines = 2, modifier = Modifier.fillMaxWidth())
-                    Text("It runs on the server, in OpenCode's environment.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f))
+                    Text("It runs on the server, in CrackCode's environment.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f))
                 }
             }
         },

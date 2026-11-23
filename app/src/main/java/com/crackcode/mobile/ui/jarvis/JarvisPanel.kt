@@ -115,10 +115,10 @@ fun JarvisPanel(onTalk: () -> Unit, onNoticeAction: (String) -> Unit, floating: 
                         Phase.THINKING -> steps.lastOrNull()?.text ?: "Working"
                         Phase.SPEAKING -> "Speaking"
                         else -> when (agent) {
-                            "AGY" -> "Ready · runs on Antigravity"
-                            "CLAUDE" -> "Ready · runs on Claude Code"
-                            "OPENCODE" -> "Ready · runs on OpenCode"
-                            "CODEX" -> "Ready · runs on Codex"
+                            "AGY" -> "Ready · runs on CrackCode"
+                            "CLAUDE" -> "Ready · runs on CrackCode"
+                            "OPENCODE" -> "Ready · runs on CrackCode"
+                            "CODEX" -> "Ready · runs on CrackCode"
                             else -> "No agent picked: Settings → Jarvis → Agent"
                         }
                     }
@@ -257,7 +257,7 @@ private fun TaskRow(t: JarvisTasks.Task, onOpen: () -> Unit, onStop: () -> Unit,
             Text(t.title, color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             val age = ((System.currentTimeMillis() - t.createdAt) / 60_000).let { if (it < 1) "just now" else if (it < 60) "${it}m" else "${it / 60}h ${it % 60}m" }
             Text(
-                listOf(t.team.takeIf { it.isNotBlank() }, when (t.agent.name) { "AGY" -> "Antigravity"; "OPENCODE" -> "OpenCode"; "CODEX" -> "Codex"; else -> "Claude" }, t.state.label, age, t.note.takeIf { it.isNotBlank() && it != "Working" }).filterNotNull().joinToString(" · "),
+                listOf(t.team.takeIf { it.isNotBlank() }, when (t.agent.name) { "AGY" -> "CrackCode"; "OPENCODE" -> "CrackCode"; "CODEX" -> "CrackCode"; else -> "CrackCode" }, t.state.label, age, t.note.takeIf { it.isNotBlank() && it != "Working" }).filterNotNull().joinToString(" · "),
                 color = c.copy(alpha = 0.85f), fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis
             )
         }

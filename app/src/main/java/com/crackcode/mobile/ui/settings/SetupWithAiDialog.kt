@@ -58,10 +58,10 @@ import com.crackcode.mobile.ui.components.OpenCodeAccent
 enum class RepoSetupKind(val label: String) { ALL("All"), SKILLS("Skills"), PLUGINS("Plugin / marketplace") }
 
 private fun agentName(agent: AgentKind) = when (agent) {
-    AgentKind.CLAUDE -> "Claude Code"
-    AgentKind.CODEX -> "Codex"
-    AgentKind.AGY -> "Antigravity (agy)"
-    AgentKind.OPENCODE -> "OpenCode"
+    AgentKind.CLAUDE -> "CrackCode"
+    AgentKind.CODEX -> "CrackCode"
+    AgentKind.AGY -> "CrackCode"
+    AgentKind.OPENCODE -> "CrackCode"
 }
 
 private fun agentAccent(agent: AgentKind) = when (agent) {
@@ -108,7 +108,7 @@ fun repoSetupPrompt(source: String, agent: AgentKind, kind: RepoSetupKind): Stri
         )
         AgentKind.CODEX -> listOf(
             "A plugin marketplace (.agents/plugins/marketplace.json, or Claude Code's .claude-plugin/marketplace.json, which Codex also reads): `codex plugin marketplace add <owner/repo>`, then `codex plugin add <plugin>@<marketplace>`.",
-            "A single plugin without a marketplace: Codex installs plugins only from a marketplace, so install its skills and MCP servers separately instead.",
+            "A single plugin without a marketplace: CrackCode installs plugins only from a marketplace, so install its skills and MCP servers separately instead.",
             "Check with `codex plugin list`."
         )
         AgentKind.AGY -> listOf(

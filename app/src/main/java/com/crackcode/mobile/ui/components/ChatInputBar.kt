@@ -621,7 +621,7 @@ fun ChatInputBar(
                 modifier = Modifier.padding(bottom = 6.dp)
             )
 
-            // Piku input card: grey gradient, 28dp corners
+            // Piku input card: light-green to white gradient, 28dp corners
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -892,7 +892,7 @@ fun ChatInputBar(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "Transcribing audio via AGY Hub...",
+                                        text = "Transcribing audio via CrackCode...",
                                         fontSize = 12.sp,
                                         color = ClaudeTerracotta,
                                         fontWeight = FontWeight.Medium
@@ -908,7 +908,7 @@ fun ChatInputBar(
                             Text(
                                 text = "Reply to Piku...",
                                 fontSize = 15.sp,
-                                color = Color.White.copy(alpha = 0.65f)
+                                color = com.crackcode.mobile.ui.piku.PikuUi.Ink.copy(alpha = 0.65f)
                             )
                         },
                         modifier = Modifier
@@ -921,8 +921,8 @@ fun ChatInputBar(
                             disabledContainerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
+                            focusedTextColor = com.crackcode.mobile.ui.piku.PikuUi.Ink,
+                            unfocusedTextColor = com.crackcode.mobile.ui.piku.PikuUi.Ink,
                             cursorColor = com.crackcode.mobile.ui.piku.PikuUi.Accent
                         ),
                         textStyle = TextStyle(

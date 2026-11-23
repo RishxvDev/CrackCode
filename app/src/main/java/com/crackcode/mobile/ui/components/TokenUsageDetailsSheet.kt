@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import com.crackcode.mobile.domain.model.TokenUsage
 
 /** The model name as the usage pill shows it (short); the sheet shows the full id. */
-fun shortModelName(model: String): String = model.substringAfterLast('/').removePrefix("claude-")
+fun shortModelName(model: String): String = model.substringAfterLast('/').removePrefix("CrackCode-")
 
 private fun grouped(n: Int): String = String.format(java.util.Locale.US, "%,d", n)
 

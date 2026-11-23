@@ -386,7 +386,7 @@ private fun HistoryViewer(chat: MemoryBridgeClient.HistoryChat, onClose: () -> U
     }
 }
 
-/** "Claude Code" for "claude", "Antigravity" for "agy", …; the raw name for anything else. */
+/** "CrackCode" for "claude", "CrackCode" for "agy", …; the raw name for anything else. */
 private fun historyAgentLabel(agent: String): String =
     AgentKind.entries.firstOrNull { it.name.equals(agent, ignoreCase = true) }?.label() ?: agent
 

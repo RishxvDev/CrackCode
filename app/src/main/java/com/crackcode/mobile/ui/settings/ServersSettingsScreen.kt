@@ -299,7 +299,7 @@ internal fun ServersSubScreen(
             if (o.has("sshPass")) { sshPass = o.optString("sshPass"); sshKey = o.optString("sshKey"); sshPassphrase = o.optString("sshPassphrase") }
             edgeName = o.optString("edgeName").ifBlank { AuthPreferences.DEFAULT_EDGE_HEADER_NAME }
             if (o.has("edgeValue")) edgeValue = o.optString("edgeValue")
-            remoteInstallDir = o.optString("installDir").ifBlank { ".antigem" }
+            remoteInstallDir = o.optString("installDir").ifBlank { ".CrackCode" }
             remoteBridgeBin = custom(o.optString("bridgeBin"), RemoteServerManager.defaultBridgeBin(remoteInstallDir))
             remoteAgyBin = custom(o.optString("agyBin"), RemoteServerManager.DEFAULT_AGY_BIN)
             remoteClaudeBin = custom(o.optString("claudeBin"), RemoteServerManager.DEFAULT_CLAUDE_BIN)
@@ -1007,13 +1007,13 @@ internal fun ServersSubScreen(
                         OutlinedTextField(remoteAgyBin, { remoteAgyBin = it; saveFeedback = null }, label = { Text("agy binary on the server") },
                             placeholder = { Text(RemoteServerManager.DEFAULT_AGY_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                         Spacer(Modifier.height(8.dp))
-                        OutlinedTextField(remoteClaudeBin, { remoteClaudeBin = it; saveFeedback = null }, label = { Text("claude binary on the server") },
+                        OutlinedTextField(remoteClaudeBin, { remoteClaudeBin = it; saveFeedback = null }, label = { Text("CrackCode binary on the server") },
                             placeholder = { Text(RemoteServerManager.DEFAULT_CLAUDE_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                         Spacer(Modifier.height(8.dp))
-                        OutlinedTextField(remoteOpenCodeBin, { remoteOpenCodeBin = it; saveFeedback = null }, label = { Text("opencode binary on the server") },
+                        OutlinedTextField(remoteOpenCodeBin, { remoteOpenCodeBin = it; saveFeedback = null }, label = { Text("CrackCode binary on the server") },
                             placeholder = { Text(RemoteServerManager.DEFAULT_OPENCODE_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                         Spacer(Modifier.height(8.dp))
-                        OutlinedTextField(remoteCodexBin, { remoteCodexBin = it; saveFeedback = null }, label = { Text("codex binary on the server") },
+                        OutlinedTextField(remoteCodexBin, { remoteCodexBin = it; saveFeedback = null }, label = { Text("CrackCode binary on the server") },
                             placeholder = { Text(RemoteServerManager.DEFAULT_CODEX_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                         Spacer(Modifier.height(8.dp))
                         OutlinedTextField(remoteInstallDir, {
@@ -1061,13 +1061,13 @@ internal fun ServersSubScreen(
                     OutlinedTextField(chrootAgyBin, { chrootAgyBin = it; saveFeedback = null }, label = { Text("AGY Hub (agy)") },
                         placeholder = { Text(RemoteServerManager.DEFAULT_AGY_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(chrootClaudeBin, { chrootClaudeBin = it; saveFeedback = null }, label = { Text("Claude Code") },
+                    OutlinedTextField(chrootClaudeBin, { chrootClaudeBin = it; saveFeedback = null }, label = { Text("CrackCode") },
                         placeholder = { Text(RemoteServerManager.DEFAULT_CLAUDE_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(chrootOpenCodeBin, { chrootOpenCodeBin = it; saveFeedback = null }, label = { Text("OpenCode") },
+                    OutlinedTextField(chrootOpenCodeBin, { chrootOpenCodeBin = it; saveFeedback = null }, label = { Text("CrackCode") },
                         placeholder = { Text(RemoteServerManager.DEFAULT_OPENCODE_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(chrootCodexBin, { chrootCodexBin = it; saveFeedback = null }, label = { Text("Codex") },
+                    OutlinedTextField(chrootCodexBin, { chrootCodexBin = it; saveFeedback = null }, label = { Text("CrackCode") },
                         placeholder = { Text(RemoteServerManager.DEFAULT_CODEX_BIN) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(8.dp))
                     Text("• Passed to the bridge on launch (--bin, --claude-bin, --opencode-bin, --codex-bin). The bridge also finds an agent in the usual folders when its path is wrong.",
@@ -1110,13 +1110,13 @@ internal fun ServersSubScreen(
                     OutlinedTextField(agyBinPath, { agyBinPath = it; saveFeedback = null }, label = { Text("AGY Hub Binary Path") },
                         placeholder = { Text(authPrefs.getDefaultAgyBinaryPath()) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(claudeBinPath, { claudeBinPath = it; saveFeedback = null }, label = { Text("Claude Code Binary Path") },
+                    OutlinedTextField(claudeBinPath, { claudeBinPath = it; saveFeedback = null }, label = { Text("CrackCode Binary Path") },
                         placeholder = { Text(authPrefs.getDefaultClaudeBinaryPath()) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(openCodeBinPath, { openCodeBinPath = it; saveFeedback = null }, label = { Text("OpenCode Binary Path") },
+                    OutlinedTextField(openCodeBinPath, { openCodeBinPath = it; saveFeedback = null }, label = { Text("CrackCode Binary Path") },
                         placeholder = { Text(authPrefs.getDefaultOpenCodeBinaryPath()) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(codexBinPath, { codexBinPath = it; saveFeedback = null }, label = { Text("Codex Binary Path") },
+                    OutlinedTextField(codexBinPath, { codexBinPath = it; saveFeedback = null }, label = { Text("CrackCode Binary Path") },
                         placeholder = { Text(authPrefs.getDefaultCodexBinaryPath()) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(10.dp))
                     Spacer(Modifier.height(8.dp))
                     Text(
@@ -1124,11 +1124,11 @@ internal fun ServersSubScreen(
                         fontSize = 11.sp, color = subtle
                     )
                     Text(
-                        "• Claude Code: the default is CrackCode's launcher, which runs the newest official Claude version through the bundled glibc. Claude updates never replace it.",
+                        "• CrackCode: the default is CrackCode's launcher, which runs the newest official CrackCode version through the bundled glibc. CrackCode updates never replace it.",
                         fontSize = 11.sp, color = subtle
                     )
                     Text(
-                        "• OpenCode: the default is where its installer (and Settings → OpenCode → Install) puts it. The bridge starts it through the bundled glibc, and finds it in the usual folders when this path is wrong.",
+                        "• CrackCode: the default is where its installer (and Settings → CrackCode → Install) puts it. The bridge starts it through the bundled glibc, and finds it in the usual folders when this path is wrong.",
                         fontSize = 11.sp, color = subtle
                     )
                     Text(

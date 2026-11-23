@@ -159,18 +159,18 @@ fun ProvidersPage(deps: ClaudeSettingsDeps) {
 
     Text("Other Anthropic-compatible APIs", fontWeight = FontWeight.Bold, fontSize = 14.sp)
     Text(
-        "OpenRouter, Kimi, DeepSeek, Z.ai… Their models are listed in the chat's model picker under Claude's own. " +
-            "A chat on one of them uses its key, headers and limits; your Claude login and other chats stay as they are.",
+        "OpenRouter, Kimi, DeepSeek, Z.ai… Their models are listed in the chat's model picker under CrackCode's own. " +
+            "A chat on one of them uses its key, headers and limits; your CrackCode login and other chats stay as they are.",
         fontSize = 11.5.sp, color = muted
     )
     // Claude Code speaks only Anthropic's API: other providers work better in OpenCode
     val oc = com.crackcode.mobile.ui.components.OpenCodeAccent
     Surface(shape = RoundedCornerShape(12.dp), color = oc.copy(alpha = 0.08f), border = BorderStroke(1.dp, oc.copy(alpha = 0.35f))) {
         Column(Modifier.padding(12.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("Third-party models work better in OpenCode", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = oc)
+            Text("Third-party models work better in CrackCode", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = oc)
             Text(
-                "Claude Code only speaks Anthropic's API, so a provider here must offer an Anthropic-compatible endpoint, and tools or " +
-                    "thinking can break on the way. OpenCode talks to each provider in its own format: 200+ built-in providers, any " +
+                "CrackCode only speaks Anthropic's API, so a provider here must offer an Anthropic-compatible endpoint, and tools or " +
+                    "thinking can break on the way. CrackCode talks to each provider in its own format: 200+ built-in providers, any " +
                     "OpenAI-compatible API (Ollama, LM Studio, NVIDIA NIM, Groq…) and free models. Turn it on in Settings → Agents. " +
                     "Keep using this page for Anthropic and Anthropic-compatible APIs.",
                 fontSize = 11.5.sp, color = muted
@@ -183,7 +183,7 @@ fun ProvidersPage(deps: ClaudeSettingsDeps) {
             Column(Modifier.padding(12.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text("settings.json sends every chat to $endpoint", fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
                 Text(
-                    "Then even chats on Claude's models go there. Move it into a provider so only the chats you choose use it.",
+                    "Then even chats on CrackCode's models go there. Move it into a provider so only the chats you choose use it.",
                     fontSize = 11.5.sp, color = muted
                 )
                 TextButton(enabled = !importing, onClick = {
@@ -716,7 +716,7 @@ private fun ProviderEditor(
                             label = "Background model (optional)", placeholder = "titles & summaries; default: the chat's model"
                         )
                         Text(
-                            "Sonnet, Opus and subagent requests are always mapped to the chat's own model, so the provider never receives a Claude model name.",
+                            "Sonnet, Opus and subagent requests are always mapped to the chat's own model, so the provider never receives a CrackCode model name.",
                             fontSize = 11.sp, color = muted
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {

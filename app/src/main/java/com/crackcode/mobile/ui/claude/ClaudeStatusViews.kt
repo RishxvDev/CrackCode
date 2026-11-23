@@ -42,18 +42,18 @@ fun ClaudeStatusPrompt(
     val dot = state.dotColor
     if (serverStarting) {
         AgentSetupPrompt(
-            AgentKind.CLAUDE, "Starting the local server…", "Claude Code will be ready in a moment.", modifier, ClaudeStatus.CHECKING.dotColor
+            AgentKind.CLAUDE, "Starting the local server…", "CrackCode will be ready in a moment.", modifier, ClaudeStatus.CHECKING.dotColor
         )
         return
     }
     when (state) {
         ClaudeStatus.CHECKING -> AgentSetupPrompt(
-            AgentKind.CLAUDE, "Checking Claude Code…", "Looking for the Claude Code CLI and your sign-in.", modifier, dot
+            AgentKind.CLAUDE, "Checking CrackCode…", "Looking for the CrackCode CLI and your sign-in.", modifier, dot
         )
         ClaudeStatus.SIGNED_OUT -> AgentSetupPrompt(
             AgentKind.CLAUDE,
-            "Sign in to Claude Code",
-            "Use your Claude Pro or Max subscription, or an Anthropic Console account, to chat with Claude Code.",
+            "Sign in to CrackCode",
+            "Use your CrackCode Pro or Max subscription, or an Anthropic Console account, to chat with CrackCode.",
             modifier, dot,
             actionLabel = "Sign in", onAction = onSignIn
         )
@@ -66,16 +66,16 @@ fun ClaudeStatusPrompt(
         )
         ClaudeStatus.NOT_INSTALLED -> AgentSetupPrompt(
             AgentKind.CLAUDE,
-            "Claude Code not found",
-            "The claude CLI is not installed on this device yet. You can install it from Settings in one tap.",
+            "CrackCode not found",
+            "The CrackCode CLI is not installed on this device yet. You can install it from Settings in one tap.",
             modifier, dot,
-            actionLabel = "Set up Claude Code", onAction = onSetup,
+            actionLabel = "Set up CrackCode", onAction = onSetup,
             secondaryLabel = "Check again", onSecondary = onRetry
         )
         ClaudeStatus.BRIDGE_OUTDATED -> AgentSetupPrompt(
             AgentKind.CLAUDE,
             "Restart the local server",
-            error ?: "The running local server cannot run Claude Code yet. Restart it to load Claude.",
+            error ?: "The running local server cannot run CrackCode yet. Restart it to load CrackCode.",
             modifier, dot,
             actionLabel = "Restart server", onAction = onRestartServer,
             secondaryLabel = "Check again", onSecondary = onRetry
@@ -83,14 +83,14 @@ fun ClaudeStatusPrompt(
         ClaudeStatus.BRIDGE_OFFLINE -> AgentSetupPrompt(
             AgentKind.CLAUDE,
             "Local server offline",
-            "Claude Code runs through the local server. Start it to chat with Claude.",
+            "CrackCode runs through the local server. Start it to chat with CrackCode.",
             modifier, dot,
             actionLabel = "Retry", onAction = onRetry,
             secondaryLabel = "Server logs", onSecondary = onServerLogs
         )
         ClaudeStatus.ERROR -> AgentSetupPrompt(
             AgentKind.CLAUDE,
-            "Couldn't check Claude Code",
+            "Couldn't check CrackCode",
             (error ?: "The status check failed.") + " You can still send a message.",
             modifier, dot,
             actionLabel = "Check again", onAction = onRetry
@@ -110,10 +110,10 @@ fun ClaudeStatusBanner(
     modifier: Modifier = Modifier
 ) {
     val (text, action) = when (state) {
-        ClaudeStatus.SIGNED_OUT -> "Claude Code is signed out" to ("Sign in" to onSignIn)
-        ClaudeStatus.SIGNING_IN -> "Finishing Claude sign-in…" to ("Open" to onSignIn)
-        ClaudeStatus.NOT_INSTALLED -> "Claude Code not found on this device" to ("Set up" to onSetup)
-        ClaudeStatus.BRIDGE_OUTDATED -> "Restart the local server to use Claude Code" to ("Restart" to onRestartServer)
+        ClaudeStatus.SIGNED_OUT -> "CrackCode is signed out" to ("Sign in" to onSignIn)
+        ClaudeStatus.SIGNING_IN -> "Finishing CrackCode sign-in…" to ("Open" to onSignIn)
+        ClaudeStatus.NOT_INSTALLED -> "CrackCode not found on this device" to ("Set up" to onSetup)
+        ClaudeStatus.BRIDGE_OUTDATED -> "Restart the local server to use CrackCode" to ("Restart" to onRestartServer)
         ClaudeStatus.BRIDGE_OFFLINE -> "Local server offline" to ("Retry" to onRetry)
         else -> return
     }
@@ -159,7 +159,7 @@ fun ClaudeStartupNotice(text: String, modifier: Modifier = Modifier) {
             androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
                 Text(text, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                 Text(
-                    "The first message of a chat starts Claude Code, which can take a little while on a phone.",
+                    "The first message of a chat starts CrackCode, which can take a little while on a phone.",
                     fontSize = 11.5.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )

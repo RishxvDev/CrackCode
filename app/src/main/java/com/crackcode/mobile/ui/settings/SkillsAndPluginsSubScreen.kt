@@ -183,7 +183,7 @@ fun SkillsAndPluginsSubScreen(
                 }
                 1 -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     GitHubActionRow(
-                        "Install a plugin from GitHub", "Antigravity or Claude Code plugins, with agy's own installer",
+                        "Install a plugin from GitHub", "CrackCode plugins and skills, with the built-in installer",
                         "From GitHub", AgyAccent
                     ) { showPluginFromGitHub = true }
                     InstalledPluginsTabView(
@@ -213,7 +213,7 @@ fun SkillsAndPluginsSubScreen(
     }
 
     if (showSkillsFromGitHub) {
-        AgentSkillsDialog(AgentKind.AGY, AgyAccent, "Antigravity skills") {
+        AgentSkillsDialog(AgentKind.AGY, AgyAccent, "CrackCode skills") {
             showSkillsFromGitHub = false
             onRefreshSkills()
         }

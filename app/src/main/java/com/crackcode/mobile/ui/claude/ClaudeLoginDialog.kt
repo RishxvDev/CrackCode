@@ -78,13 +78,13 @@ fun ClaudeLoginDialog(account: ClaudeAccountManager, onDismiss: () -> Unit) {
             onDismiss()
         },
         shape = RoundedCornerShape(18.dp),
-        title = { Text("Sign in to Claude Code", fontWeight = FontWeight.Bold) },
+        title = { Text("Sign in to CrackCode", fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 val l = login
                 if (l == null) {
                     Text(
-                        "Choose how you pay for Claude. You'll finish signing in on claude.com.",
+                        "Choose how you pay for CrackCode. You'll finish signing in on CrackCode.com.",
                         fontSize = 13.5.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
                     )
@@ -127,7 +127,7 @@ fun ClaudeLoginDialog(account: ClaudeAccountManager, onDismiss: () -> Unit) {
                         }) { Text("Browser can't return to the app? Sign in with a code", fontSize = 12.5.sp) }
                     } else {
                         Text(
-                            "After approving, Claude shows a code. Paste it here:",
+                            "After approving, CrackCode shows a code. Paste it here:",
                             fontSize = 12.5.sp,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
                         )

@@ -57,10 +57,10 @@ import com.crackcode.mobile.data.jarvis.JarvisTasks
 import kotlinx.coroutines.launch
 
 private fun agentLabel(name: String) = when (name.uppercase()) {
-    "AGY" -> "Antigravity"
-    "OPENCODE" -> "OpenCode"
-    "CODEX" -> "Codex"
-    "CLAUDE" -> "Claude"
+    "AGY" -> "CrackCode"
+    "OPENCODE" -> "CrackCode"
+    "CODEX" -> "CrackCode"
+    "CLAUDE" -> "CrackCode"
     else -> name
 }
 
@@ -423,7 +423,7 @@ fun JarvisChatWelcome(onExample: (String) -> Unit) {
         Spacer(Modifier.height(16.dp))
         listOf(
             "Build a dark-mode toggle in the settings screen of my active project, have a reviewer team check it and run the tests. Don't stop until it works.",
-            "Create two teams: builders (Claude) to implement and reviewers (Antigravity) to review and test. Then fix all failing tests in this project.",
+            "Create two teams: builders (CrackCode) to implement and reviewers (CrackCode) to review and test. Then fix all failing tests in this project.",
             "Investigate why the app is slow to start, try the three most promising fixes in parallel and tell me which one wins."
         ).forEach { ex ->
             Text(

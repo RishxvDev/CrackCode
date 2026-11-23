@@ -149,8 +149,8 @@ fun AccountsButton(
                 needsSignIn -> "Sign in"
                 single?.agent == AgentKind.AGY && single.isReady -> agyAuth.displayName.ifBlank { "Account" }
                 single?.agent == AgentKind.CLAUDE && single.isReady -> claudeStatus?.auth?.email?.substringBefore('@') ?: "Account"
-                single?.agent == AgentKind.OPENCODE && single.isReady -> "OpenCode"
-                single?.agent == AgentKind.CODEX && single.isReady -> codexEmail?.substringBefore('@') ?: "Codex"
+                single?.agent == AgentKind.OPENCODE && single.isReady -> "CrackCode"
+                single?.agent == AgentKind.CODEX && single.isReady -> codexEmail?.substringBefore('@') ?: "CrackCode"
                 single != null -> single.label
                 else -> "Accounts"
             }

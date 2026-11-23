@@ -175,15 +175,15 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             ?: AgentKind.AGY
 
     private fun claudeNotSupported(action: String) {
-        com.crackcode.mobile.ui.components.AppToastHelper.showToast("$action is not available in Claude chats yet", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+        com.crackcode.mobile.ui.components.AppToastHelper.showToast("$action is not available in CrackCode chats yet", com.crackcode.mobile.ui.components.ChatToastType.INFO)
     }
 
     private fun openCodeNotSupported(action: String) {
-        com.crackcode.mobile.ui.components.AppToastHelper.showToast("$action is not available in OpenCode chats yet", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+        com.crackcode.mobile.ui.components.AppToastHelper.showToast("$action is not available in CrackCode chats yet", com.crackcode.mobile.ui.components.ChatToastType.INFO)
     }
 
     private fun codexNotSupported(action: String) {
-        com.crackcode.mobile.ui.components.AppToastHelper.showToast("$action is not available in Codex chats yet", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+        com.crackcode.mobile.ui.components.AppToastHelper.showToast("$action is not available in CrackCode chats yet", com.crackcode.mobile.ui.components.ChatToastType.INFO)
     }
 
     fun setNewChatAgent(agent: AgentKind) {
@@ -316,22 +316,22 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         buildList {
             val agyWorking = agyChats.filter { it.isRunning }
             val agyBackground = agyChats.filter { !it.isRunning && (it.notFullyIdle || it.hasActivity) }
-            if (agyWorking.isNotEmpty()) add("Antigravity is working in ${names(agyWorking.map { it.title })}")
-            if (agyBackground.isNotEmpty()) add("Antigravity has background work in ${names(agyBackground.map { it.title })}")
+            if (agyWorking.isNotEmpty()) add("CrackCode is working in ${names(agyWorking.map { it.title })}")
+            if (agyBackground.isNotEmpty()) add("CrackCode has background work in ${names(agyBackground.map { it.title })}")
             val listed = (agyWorking + agyBackground).map { it.id }.toSet()
             val otherInstances = instances.count { it.conversationId !in listed }
-            if (otherInstances > 0) add(if (otherInstances == 1) "An Antigravity instance is running" else "$otherInstances Antigravity instances are running")
+            if (otherInstances > 0) add(if (otherInstances == 1) "An CrackCode instance is running" else "$otherInstances CrackCode instances are running")
             val claudeOpen = current?.takeIf { claudeTurn && it.agent == AgentKind.CLAUDE }
-            if (claudeOpen != null) add("Claude is replying in ${names(listOf(claudeOpen.title))}")
+            if (claudeOpen != null) add("CrackCode is replying in ${names(listOf(claudeOpen.title))}")
             val claudeOthers = claudeChats.filter { it.isRunning && it.id != claudeOpen?.id }
-            if (claudeOthers.isNotEmpty()) add("Claude is working in ${names(claudeOthers.map { it.title })}")
-            if (claudeTurn && claudeOpen == null && claudeOthers.isEmpty()) add("Claude is replying")
+            if (claudeOthers.isNotEmpty()) add("CrackCode is working in ${names(claudeOthers.map { it.title })}")
+            if (claudeTurn && claudeOpen == null && claudeOthers.isEmpty()) add("CrackCode is replying")
             val openCodeChats = openCodeBackend.conversations.value.filter { it.isRunning }
-            if (openCodeChats.isNotEmpty()) add("OpenCode is working in ${names(openCodeChats.map { it.title })}")
-            else if (openCodeBackend.isCurrentChatActivelyRunning.value) add("OpenCode is replying")
+            if (openCodeChats.isNotEmpty()) add("CrackCode is working in ${names(openCodeChats.map { it.title })}")
+            else if (openCodeBackend.isCurrentChatActivelyRunning.value) add("CrackCode is replying")
             val codexChats = codexBackend.conversations.value.filter { it.isRunning }
-            if (codexChats.isNotEmpty()) add("Codex is working in ${names(codexChats.map { it.title })}")
-            else if (codexBackend.isCurrentChatActivelyRunning.value) add("Codex is replying")
+            if (codexChats.isNotEmpty()) add("CrackCode is working in ${names(codexChats.map { it.title })}")
+            else if (codexBackend.isCurrentChatActivelyRunning.value) add("CrackCode is replying")
             if (tasks) add("A Jarvis task is running")
             if (jarvis) add(
                 when (com.crackcode.mobile.data.jarvis.JarvisPreferences.keepScreenOn.value) {
@@ -340,7 +340,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 }
             )
         }
-    }.combine(voiceCallActive) { reasons, call -> if (call) listOf("A voice call with Antigravity is on") + reasons else reasons }
+    }.combine(voiceCallActive) { reasons, call -> if (call) listOf("A voice call with CrackCode is on") + reasons else reasons }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
     val isCurrentChatActivelyRunning = byAgent(agyBackend.isCurrentChatActivelyRunning, claudeBackend.isCurrentChatActivelyRunning, openCodeBackend.isCurrentChatActivelyRunning, codexBackend.isCurrentChatActivelyRunning)
     val isCurrentChatBackgroundActive = byAgent(agyBackend.isCurrentChatBackgroundActive, alwaysFalse, alwaysFalse, alwaysFalse)
@@ -1779,7 +1779,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                         withContext(Dispatchers.Main) {
                             com.crackcode.mobile.ui.components.AppToastHelper.showToast(
                                 if (hubReady) "Chat restored: ${restored.title}"
-                                else "Chat restored: ${restored.title}. It opens once Antigravity has started.",
+                                else "Chat restored: ${restored.title}. It opens once CrackCode has started.",
                                 com.crackcode.mobile.ui.components.ChatToastType.SUCCESS
                             )
                         }
@@ -1816,7 +1816,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         val ready = withTimeoutOrNull(180_000) { systemConnectionState.first { it.isReady } } != null
         if (!ready) {
             withContext(Dispatchers.Main) {
-                com.crackcode.mobile.ui.components.AppToastHelper.showToast("Antigravity has not started yet: the restored chat is in the chat list.", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+                com.crackcode.mobile.ui.components.AppToastHelper.showToast("CrackCode has not started yet: the restored chat is in the chat list.", com.crackcode.mobile.ui.components.ChatToastType.INFO)
             }
             return
         }

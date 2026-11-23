@@ -186,7 +186,7 @@ fun permissionModeDescription(mode: String): String = when (mode) {
     "default" -> "Ask before edits and commands"
     "acceptEdits" -> "Apply file edits without asking"
     "plan" -> "Explore and propose a plan, no changes"
-    "auto" -> "Claude decides what is safe to run"
+    "auto" -> "CrackCode decides what is safe to run"
     "dontAsk" -> "Never ask; deny anything not pre-allowed"
     "bypassPermissions" -> "Allow everything (sandboxes only)"
     else -> ""

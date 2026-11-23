@@ -112,11 +112,11 @@ import kotlinx.serialization.json.JsonPrimitive
 
 /** Pages of the Claude Code settings. */
 enum class ClaudeSettingsPage(val title: String, val subtitle: String) {
-    ACCOUNT("Account & CLI", "Sign-in, plan usage, install and update Claude Code"),
+    ACCOUNT("Account & CLI", "Sign-in, plan usage, install and update CrackCode"),
     DEFAULTS("Chat defaults", "Model, effort, thinking, permission mode, output style"),
     PROVIDERS("Custom providers", "OpenRouter, Kimi and other Anthropic-compatible APIs"),
-    PERMISSIONS("Permission rules", "What Claude may do without asking"),
-    MCP("MCP servers", "Tools Claude can call"),
+    PERMISSIONS("Permission rules", "What CrackCode may do without asking"),
+    MCP("MCP servers", "Tools CrackCode can call"),
     PLUGINS("Plugins", "Installed plugins, catalog and marketplaces"),
     SKILLS("Skills", "Add skills from GitHub, update or remove them"),
     MEMORY("Memory", "Instructions (CLAUDE.md) and the notes Claude saved"),
@@ -245,7 +245,7 @@ private fun AccountPage(deps: ClaudeSettingsDeps) {
 
     ClaudeCard {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Claude Code CLI", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            Text("CrackCode CLI", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             IconButton(onClick = { deps.account.refreshStatus() }) { Icon(Icons.Outlined.Refresh, "Refresh") }
         }
         when (state) {
@@ -254,7 +254,7 @@ private fun AccountPage(deps: ClaudeSettingsDeps) {
                 Text(state.label, color = state.dotColor, fontWeight = FontWeight.SemiBold, fontSize = 12.5.sp)
                 statusError?.let { Hint(it) }
             }
-            ClaudeStatus.NOT_INSTALLED -> Text("Claude Code not found on this device.", fontSize = 12.5.sp, color = state.dotColor)
+            ClaudeStatus.NOT_INSTALLED -> Text("CrackCode not found on this device.", fontSize = 12.5.sp, color = state.dotColor)
             else -> {
                 Text(status?.version ?: "Installed", fontSize = 13.sp)
                 status?.bin_path?.let { Hint(it) }
@@ -265,7 +265,7 @@ private fun AccountPage(deps: ClaudeSettingsDeps) {
             val running = job?.running == true
             if (state == ClaudeStatus.NOT_INSTALLED) {
                 Button(onClick = { deps.config.startCliJob("install") }, enabled = !running,
-                    colors = ButtonDefaults.buttonColors(containerColor = ClaudeAccent)) { Text("Install Claude Code") }
+                    colors = ButtonDefaults.buttonColors(containerColor = ClaudeAccent)) { Text("Install CrackCode") }
             } else if (status?.installed == true) {
                 OutlinedButton(onClick = { deps.config.startCliJob("update") }, enabled = !running) { Text("Check for updates") }
             }
@@ -306,7 +306,7 @@ private fun AccountPage(deps: ClaudeSettingsDeps) {
                 OutlinedButton(onClick = { deps.account.logout() }, enabled = !busy) { Text("Sign out", color = QuotaRed) }
             }
         } else {
-            Hint("Sign in with your Claude subscription or an Anthropic Console account.")
+            Hint("Sign in with your CrackCode subscription or an Anthropic Console account.")
             Spacer(Modifier.height(8.dp))
             Button(onClick = { showLogin = true }, enabled = !state.isBlocking && state != ClaudeStatus.CHECKING && (!busy || state == ClaudeStatus.SIGNING_IN),
                 colors = ButtonDefaults.buttonColors(containerColor = ClaudeAccent)) {
@@ -434,7 +434,7 @@ private fun DefaultsPage(deps: ClaudeSettingsDeps) {
     if (styles.isNotEmpty()) {
         ClaudeCard {
             SectionTitle("Output style")
-            Hint("How Claude writes its replies")
+            Hint("How CrackCode writes its replies")
             Spacer(Modifier.height(6.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 styles.forEach { st ->
@@ -448,7 +448,7 @@ private fun DefaultsPage(deps: ClaudeSettingsDeps) {
 
     ClaudeCard {
         SectionTitle("Dictation language")
-        Hint("Language code for voice input in Claude chats (e.g. en, es, de, ja)")
+        Hint("Language code for voice input in CrackCode chats (e.g. en, es, de, ja)")
         Spacer(Modifier.height(6.dp))
         var lang by remember(voiceLang) { mutableStateOf(voiceLang) }
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -479,7 +479,7 @@ private fun PermissionsPage(deps: ClaudeSettingsDeps) {
                 Hint(
                     when {
                         sandbox == null -> "Checking whether the sandbox can run on this device…"
-                        sandbox?.available == true -> "Run Claude's shell commands in an isolated container (no network, limited files). Commands that stay inside it run without asking."
+                        sandbox?.available == true -> "Run CrackCode's shell commands in an isolated container (no network, limited files). Commands that stay inside it run without asking."
                         else -> "Not available here: ${sandbox?.reason ?: "unknown reason"}. Auto mode already asks rarely."
                     }
                 )
@@ -543,7 +543,7 @@ private fun McpPage(deps: ClaudeSettingsDeps, onOpenRea: () -> Unit, onOpenReaGr
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
-            Text("Tools Claude can call", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            Text("Tools CrackCode can call", fontWeight = FontWeight.Bold, fontSize = 14.sp)
             Hint(if (cwd != null) "Includes servers of the open project ($cwd)." else "Open a project to also see its project-scoped servers.")
         }
         if (loading) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = ClaudeAccent)
@@ -581,7 +581,7 @@ private fun McpPage(deps: ClaudeSettingsDeps, onOpenRea: () -> Unit, onOpenReaGr
         srv.name to (config["env"] as? JsonObject)?.mapValues { (it.value as? JsonPrimitive)?.content.orEmpty() }.orEmpty()
     }.toMap()
     if (showReaDialog) com.crackcode.mobile.ui.settings.ReaServerDialog(
-        agent = "Claude Code",
+        agent = "CrackCode",
         existing = reaServers,
         takenNames = servers.map { it.name }.toSet(),
         canReplace = false,
@@ -668,7 +668,7 @@ private fun McpPage(deps: ClaudeSettingsDeps, onOpenRea: () -> Unit, onOpenReaGr
                 Spacer(Modifier.width(10.dp))
                 Column {
                     Text("Checking MCP servers…", fontWeight = FontWeight.SemiBold, fontSize = 13.5.sp)
-                    Hint("Claude Code starts each server to list its tools; this can take a few seconds.")
+                    Hint("CrackCode starts each server to list its tools; this can take a few seconds.")
                 }
             }
         }
@@ -677,7 +677,7 @@ private fun McpPage(deps: ClaudeSettingsDeps, onOpenRea: () -> Unit, onOpenReaGr
                 Icon(Icons.Outlined.Hub, null, tint = ClaudeAccent.copy(alpha = 0.7f), modifier = Modifier.size(28.dp))
                 Spacer(Modifier.height(6.dp))
                 Text("No MCP servers yet", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                Hint("Add one from the presets above or a custom server to give Claude more tools.")
+                Hint("Add one from the presets above or a custom server to give CrackCode more tools.")
             }
         }
     }
@@ -776,7 +776,7 @@ private fun McpPage(deps: ClaudeSettingsDeps, onOpenRea: () -> Unit, onOpenReaGr
         AlertDialog(
             onDismissRequest = { toDelete = null },
             title = { Text("Remove ${srv.name}?", fontWeight = FontWeight.Bold) },
-            text = { Text("Claude will no longer be able to use its tools.", fontSize = 13.5.sp) },
+            text = { Text("CrackCode will no longer be able to use its tools.", fontSize = 13.5.sp) },
             confirmButton = {
                 TextButton(onClick = {
                     deps.config.removeMcp(srv.name, srv.scope, cwd)
@@ -1129,7 +1129,7 @@ private fun PluginsPage(deps: ClaudeSettingsDeps) {
         }
     }
     aiSetup?.let { src ->
-        com.crackcode.mobile.ui.settings.SetupWithAiDialog(src, com.crackcode.mobile.domain.model.AgentKind.CLAUDE, "Claude Code found no plugin marketplace in it") { aiSetup = null }
+        com.crackcode.mobile.ui.settings.SetupWithAiDialog(src, com.crackcode.mobile.domain.model.AgentKind.CLAUDE, "CrackCode found no plugin marketplace in it") { aiSetup = null }
     }
 }
 
@@ -1183,7 +1183,7 @@ private fun MemoryPage(deps: ClaudeSettingsDeps) {
     // ---- CLAUDE.md
     ClaudeCard {
         SectionTitle("Instructions (CLAUDE.md)")
-        Hint("Rules Claude follows in every chat. New chats read them right away; a chat that is already running reads them the next time its Claude process starts.")
+        Hint("Rules CrackCode follows in every chat. New chats read them right away; a chat that is already running reads them the next time its CrackCode process starts.")
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             ControlChip("All projects", highlighted = scope == "user", color = if (scope == "user") ClaudeAccent else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), onClick = { scope = "user" })
@@ -1219,8 +1219,8 @@ private fun MemoryPage(deps: ClaudeSettingsDeps) {
     ClaudeCard {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                SectionTitle("Claude's memory · $projectName")
-                Hint("Notes Claude saved by itself while working in this project. This is what Claude checks when you ask what it remembers.")
+                SectionTitle("CrackCode's memory · $projectName")
+                Hint("Notes CrackCode saved by itself while working in this project. This is what CrackCode checks when you ask what it remembers.")
             }
             IconButton(onClick = { deps.config.loadAutoMemory(cwd) }) { Icon(Icons.Outlined.Refresh, "Refresh") }
         }
@@ -1228,7 +1228,7 @@ private fun MemoryPage(deps: ClaudeSettingsDeps) {
         when {
             a == null -> CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = ClaudeAccent)
             a.error != null -> Text(a.error, fontSize = 12.sp, color = QuotaRed)
-            a.files.isEmpty() -> Hint("No notes yet. Ask Claude to remember something and it saves it here.")
+            a.files.isEmpty() -> Hint("No notes yet. Ask CrackCode to remember something and it saves it here.")
             else -> {
                 Hint(a.dir)
                 a.files.forEach { f ->
@@ -1258,7 +1258,7 @@ private fun MemoryPage(deps: ClaudeSettingsDeps) {
         AlertDialog(
             onDismissRequest = { noteToDelete = null },
             title = { Text("Delete $name?", fontWeight = FontWeight.Bold) },
-            text = { Text("Claude forgets what this note says.", fontSize = 13.5.sp) },
+            text = { Text("CrackCode forgets what this note says.", fontSize = 13.5.sp) },
             confirmButton = {
                 TextButton(onClick = {
                     deps.config.deleteAutoMemory(cwd, name)
@@ -1282,7 +1282,7 @@ private fun AdvancedPage(deps: ClaudeSettingsDeps) {
     LaunchedEffect(Unit) { deps.config.loadSettings() }
     LaunchedEffect(settings) { settings?.let { text = prettyJson.encodeToString(JsonObject.serializer(), it) } }
 
-    Hint("Every Claude Code setting lives here: permissions, hooks, env, model, statusLine… Changes apply to new Claude chats.")
+    Hint("Every CrackCode setting lives here: permissions, hooks, env, model, statusLine… Changes apply to new CrackCode chats.")
     if (path.isNotBlank()) Hint(path)
     error?.let { Text(it, color = QuotaRed, fontSize = 12.sp) }
     OutlinedTextField(

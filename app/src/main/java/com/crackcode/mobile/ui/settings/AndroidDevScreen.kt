@@ -430,7 +430,7 @@ private fun TaskOutput(state: AndroidDevManager.State, task: String) {
 /** How agents (any agent) and the user build: the adev commands in the terminal. */
 @Composable
 private fun UseGuide(state: AndroidDevManager.State) {
-    Hint("Any agent that can run terminal commands can build apps: Antigravity, Claude Code, OpenCode or Codex. Ask it in chat; the Android Development skill (below) tells it the commands. In the terminal yourself:")
+    Hint("Any agent that can run terminal commands can build apps: CrackCode, CrackCode, CrackCode or CrackCode. Ask it in chat; the Android Development skill (below) tells it the commands. In the terminal yourself:")
     if (Component.LAUNCHER !in state.installed) Hint("Install Kotlin / Java above first.")
     DevCopyLine("adev-new compose ~/${AndroidDevManager.PROJECTS_DIR}/my-app", mono = true)
     DevCopyLine("cd ~/${AndroidDevManager.PROJECTS_DIR}/my-app && adev ./gradlew assembleDebug", mono = true)

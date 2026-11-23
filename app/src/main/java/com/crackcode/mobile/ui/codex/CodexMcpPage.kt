@@ -164,7 +164,7 @@ fun CodexMcpPage(backend: CodexChatBackend, onOpenRea: () -> Unit = {}, onOpenRe
         srv.name to stringsOf(srv.config, "env")
     }.toMap()
     if (showReaDialog) com.crackcode.mobile.ui.settings.ReaServerDialog(
-        agent = "Codex",
+        agent = "CrackCode",
         existing = reaServers,
         takenNames = servers.map { it.name }.toSet(),
         canReplace = true,
@@ -338,7 +338,7 @@ private fun McpServerDialog(initial: McpDraft, onDismiss: () -> Unit, onSave: (M
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(d.env, { d = d.copy(env = it) }, label = { Text("Environment (one per line, KEY=value)") },
                         minLines = 2, modifier = Modifier.fillMaxWidth())
-                    Text("It runs on the server, in Codex's environment.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f))
+                    Text("It runs on the server, in CrackCode's environment.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f))
                 }
             }
         },

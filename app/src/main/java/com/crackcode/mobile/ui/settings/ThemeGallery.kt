@@ -53,7 +53,7 @@ fun ThemeGallery(cardBg: Color, themeMode: String, onSetThemeMode: (String) -> U
         GalleryHeader("Dark theme", "Used in Dark mode, and by Auto when the system is dark.")
         ThemeGrid(all.filter { it.dark }, darkId, cardBg, ::pick) { toDelete = it }
         Text(
-            "Make your own: add the Theme preset in MCP Servers (or Claude Code → MCP) and ask any chat, e.g. " +
+            "Make your own: add the Theme preset in MCP Servers (or CrackCode → MCP) and ask any chat, e.g. " +
                 "“create a neon cyberpunk dark theme and apply it”. Jarvis can switch themes by voice too.",
             fontSize = 11.5.sp, lineHeight = 16.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         )

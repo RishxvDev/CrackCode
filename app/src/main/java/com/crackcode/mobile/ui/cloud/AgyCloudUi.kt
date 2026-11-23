@@ -157,15 +157,15 @@ fun AgyCloudSettingsCard(modifier: Modifier = Modifier) {
                 }
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "Antigravity chats can run on a Google cloud machine with your GitHub repos (Antigravity's Remote " +
+                    "CrackCode chats can run on a Google cloud machine with your GitHub repos (CrackCode's Remote " +
                         "Agents) and keep working while the phone is off. Needs Google AI Pro or Ultra on a personal account.",
                     fontSize = 12.5.sp, color = subtle()
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    if (enabled) "On: cloud projects show in the project picker of Antigravity chats, and cloud chats in the " +
-                        "chat list. They are ready about a minute after the Antigravity server starts."
-                    else "Off: the app does not ask the Antigravity server for cloud projects or cloud chats.",
+                    if (enabled) "On: cloud projects show in the project picker of CrackCode chats, and cloud chats in the " +
+                        "chat list. They are ready about a minute after the CrackCode server starts."
+                    else "Off: the app does not ask the CrackCode server for cloud projects or cloud chats.",
                     fontSize = 12.5.sp, color = subtle()
                 )
             }
@@ -552,8 +552,8 @@ private fun CloudProjectEditor(
                 when {
                     notConnected -> {
                         Text(
-                            "GitHub is not connected to your cloud agents yet. Connect opens Antigravity's GitHub page in your " +
-                                "browser, as your Antigravity Google account: connect GitHub there and choose the repos it may use, then come back here.",
+                            "GitHub is not connected to your cloud agents yet. Connect opens CrackCode's GitHub page in your " +
+                                "browser, as your CrackCode Google account: connect GitHub there and choose the repos it may use, then come back here.",
                             fontSize = 12.5.sp, lineHeight = 17.sp, color = subtle()
                         )
                         Spacer(Modifier.height(8.dp))
@@ -563,7 +563,7 @@ private fun CloudProjectEditor(
                     available == null -> Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp); Spacer(Modifier.width(8.dp)); Text("Loading your repos…", fontSize = 12.5.sp)
                     }
-                    all.isEmpty() -> Text("No repos are shared with Antigravity. Add some in GitHub's settings for the Antigravity app.", fontSize = 12.5.sp, color = subtle())
+                    all.isEmpty() -> Text("No repos are shared with CrackCode. Add some in GitHub's settings for the CrackCode app.", fontSize = 12.5.sp, color = subtle())
                 }
                 if (all.isNotEmpty()) {
                     LazyColumn(Modifier.heightIn(max = 300.dp)) {
@@ -624,7 +624,7 @@ private fun ConnectionsTab(modifier: Modifier) {
     Column(modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                "Connect opens Antigravity's page for it in your browser, as your Antigravity Google account. Connect it there, then come back here.",
+                "Connect opens CrackCode's page for it in your browser, as your CrackCode Google account. Connect it there, then come back here.",
                 fontSize = 12.sp, color = subtle(), lineHeight = 16.sp, modifier = Modifier.weight(1f)
             )
             IconButton(onClick = { reload++ }) { Icon(Icons.Outlined.Refresh, "Refresh") }

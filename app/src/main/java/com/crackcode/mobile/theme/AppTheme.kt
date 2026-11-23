@@ -241,7 +241,7 @@ object ThemeTokens {
     fun scheme(colors: Map<String, Long>, dark: Boolean): ColorScheme {
         val b = if (dark) darkColorScheme() else lightColorScheme()
         fun c(k: String, d: Color) = colors[k]?.let { Color(it.toInt()) } ?: d
-        return b.copy(
+        val scheme = b.copy(
             primary = c("primary", b.primary), onPrimary = c("on_primary", b.onPrimary),
             primaryContainer = c("primary_container", b.primaryContainer), onPrimaryContainer = c("on_primary_container", b.onPrimaryContainer),
             inversePrimary = c("inverse_primary", b.inversePrimary),
@@ -263,6 +263,7 @@ object ThemeTokens {
             surfaceContainerHigh = c("surface_container_high", b.surfaceContainerHigh),
             surfaceContainerHighest = c("surface_container_highest", b.surfaceContainerHighest)
         )
+        return if (dark) scheme.copy(background = Color(0xFF000000)) else scheme
     }
 
     /** WCAG contrast ratio of two colors (1 = none, 21 = black on white). */

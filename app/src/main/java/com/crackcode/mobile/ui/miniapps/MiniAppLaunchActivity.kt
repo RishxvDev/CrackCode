@@ -25,7 +25,7 @@ class MiniAppLaunchActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // antigem-miniapp://app/<id>[/<path>][?query]: a deep link (also how shortcuts open apps)
-        val link = intent.data?.takeIf { it.scheme == "antigem-miniapp" }
+        val link = intent.data?.takeIf { it.scheme == "CrackCode-miniapp" }
         val appId = intent.getStringExtra(MiniAppNotify.EXTRA_APP) ?: link?.pathSegments?.firstOrNull()
         val app = appId?.let { MiniApps.find(this, it) }
         if (app != null) {

@@ -81,9 +81,9 @@ private fun PanelHint(text: String, modifier: Modifier = Modifier) {
 private fun pluginHint(agent: AgentKind, kinds: List<String>): String? {
     if (kinds.isEmpty()) return null
     return when (agent) {
-        AgentKind.CLAUDE -> if ("claude-marketplace" in kinds) "This repository is a Claude Code plugin marketplace: add it in Plugins → Marketplaces." else null
-        AgentKind.CODEX -> if ("codex-plugin" in kinds || "claude-marketplace" in kinds) "This repository is a plugin marketplace: add it in Plugins → Marketplaces." else null
-        AgentKind.AGY -> if ("agy-plugin" in kinds || "claude-plugin" in kinds || "claude-marketplace" in kinds) "This repository is a plugin: install it from the Plugins tab (From GitHub)." else null
+        AgentKind.CLAUDE -> if ("CrackCode-marketplace" in kinds) "This repository is a CrackCode plugin marketplace: add it in Plugins → Marketplaces." else null
+        AgentKind.CODEX -> if ("CrackCode-plugin" in kinds || "CrackCode-marketplace" in kinds) "This repository is a plugin marketplace: add it in Plugins → Marketplaces." else null
+        AgentKind.AGY -> if ("agy-plugin" in kinds || "CrackCode-plugin" in kinds || "CrackCode-marketplace" in kinds) "This repository is a plugin: install it from the Plugins tab (From GitHub)." else null
         AgentKind.OPENCODE -> null
     }
 }

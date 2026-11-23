@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 
 /** Agent memory: the ```antigem-memory blocks agents write in their replies (the bridge saves them, the chat shows a chip). */
 object MemoryBlocks {
-    const val LANG = "antigem-memory"
+    const val LANG = "CrackCode-memory"
 
     private val block = Regex("(?m)^[ \\t]*```$LANG[^\\n]*\\n[\\s\\S]*?^[ \\t]*```[ \\t]*$\\n?")
 

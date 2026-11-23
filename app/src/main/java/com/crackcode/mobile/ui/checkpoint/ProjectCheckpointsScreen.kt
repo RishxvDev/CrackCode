@@ -71,7 +71,7 @@ fun ProjectCheckpointsScreen() {
         val muted = MaterialTheme.colorScheme.onSurfaceVariant
         Column(Modifier.fillMaxSize().bouncyVerticalScroll(rememberScrollState()).padding(16.dp)) {
             Text(
-                "Before every message you send (Claude Code, Codex, OpenCode or Antigravity), CrackCode saves a hidden copy of " +
+                "Before every message you send (CrackCode, CrackCode, CrackCode or CrackCode), CrackCode saves a hidden copy of " +
                     "the project's files. Each message then gets a restore point: go back to before it, with a preview of every " +
                     "file that changes. Your own git history, branches, staging and stashes are never touched.",
                 fontSize = 12.5.sp, lineHeight = 17.sp, color = muted

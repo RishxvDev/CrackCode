@@ -816,7 +816,7 @@ fun AssistantMessageFooter(
 }
 
 private val WAITING_PHRASES = listOf(
-    "Consulting AGY",
+    "Consulting CrackCode",
     "Cooking response",
     "Crafting answer",
     "Gathering context",

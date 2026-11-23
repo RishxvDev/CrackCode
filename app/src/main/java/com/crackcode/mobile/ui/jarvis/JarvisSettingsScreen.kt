@@ -102,10 +102,10 @@ fun JarvisSettingsScreen(cardBg: Color, cardBorder: BorderStroke, onOpen: (Jarvi
         listOf(
             listOfNotNull(
                 row(JarvisSettingsPage.AGENT, I.SmartToy, c.info, "Voice agent & model", when (agentName) {
-                    AgentKind.AGY.name -> "Antigravity"
-                    AgentKind.CLAUDE.name -> "Claude Code"
-                    AgentKind.OPENCODE.name -> "OpenCode"
-                    AgentKind.CODEX.name -> "Codex"
+                    AgentKind.AGY.name -> "CrackCode"
+                    AgentKind.CLAUDE.name -> "CrackCode"
+                    AgentKind.OPENCODE.name -> "CrackCode"
+                    AgentKind.CODEX.name -> "CrackCode"
                     else -> "Not set"
                 }),
                 row(JarvisSettingsPage.PERSONALITY, I.Face, c.accentPink, "Personality & you"),
@@ -149,10 +149,10 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
     // null until the user picks the agent Jarvis talks to
     val agent: AgentKind? = agentName.takeIf { it.isNotBlank() }?.let { runCatching { AgentKind.valueOf(it) }.getOrNull() }
     val agentTitle = when (agent) {
-        AgentKind.CLAUDE -> "Claude Code"
-        AgentKind.AGY -> "Antigravity"
-        AgentKind.OPENCODE -> "OpenCode"
-        AgentKind.CODEX -> "Codex"
+        AgentKind.CLAUDE -> "CrackCode"
+        AgentKind.AGY -> "CrackCode"
+        AgentKind.OPENCODE -> "CrackCode"
+        AgentKind.CODEX -> "CrackCode"
         null -> "the agent"
     }
 
@@ -170,7 +170,7 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
                 JCard(cardBg, cardBorder, "") {
                     val enabledAgents by vm.enabledAgents.collectAsState()
                     JChips(
-                        listOf(AgentKind.CLAUDE.name to "Claude Code", AgentKind.AGY.name to "Antigravity", AgentKind.OPENCODE.name to "OpenCode", AgentKind.CODEX.name to "Codex"),
+                        listOf(AgentKind.CLAUDE.name to "CrackCode", AgentKind.AGY.name to "CrackCode", AgentKind.OPENCODE.name to "CrackCode", AgentKind.CODEX.name to "CrackCode"),
                         agentName
                     ) { P.agent.set(it); P.modelId.set("") }
                     if (agent == null) {
@@ -213,7 +213,7 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
                     OutlinedTextField(
                         value = about, onValueChange = { P.aboutUser.set(it.take(2000)) },
                         label = { Text("About you and extra instructions") },
-                        placeholder = { Text("e.g. Call me Santosh. Reply in Hinglish. I mostly work on the antigem project.", fontSize = 12.sp) },
+                        placeholder = { Text("e.g. Call me Santosh. Reply in Hinglish. I mostly work on the CrackCode project.", fontSize = 12.sp) },
                         modifier = Modifier.fillMaxWidth(), minLines = 3, maxLines = 8
                     )
                     JHint("Sent with the first message of every new Jarvis chat. When you change it (or the persona), the open chat is told with your next message. " +
@@ -278,14 +278,14 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
                                 if (mcpAdded) reloadCodexMcp()
                                 else scope.launch {
                                     vm.codexBackend.addRemoteMcp(name, url, headers)
-                                        .onSuccess { reloadCodexMcp(); Toast.makeText(context, "Added to Codex", Toast.LENGTH_SHORT).show() }
+                                        .onSuccess { reloadCodexMcp(); Toast.makeText(context, "Added to CrackCode", Toast.LENGTH_SHORT).show() }
                                         .onFailure { Toast.makeText(context, it.message ?: "Could not add it", Toast.LENGTH_LONG).show() }
                                 }
                             } else if (agent == AgentKind.OPENCODE) {
                                 if (mcpAdded) reloadOpenCodeMcp()
                                 else scope.launch {
                                     vm.openCodeBackend.client.addRemoteMcp(name, url, headers)
-                                        .onSuccess { reloadOpenCodeMcp(); Toast.makeText(context, "Added to OpenCode", Toast.LENGTH_SHORT).show() }
+                                        .onSuccess { reloadOpenCodeMcp(); Toast.makeText(context, "Added to CrackCode", Toast.LENGTH_SHORT).show() }
                                         .onFailure { Toast.makeText(context, it.message ?: "Could not add it", Toast.LENGTH_LONG).show() }
                                 }
                             } else if (agent == AgentKind.CLAUDE) {
@@ -451,7 +451,7 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
                     JSwitch("Tones when the microphone opens and closes", null, earcons) { P.earcons.set(it) }
                     val stt by P.sttEngine.state.collectAsState()
                     Text("Speech recognition", fontSize = 13.sp, fontWeight = FontWeight.Medium)
-                    JChips(listOf("auto" to "Same as agent", "claude" to "Claude", "agy" to "Antigravity", "android" to "This device"), stt) { P.sttEngine.set(it) }
+                    JChips(listOf("auto" to "Same as agent", "claude" to "CrackCode", "agy" to "CrackCode", "android" to "This device"), stt) { P.sttEngine.set(it) }
                     JHint("“This device” uses Android's recognizer and needs no sign-in. If the agent's dictation fails, Jarvis switches to the device for the rest of the session.")
                     val lang by P.sttLanguage.state.collectAsState()
                     JField("Language (e.g. en, hi, es)", lang) { P.sttLanguage.set(it) }
@@ -554,7 +554,7 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
                     val sum by P.announceSummary.state.collectAsState()
                     JSwitch("Also read the start of the reply", "For announcements without a model turn.", sum) { P.announceSummary.set(it) }
                     val low by P.announceUsageLow.state.collectAsState()
-                    JSwitch("Warn when the 5-hour usage is almost gone", "Once per window, at about 15% left (Claude Code).", low) { P.announceUsageLow.set(it) }
+                    JSwitch("Warn when the 5-hour usage is almost gone", "Once per window, at about 15% left (CrackCode).", low) { P.announceUsageLow.set(it) }
                 }
                 JCard(cardBg, cardBorder, "Command center") {
                     JHint("Open the Jarvis tab in the chat list and tap “New Jarvis chat” to type to Jarvis like in any chat. Give it a big job: it writes a " +
@@ -654,7 +654,7 @@ fun JarvisSettingsSectionPage(page: JarvisSettingsPage, cardBg: Color, cardBorde
                         "Float over other apps",
                         "Outside CrackCode the orb floats over any app: tap it to talk, long-press it for the Jarvis panel. While Jarvis " +
                             "listens or speaks, its card shows at the bottom of the screen. Drag the orb onto the ✕ at the bottom to hide " +
-                            "it until you talk to Jarvis in CrackCode again. Hidden during Antigravity voice calls.",
+                            "it until you talk to Jarvis in CrackCode again. Hidden during CrackCode voice calls.",
                         floating
                     ) { on ->
                         P.floating.set(on)

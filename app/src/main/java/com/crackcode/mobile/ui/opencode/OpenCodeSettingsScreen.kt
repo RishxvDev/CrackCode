@@ -92,10 +92,10 @@ private fun toast(msg: String, ok: Boolean = true) =
 
 /** The pages of Settings → OpenCode (each opens from the OpenCode row list). */
 enum class OpenCodeSettingsPage(val title: String, val subtitle: String) {
-    SERVER("OpenCode CLI", "Install, update and restart OpenCode"),
-    DEFAULTS("Permissions", "What OpenCode asks before acting, and the agent of new chats"),
+    SERVER("CrackCode CLI", "Install, update and restart CrackCode"),
+    DEFAULTS("Permissions", "What CrackCode asks before acting, and the agent of new chats"),
     PROVIDERS("Custom providers", "Sign in or add an API key, or add any OpenAI- or Anthropic-compatible API manually"),
-    MCP("MCP servers", "Tools OpenCode can call: presets and your own servers"),
+    MCP("MCP servers", "Tools CrackCode can call: presets and your own servers"),
     SKILLS("Skills", "Add skills from GitHub, update or remove them")
 }
 
@@ -209,7 +209,7 @@ fun OpenCodeSettingsScreen(
                 com.crackcode.mobile.ui.agents.AgentMark(com.crackcode.mobile.domain.model.AgentKind.OPENCODE, size = 40.dp)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("OpenCode", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    Text("CrackCode", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text(
                         listOfNotNull(state.label, status?.version, if (status?.running == true) "server running" else null).joinToString(" · "),
                         fontSize = 12.sp,
@@ -226,7 +226,7 @@ fun OpenCodeSettingsScreen(
             if (state == OpenCodeState.NOT_INSTALLED) {
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "OpenCode is not installed on the server (on this phone when you use the local server). " +
+                    "CrackCode is not installed on the server (on this phone when you use the local server). " +
                         "Install it here: the app downloads the official build (~250 MB) into ~/.opencode/bin.",
                     fontSize = 12.5.sp, lineHeight = 17.sp
                 )
@@ -240,7 +240,7 @@ fun OpenCodeSettingsScreen(
                             enabled = !jobRunning,
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = OpenCodeAccent, contentColor = Color.White)
-                        ) { Text(if (jobRunning) "Installing…" else "Install OpenCode") }
+                        ) { Text(if (jobRunning) "Installing…" else "Install CrackCode") }
                     } else {
                         OutlinedButton(onClick = { backend.startCliJob("update") }, enabled = !jobRunning, shape = RoundedCornerShape(12.dp)) {
                             Text(if (jobRunning) "Checking…" else "Check for updates")
@@ -288,7 +288,7 @@ fun OpenCodeSettingsScreen(
                         restarting = true
                         backend.restartServer { err ->
                             restarting = false
-                            if (err == null) toast("OpenCode restarted") else toast("Restart failed: $err", ok = false)
+                            if (err == null) toast("CrackCode restarted") else toast("Restart failed: $err", ok = false)
                             scope.launch { reload() }
                         }
                     },
@@ -297,10 +297,10 @@ fun OpenCodeSettingsScreen(
                 ) {
                     if (restarting) CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp) else Icon(Icons.Outlined.Refresh, null, Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text(if (status?.running == true) "Restart OpenCode" else "Start OpenCode")
+                    Text(if (status?.running == true) "Restart CrackCode" else "Start CrackCode")
                 }
                 Text(
-                    "Running replies stop when OpenCode restarts.",
+                    "Running replies stop when CrackCode restarts.",
                     fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), modifier = Modifier.padding(top = 4.dp)
                 )
             }

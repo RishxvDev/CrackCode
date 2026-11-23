@@ -448,7 +448,7 @@ fun ChatScreen(
         when {
             voiceCall.active -> com.crackcode.mobile.data.voice.AgyVoiceCall.setMinimized(false)
             !systemConnectionState.canSend -> com.crackcode.mobile.ui.components.AppToastHelper.showToast(
-                "Start the server to call Antigravity.", com.crackcode.mobile.ui.components.ChatToastType.ERROR
+                "Start the server to call CrackCode.", com.crackcode.mobile.ui.components.ChatToastType.ERROR
             )
             // agy refuses voice calls for cloud chats (its /voice/ws answers 404 for them)
             currentConv?.cloudProjectId != null -> com.crackcode.mobile.ui.components.AppToastHelper.showToast(
@@ -488,7 +488,7 @@ fun ChatScreen(
             when {
                 com.crackcode.mobile.data.voice.AgyVoiceCall.state.value.active -> com.crackcode.mobile.data.voice.AgyVoiceCall.setMinimized(false)
                 !serverUp -> com.crackcode.mobile.ui.components.AppToastHelper.showToast(
-                    "Start the server to call Antigravity.", com.crackcode.mobile.ui.components.ChatToastType.ERROR
+                    "Start the server to call CrackCode.", com.crackcode.mobile.ui.components.ChatToastType.ERROR
                 )
                 else -> {
                     viewModel.openLastCallChat()
@@ -570,7 +570,7 @@ fun ChatScreen(
         com.crackcode.mobile.data.local.LocalServerManager.restartServer(context)
     }
     val recheckClaude = {
-        com.crackcode.mobile.ui.components.AppToastHelper.showToast("Checking Claude Code…", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+        com.crackcode.mobile.ui.components.AppToastHelper.showToast("Checking CrackCode…", com.crackcode.mobile.ui.components.ChatToastType.INFO)
         viewModel.claudeAccount.refreshStatus()
     }
     val agyCliInfo by com.crackcode.mobile.data.remote.BridgeInfo.agyCli.collectAsState()
@@ -592,7 +592,7 @@ fun ChatScreen(
             onSignIn = { viewModel.loginToAgyHub(force = true) },
             onCheckAuth = { viewModel.checkAgyAuthStatus(userInitiated = true) },
             onRetry = {
-                com.crackcode.mobile.ui.components.AppToastHelper.showToast("Reconnecting to Antigravity…", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+                com.crackcode.mobile.ui.components.AppToastHelper.showToast("Reconnecting to CrackCode…", com.crackcode.mobile.ui.components.ChatToastType.INFO)
                 viewModel.retryConnections()
             },
             onRestartServer = restartLocalServer,
@@ -909,7 +909,7 @@ fun ChatScreen(
         { id ->
             if (isClaudeChat) {
                 (claudeModelInfos.firstOrNull { it.resolvedModel == id && it.value != "default" } ?: claudeModelInfos.firstOrNull { it.value == id })
-                    ?.displayName?.takeIf { it.isNotBlank() } ?: id.removePrefix("claude-")
+                    ?.displayName?.takeIf { it.isNotBlank() } ?: id.removePrefix("CrackCode-")
             } else {
                 availableModels.firstOrNull { it.id == id || it.key == id }?.displayName ?: id
             }
@@ -1515,7 +1515,7 @@ fun ChatScreen(
                 text = {
                     Column {
                         Text(
-                            text = "Antigravity requires Google authentication to access Gemini models.",
+                            text = "CrackCode requires Google authentication to access CrackCode models.",
                             fontSize = 13.5.sp,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -1661,7 +1661,7 @@ fun ChatScreen(
                     val activeTitle = currentConv?.title?.takeIf {
                         it.isNotBlank() && it != "New Chat" && it != "Conversation"
                     }
-                    listTitle ?: activeTitle ?: currentConv?.title?.takeIf { it.isNotBlank() } ?: "Antigravity Chat"
+                    listTitle ?: activeTitle ?: currentConv?.title?.takeIf { it.isNotBlank() } ?: "CrackCode Chat"
                 }
 
                 val startNewChatFromHeader = {
@@ -1940,9 +1940,9 @@ fun ChatScreen(
                                     com.crackcode.mobile.ui.agents.AgentSetupPrompt(
                                         agent = com.crackcode.mobile.domain.model.AgentKind.OPENCODE,
                                         title = when (openCodeState) {
-                                            com.crackcode.mobile.data.agent.opencode.OpenCodeState.CHECKING -> "Starting OpenCode…"
-                                            com.crackcode.mobile.data.agent.opencode.OpenCodeState.NOT_INSTALLED -> "OpenCode is not installed"
-                                            else -> "OpenCode is unavailable"
+                                            com.crackcode.mobile.data.agent.opencode.OpenCodeState.CHECKING -> "Starting CrackCode…"
+                                            com.crackcode.mobile.data.agent.opencode.OpenCodeState.NOT_INSTALLED -> "CrackCode is not installed"
+                                            else -> "CrackCode is unavailable"
                                         },
                                         message = if (openCodeState == com.crackcode.mobile.data.agent.opencode.OpenCodeState.CHECKING)
                                             "Waiting for the server to come up. This takes a few seconds after the app opens."
@@ -1957,10 +1957,10 @@ fun ChatScreen(
                                     com.crackcode.mobile.ui.agents.AgentSetupPrompt(
                                         agent = com.crackcode.mobile.domain.model.AgentKind.CODEX,
                                         title = when (codexState) {
-                                            com.crackcode.mobile.data.agent.codex.CodexState.CHECKING -> "Starting Codex…"
-                                            com.crackcode.mobile.data.agent.codex.CodexState.NOT_INSTALLED -> "Codex is not installed"
-                                            com.crackcode.mobile.data.agent.codex.CodexState.SIGNED_OUT -> "Sign in to Codex"
-                                            else -> "Codex is unavailable"
+                                            com.crackcode.mobile.data.agent.codex.CodexState.CHECKING -> "Starting CrackCode…"
+                                            com.crackcode.mobile.data.agent.codex.CodexState.NOT_INSTALLED -> "CrackCode is not installed"
+                                            com.crackcode.mobile.data.agent.codex.CodexState.SIGNED_OUT -> "Sign in to CrackCode"
+                                            else -> "CrackCode is unavailable"
                                         },
                                         message = if (codexState == com.crackcode.mobile.data.agent.codex.CodexState.CHECKING)
                                             "Waiting for the server to come up. This takes a few seconds after the app opens."
@@ -1974,8 +1974,8 @@ fun ChatScreen(
                                 } else if (isAgyChat && agyNotInstalled) {
                                     com.crackcode.mobile.ui.agents.AgentSetupPrompt(
                                         agent = com.crackcode.mobile.domain.model.AgentKind.AGY,
-                                        title = "Antigravity is not installed",
-                                        message = agyEntry?.detail ?: "Antigravity (agy) is not installed yet.",
+                                        title = "CrackCode is not installed",
+                                        message = agyEntry?.detail ?: "CrackCode is not installed yet.",
                                         statusColor = agyEntry?.color,
                                         actionLabel = agyEntry?.action?.label,
                                         onAction = { agyEntry?.action?.onClick?.invoke() },
@@ -2522,7 +2522,7 @@ fun ChatScreen(
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    text = if (isReconnecting) "Connecting to Antigravity..." else "Antigravity Disconnected",
+                                    text = if (isReconnecting) "Connecting to CrackCode..." else "CrackCode Disconnected",
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Medium,
                                     color = if (isReconnecting) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onErrorContainer,
@@ -2693,18 +2693,18 @@ fun ChatScreen(
                         else if (isOpenCodeChat) !openCodeState.isBlocking else if (isClaudeChat) !claudeState.isBlocking else systemConnectionState.canSend,
                     isAuth = if (isCodexChat) codexState != com.crackcode.mobile.data.agent.codex.CodexState.SIGNED_OUT else if (isOpenCodeChat) true else if (isClaudeChat) claudeChatState != com.crackcode.mobile.data.agent.claude.ClaudeStatus.SIGNED_OUT && claudeChatState != com.crackcode.mobile.data.agent.claude.ClaudeStatus.SIGNING_IN else systemConnectionState.isAuth,
                     offlineMessage = if (isCodexChat) when (codexState) {
-                        com.crackcode.mobile.data.agent.codex.CodexState.NOT_INSTALLED -> "Codex is not installed on the server. See Settings → Codex."
-                        com.crackcode.mobile.data.agent.codex.CodexState.DISABLED, com.crackcode.mobile.data.agent.codex.CodexState.OUTDATED -> "Restart the server to use Codex."
+                        com.crackcode.mobile.data.agent.codex.CodexState.NOT_INSTALLED -> "CrackCode is not installed on the server. See Settings → CrackCode."
+                        com.crackcode.mobile.data.agent.codex.CodexState.DISABLED, com.crackcode.mobile.data.agent.codex.CodexState.OUTDATED -> "Restart the server to use CrackCode."
                         else -> "The server is offline. Start it to send messages."
                     } else if (isOpenCodeChat) when (openCodeState) {
-                        com.crackcode.mobile.data.agent.opencode.OpenCodeState.NOT_INSTALLED -> "OpenCode is not installed on the server. See Settings → OpenCode."
-                        com.crackcode.mobile.data.agent.opencode.OpenCodeState.DISABLED, com.crackcode.mobile.data.agent.opencode.OpenCodeState.OUTDATED -> "Restart the server to use OpenCode."
+                        com.crackcode.mobile.data.agent.opencode.OpenCodeState.NOT_INSTALLED -> "CrackCode is not installed on the server. See Settings → CrackCode."
+                        com.crackcode.mobile.data.agent.opencode.OpenCodeState.DISABLED, com.crackcode.mobile.data.agent.opencode.OpenCodeState.OUTDATED -> "Restart the server to use CrackCode."
                         else -> "The server is offline. Start it to send messages."
                     } else if (isClaudeChat) when (claudeState) {
-                        com.crackcode.mobile.data.agent.claude.ClaudeStatus.NOT_INSTALLED -> "Claude Code is not installed. Set it up in Settings."
-                        com.crackcode.mobile.data.agent.claude.ClaudeStatus.BRIDGE_OUTDATED -> "Restart the local server to use Claude Code."
+                        com.crackcode.mobile.data.agent.claude.ClaudeStatus.NOT_INSTALLED -> "CrackCode is not installed. Set it up in Settings."
+                        com.crackcode.mobile.data.agent.claude.ClaudeStatus.BRIDGE_OUTDATED -> "Restart the local server to use CrackCode."
                         else -> "The local server is offline. Start it to send messages."
-                    } else if (agyNotInstalled) "Antigravity (agy) is not installed. Install it in Settings → Antigravity → Account & CLI."
+                    } else if (agyNotInstalled) "CrackCode is not installed. Install it in Settings → CrackCode → Account & CLI."
                     else "Server is offline. Start the server to send messages.",
                     selectedModel = currentModel,
                     quota = currentQuota,
@@ -2737,7 +2737,7 @@ fun ChatScreen(
                         if (unreadable.isNotEmpty()) {
                             // Claude models cannot read audio or video: say so instead of sending a file it would reject
                             com.crackcode.mobile.ui.components.AppToastHelper.showToast(
-                                "Claude can't read audio or video files. Remove them, or tap the mic to dictate instead.",
+                                "CrackCode can't read audio or video files. Remove them, or tap the mic to dictate instead.",
                                 com.crackcode.mobile.ui.components.ChatToastType.ERROR
                             )
                             return@ChatInputBar
@@ -3064,9 +3064,10 @@ fun ChatScreen(
     // asked once the local environment (rootfs) is installed, before the local server starts
     // First-launch setup, one full-screen step at a time: the agents, then the terminal icon (that one waits for the
     // agent choice so the two never show at once). The steps are numbered while both are still to do.
-    val agentStepPending = !hasChosenAgents &&
+    val agentStepPending = com.crackcode.mobile.UiToggles.AGENT_CHOICE_ONBOARDING && !hasChosenAgents &&
         (isLocalToolsInstalled || com.crackcode.mobile.data.local.LocalEnvironmentManager.isInstalled(context) || AuthPreferences.currentRemoteMode)
-    val launcherStepPending = !hasSeenTerminalLauncherOnboarding && !isInFloatingWindow
+    val launcherStepPending = com.crackcode.mobile.UiToggles.TERMINAL_LAUNCHER_ONBOARDING &&
+        !hasSeenTerminalLauncherOnboarding && !isInFloatingWindow
     var setupSteps by remember { mutableStateOf(0) }
     LaunchedEffect(agentStepPending, launcherStepPending) {
         if (agentStepPending && launcherStepPending) setupSteps = 2

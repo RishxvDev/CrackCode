@@ -222,7 +222,7 @@ fun FullScreenLocalToolsInstaller(
 
                         is LocalInstallerState.Success -> InstallerCard(tint = QuotaGreen) {
                             Text(
-                                text = "The terminal, the IDE backend and the Antigravity language server are ready to run.",
+                                text = "The terminal, the IDE backend and the CrackCode language server are ready to run.",
                                 fontSize = 13.5.sp,
                                 lineHeight = 19.sp,
                                 color = AppColors.onBackground

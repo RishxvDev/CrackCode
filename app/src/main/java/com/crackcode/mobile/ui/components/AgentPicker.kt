@@ -28,8 +28,8 @@ import com.crackcode.mobile.domain.model.AgentKind
 
 val ClaudeAccent = Color(0xFFD97757)
 
-/** Antigravity's color across the app (same blue as its settings group). */
-val AgyAccent = Color(0xFF3B82F6)
+/** CrackCode's green across the app. */
+val AgyAccent = Color(0xFF4CAF50)
 
 /** OpenCode's color across the app. */
 val OpenCodeAccent = Color(0xFF10B981)
@@ -39,9 +39,9 @@ val CodexAccent = Color(0xFF8B5CF6)
 
 fun AgentKind.label(): String = when (this) {
     AgentKind.AGY -> "CrackCode"
-    AgentKind.CLAUDE -> "Claude Code"
-    AgentKind.OPENCODE -> "OpenCode"
-    AgentKind.CODEX -> "Codex"
+    AgentKind.CLAUDE -> "CrackCode"
+    AgentKind.OPENCODE -> "CrackCode"
+    AgentKind.CODEX -> "CrackCode"
 }
 
 fun AgentKind.accent(): Color = when (this) {
@@ -111,6 +111,6 @@ fun ClaudeBadge(modifier: Modifier = Modifier) {
             .background(ClaudeAccent.copy(alpha = 0.16f))
             .padding(horizontal = 5.dp, vertical = 1.dp)
     ) {
-        Text(text = "Claude", fontSize = 9.5.sp, fontWeight = FontWeight.SemiBold, color = ClaudeAccent)
+        Text(text = "CrackCode", fontSize = 9.5.sp, fontWeight = FontWeight.SemiBold, color = ClaudeAccent)
     }
 }

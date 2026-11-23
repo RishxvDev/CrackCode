@@ -364,7 +364,7 @@ fun ChatHistoryDrawer(
             text = {
                 Column {
                     Text(
-                        text = "A live Antigravity CLI process is running in the background for this chat:",
+                        text = "A live CrackCode CLI process is running in the background for this chat:",
                         fontSize = 13.5.sp,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -676,14 +676,22 @@ fun ChatHistoryDrawer(
                     .padding(start = 2.dp, top = 2.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "CrackCode",
-                    fontSize = 19.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = (-0.3).sp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f)
-                )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFB5FFA8))
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = "CrackCode",
+                        fontSize = 19.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.3).sp,
+                        color = Color(0xFF1F3D1A)
+                    )
+                }
 
                 @Composable
                 fun HeaderIcon(icon: androidx.compose.ui.graphics.vector.ImageVector, description: String, active: Boolean, onClick: () -> Unit) {
@@ -880,12 +888,12 @@ fun ChatHistoryDrawer(
                 ) {
                     val allItems = buildList {
                         add(null to "All")
-                        visibleAgents.forEach { agent ->
+                        visibleAgents.filter { it == com.crackcode.mobile.domain.model.AgentKind.AGY }.forEach { agent ->
                             val label = when (agent) {
-                                com.crackcode.mobile.domain.model.AgentKind.AGY -> "Antigravity"
-                                com.crackcode.mobile.domain.model.AgentKind.CLAUDE -> "Claude"
-                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "OpenCode"
-                                com.crackcode.mobile.domain.model.AgentKind.CODEX -> "Codex"
+                                com.crackcode.mobile.domain.model.AgentKind.AGY -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.CLAUDE -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.CODEX -> "CrackCode"
                             }
                             add(agent to label)
                         }
@@ -1652,7 +1660,7 @@ private fun ChatHistoryItemRow(
             Spacer(modifier = Modifier.width(8.dp))
         } else {
             Box(contentAlignment = Alignment.Center) {
-                // Claude chats are marked by an orange chat icon (instead of a "Claude" text badge)
+                // Claude chats are marked by an orange chat icon (instead of a "CrackCode" text badge)
                 val isClaudeChat = conv.agent == com.crackcode.mobile.domain.model.AgentKind.CLAUDE
                 val isOpenCodeChat = conv.agent == com.crackcode.mobile.domain.model.AgentKind.OPENCODE
                 val isCodexChat = conv.agent == com.crackcode.mobile.domain.model.AgentKind.CODEX
@@ -1661,7 +1669,7 @@ private fun ChatHistoryItemRow(
                 } else Icon(
                     // an Antigravity cloud chat (Remote Agents) shows a cloud
                     imageVector = if (conv.isCloud) Icons.Outlined.Cloud else Icons.Outlined.ChatBubbleOutline,
-                    contentDescription = if (conv.isCloud) "Cloud chat" else if (isClaudeChat) "Claude Code chat" else if (isOpenCodeChat) "OpenCode chat" else if (isCodexChat) "Codex chat" else null,
+                    contentDescription = if (conv.isCloud) "Cloud chat" else if (isClaudeChat) "CrackCode chat" else if (isOpenCodeChat) "CrackCode chat" else if (isCodexChat) "CrackCode chat" else null,
                     tint = when {
                         conv.isCloud -> com.crackcode.mobile.theme.GeminiBlue.copy(alpha = if (isSelected) 1f else 0.85f)
                         isClaudeChat -> com.crackcode.mobile.ui.components.ClaudeAccent.copy(alpha = if (isSelected) 1f else 0.85f)
@@ -2002,7 +2010,7 @@ private fun ChatHistoryItemRow(
                     },
                     onClick = {
                         menuExpanded = false
-                        com.crackcode.mobile.ui.components.AppToastHelper.showToast("Preparing .antigem share...", com.crackcode.mobile.ui.components.ChatToastType.INFO)
+                        com.crackcode.mobile.ui.components.AppToastHelper.showToast("Preparing .CrackCode share...", com.crackcode.mobile.ui.components.ChatToastType.INFO)
                         scope.launch(Dispatchers.IO) {
                             ConversationShareHelper.shareConversation(
                                 context = context,

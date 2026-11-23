@@ -593,7 +593,7 @@ private fun MemoryOption(title: String, subtitle: String, selected: Boolean, onS
     }
 }
 
-/** "Claude Code" for "claude", "Antigravity" for "agy", …; the raw name for anything else. */
+/** "CrackCode" for "claude", "CrackCode" for "agy", …; the raw name for anything else. */
 private fun agentLabel(agent: String): String =
     AgentKind.entries.firstOrNull { it.name.equals(agent, ignoreCase = true) }?.label() ?: agent
 

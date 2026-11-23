@@ -369,7 +369,7 @@ private fun EgmGuideCard(cardBg: Color, cardBorder: BorderStroke, artifactDir: S
             )
 
             EgmGuideHeading("Normal chat or Jarvis chat?")
-            Hint("Normal chat (Claude Code, Codex, …): the agent does everything in that chat and runs the reviewers as its own hidden sub-agents. The simplest and lightest way. If the agent has no sub-agent tool, it stops and tells you to use a Jarvis chat.")
+            Hint("Normal chat (CrackCode, CrackCode, …): the agent does everything in that chat and runs the reviewers as its own hidden sub-agents. The simplest and lightest way. If the agent has no sub-agent tool, it stops and tells you to use a Jarvis chat.")
             Hint("Jarvis chat (Jarvis tab → a Jarvis chat, then type the command): Jarvis manages the run. It starts a planner chat (or plans itself, see Jarvis below) and one chat per reviewer, which you can open from the chat list. The phases show as Jarvis' mission steps, and Jarvis asks you to approve the design. Use it to watch the reviewers, or when the agent has no sub-agent tool. Every reviewer chat is a full agent, so it needs more memory.")
 
             EgmGuideHeading("During a run")

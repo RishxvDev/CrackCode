@@ -58,7 +58,7 @@ private val AGENT_OPTIONS = listOf(
     AgentOption(
         AgentKind.AGY,
         "CrackCode",
-        "CrackCode's built-in coding agent: Gemini and Claude models on your plan."
+        "CrackCode's built-in coding agent: CrackCode and CrackCode models on your plan."
     )
 )
 

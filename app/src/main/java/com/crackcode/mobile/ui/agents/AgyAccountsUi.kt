@@ -149,7 +149,7 @@ fun AgyAccountsCard(
                 )
                 else -> {
                     Text(
-                        "Keep several Google accounts and switch between them. Antigravity uses the new one right away.",
+                        "Keep several Google accounts and switch between them. CrackCode uses the new one right away.",
                         fontSize = 12.sp, color = subtle
                     )
                     // signed in with a login that has no saved copy

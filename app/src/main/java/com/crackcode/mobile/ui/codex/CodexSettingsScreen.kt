@@ -64,11 +64,11 @@ import kotlinx.coroutines.launch
 
 /** The pages of Settings → Codex (each opens from the Codex row list). */
 enum class CodexSettingsPage(val title: String, val subtitle: String) {
-    ACCOUNT("Account & CLI", "Sign in with ChatGPT, install, update and restart Codex"),
+    ACCOUNT("Account & CLI", "Sign in with ChatGPT, install, update and restart CrackCode"),
     USAGE("Usage limits", "How much of your plan's limits is used, and when they reset"),
-    PERMISSIONS("Permissions", "What Codex asks before acting in new chats"),
-    MCP("MCP servers", "Tools Codex can call: presets and your own servers"),
-    PLUGINS("Plugins", "Install plugins from Codex' catalog or any GitHub marketplace"),
+    PERMISSIONS("Permissions", "What CrackCode asks before acting in new chats"),
+    MCP("MCP servers", "Tools CrackCode can call: presets and your own servers"),
+    PLUGINS("Plugins", "Install plugins from CrackCode' catalog or any GitHub marketplace"),
     SKILLS("Skills", "Add skills from GitHub, update or remove them")
 }
 
@@ -164,9 +164,9 @@ fun CodexSettingsScreen(
     ) {
         // ---- CLI (install, update, restart)
         if (page == CodexSettingsPage.ACCOUNT) ClaudeCard {
-            Text("Codex CLI", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            Text("CrackCode CLI", fontWeight = FontWeight.Bold, fontSize = 14.sp)
             Text(
-                listOfNotNull(status?.version?.let { "Codex $it" }, if (status?.running == true) "running" else if (status?.installed == true) "starts when needed" else null)
+                listOfNotNull(status?.version?.let { "CrackCode $it" }, if (status?.running == true) "running" else if (status?.installed == true) "starts when needed" else null)
                     .joinToString(" · ").ifBlank { state.label },
                 fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
@@ -190,7 +190,7 @@ fun CodexSettingsScreen(
                         enabled = !jobRunning,
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = CodexAccent, contentColor = Color.White)
-                    ) { Text(if (jobRunning) "Installing…" else "Install Codex") }
+                    ) { Text(if (jobRunning) "Installing…" else "Install CrackCode") }
                 } else {
                     OutlinedButton(onClick = { backend.startCliJob("update") }, enabled = !jobRunning, shape = RoundedCornerShape(12.dp)) {
                         Text(if (jobRunning) "Checking…" else "Check for updates")
@@ -202,7 +202,7 @@ fun CodexSettingsScreen(
                             backend.restartServer { err ->
                                 restarting = false
                                 com.crackcode.mobile.ui.components.AppToastHelper.showToast(
-                                    err?.let { "Restart failed: $it" } ?: "Codex restarted",
+                                    err?.let { "Restart failed: $it" } ?: "CrackCode restarted",
                                     if (err == null) com.crackcode.mobile.ui.components.ChatToastType.SUCCESS else com.crackcode.mobile.ui.components.ChatToastType.ERROR
                                 )
                             }
@@ -250,7 +250,7 @@ fun CodexSettingsScreen(
                 com.crackcode.mobile.ui.agents.AgentMark(AgentKind.CODEX, size = 40.dp)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("Codex", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    Text("CrackCode", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text(
                         when {
                             account != null -> listOfNotNull(account?.email, account?.plan?.replaceFirstChar { it.uppercase() }?.let { "$it plan" }).joinToString(" · ").ifBlank { "Signed in" }
@@ -274,7 +274,7 @@ fun CodexSettingsScreen(
                                 modifier = Modifier.padding(vertical = 8.dp))
                         }
                     } else {
-                        Text("Finish signing in in your browser. Codex picks it up by itself.", fontSize = 12.5.sp, lineHeight = 17.sp)
+                        Text("Finish signing in in your browser. CrackCode picks it up by itself.", fontSize = 12.5.sp, lineHeight = 17.sp)
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Button(
@@ -291,7 +291,7 @@ fun CodexSettingsScreen(
                 state == CodexState.SIGNED_OUT -> {
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "Sign in with the ChatGPT account whose plan Codex should use (Free, Plus, Pro, Business…).",
+                        "Sign in with the ChatGPT account whose plan CrackCode should use (Free, Plus, Pro, Business…).",
                         fontSize = 12.5.sp, lineHeight = 17.sp
                     )
                     Spacer(Modifier.height(10.dp))
@@ -336,7 +336,7 @@ fun CodexSettingsScreen(
                 val lim = limits
                 when {
                     lim == null -> Text(
-                        if (state == CodexState.READY) "No usage information yet." else "Sign in to Codex to see your limits.",
+                        if (state == CodexState.READY) "No usage information yet." else "Sign in to CrackCode to see your limits.",
                         fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                     lim.primary == null && lim.secondary == null -> Text("No limits reported for this account.", fontSize = 12.sp)
@@ -351,7 +351,7 @@ fun CodexSettingsScreen(
         // ---- approvals for new chats
         if (page == CodexSettingsPage.PERMISSIONS) ClaudeCard {
             Text("Approvals", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text("What Codex asks before acting. Each chat can change it from the chip above the message box.",
+            Text("What CrackCode asks before acting. Each chat can change it from the chip above the message box.",
                 fontSize = 11.5.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             Spacer(Modifier.height(8.dp))
             CodexPreferences.MODES.forEach { m ->

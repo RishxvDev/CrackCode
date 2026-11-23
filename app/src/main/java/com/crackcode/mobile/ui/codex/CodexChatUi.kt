@@ -104,10 +104,10 @@ fun codexApprovalItems(pending: List<CodexPending>, backend: CodexChatBackend, m
                     reason = reason,
                     primary = ApprovalChoice("Allow") { backend.approve(p.key) },
                     always = buildList {
-                        add(ApprovalChoice("Allow for this session", "Codex asks again after a restart") { backend.approve(p.key, always = true) })
-                        if (rule.isNotEmpty()) add(ApprovalChoice("Always allow `${rule.joinToString(" ")}`", "Codex saves this rule") { backend.approveRule(p.key) })
+                        add(ApprovalChoice("Allow for this session", "CrackCode asks again after a restart") { backend.approve(p.key, always = true) })
+                        if (rule.isNotEmpty()) add(ApprovalChoice("Always allow `${rule.joinToString(" ")}`", "CrackCode saves this rule") { backend.approveRule(p.key) })
                     },
-                    denyPlaceholder = "Tell Codex what to do instead (optional)",
+                    denyPlaceholder = "Tell CrackCode what to do instead (optional)",
                     onDeny = deny
                 )
             }
@@ -128,8 +128,8 @@ fun codexApprovalItems(pending: List<CodexPending>, backend: CodexChatBackend, m
                 },
                 reason = reason,
                 primary = ApprovalChoice("Allow") { backend.approve(p.key) },
-                always = listOf(ApprovalChoice("Allow edits for this session", "Codex asks again after a restart") { backend.approve(p.key, always = true) }),
-                denyPlaceholder = "Tell Codex what to do instead (optional)",
+                always = listOf(ApprovalChoice("Allow edits for this session", "CrackCode asks again after a restart") { backend.approve(p.key, always = true) }),
+                denyPlaceholder = "Tell CrackCode what to do instead (optional)",
                 onDeny = deny
             )
             "item/permissions/requestApproval" -> ApprovalItem(
@@ -178,8 +178,8 @@ fun codexModeLabel(mode: String): String = when (mode) {
 fun codexModeDescription(mode: String): String = when (mode) {
     CodexPreferences.MODE_READ_ONLY -> "Reads the project. Asks before changing files or running anything that needs more."
     CodexPreferences.MODE_ASK -> "Edits files in the project; asks before running commands (except known safe ones)."
-    CodexPreferences.MODE_FULL -> "No sandbox and no questions: Codex can change anything and use the network."
-    else -> "Codex's default: edits and runs commands inside the project; asks before going outside it or online."
+    CodexPreferences.MODE_FULL -> "No sandbox and no questions: CrackCode can change anything and use the network."
+    else -> "CrackCode's default: edits and runs commands inside the project; asks before going outside it or online."
 }
 
 @Composable
@@ -254,7 +254,7 @@ fun CodexControlsStrip(backend: CodexChatBackend) {
         }
     }
     if (effortSheet) {
-        com.crackcode.mobile.ui.claude.ClaudePickerSheet("Reasoning", "how long Codex thinks before answering", { effortSheet = false }, agent = AgentKind.CODEX) {
+        com.crackcode.mobile.ui.claude.ClaudePickerSheet("Reasoning", "how long CrackCode thinks before answering", { effortSheet = false }, agent = AgentKind.CODEX) {
             efforts.forEach { e ->
                 com.crackcode.mobile.ui.claude.PickerOption(
                     title = codexEffortLabel(e),
@@ -274,7 +274,7 @@ fun CodexControlsStrip(backend: CodexChatBackend) {
         }
     }
     if (modeSheet) {
-        com.crackcode.mobile.ui.claude.ClaudePickerSheet("Approvals", "what Codex asks before doing", { modeSheet = false }, agent = AgentKind.CODEX) {
+        com.crackcode.mobile.ui.claude.ClaudePickerSheet("Approvals", "what CrackCode asks before doing", { modeSheet = false }, agent = AgentKind.CODEX) {
             CodexPreferences.MODES.forEach { m ->
                 com.crackcode.mobile.ui.claude.PickerOption(
                     title = codexModeLabel(m),
@@ -387,7 +387,7 @@ fun CodexModelSheet(backend: CodexChatBackend, onOpenSettings: () -> Unit, onDis
             TextButton(onClick = { onDismiss(); onOpenSettings() }) {
                 Icon(Icons.Outlined.Settings, null, Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
-                Text("Codex account and settings")
+                Text("CrackCode account and settings")
             }
         }
     }

@@ -13,4 +13,15 @@ object UiToggles {
 
     /** Voice calls, mic voice notes and live dictation ("Stream words in real-time"). */
     const val VOICE = false
+
+    /** STEP 1: first-run install / agent-pick / terminal-icon onboarding. Code kept, UI hidden. */
+    const val FIRST_RUN_INSTALLER = false
+    const val AGENT_CHOICE_ONBOARDING = false
+    const val TERMINAL_LAUNCHER_ONBOARDING = false
+
+    /** STEP 1: UI customisation hidden; themes stay System / Light / Dark. */
+    const val THEME_GALLERY = false
+    const val PIKU_PALETTE_PICKER = false
+    const val CHAT_TEXT_SCALING = false
+    const val CHAT_HEADER_ICONS = false
 }

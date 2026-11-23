@@ -135,7 +135,7 @@ fun ClaudePermissionModeSheet(
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    ClaudePickerSheet("Permission mode", "how Claude asks before acting", onDismiss) {
+    ClaudePickerSheet("Permission mode", "how CrackCode asks before acting", onDismiss) {
         modes.forEach { (value, label) ->
             PickerOption(
                 title = label,
@@ -188,7 +188,7 @@ private fun EffortBars(filled: Int, total: Int, color: Color) {
 /** How much work Claude puts into each reply. */
 @Composable
 fun ClaudeEffortSheet(levels: List<String>, current: String?, onSelect: (String?) -> Unit, onDismiss: () -> Unit) {
-    ClaudePickerSheet("Effort", "how much work Claude puts into each reply", onDismiss) {
+    ClaudePickerSheet("Effort", "how much work CrackCode puts into each reply", onDismiss) {
         (listOf<String?>(null) + levels).forEachIndexed { index, level ->
             PickerOption(
                 title = effortLabel(level),

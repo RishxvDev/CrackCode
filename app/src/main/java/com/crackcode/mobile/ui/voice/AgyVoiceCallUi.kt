@@ -210,9 +210,9 @@ private fun CallContent(st: AgyVoiceCall.State, agentWorking: Boolean, onOpenAgy
                     Icon(Icons.Rounded.KeyboardArrowDown, "Minimize", tint = Color.White.copy(alpha = 0.85f), modifier = Modifier.size(28.dp))
                 }
                 Column(Modifier.weight(1f).padding(horizontal = 4.dp)) {
-                    Text(st.title.ifBlank { "Antigravity" }, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(st.title.ifBlank { "CrackCode" }, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(
-                        "Antigravity voice · ${voice.name}" +
+                        "CrackCode voice · ${voice.name}" +
                             (if (st.language != AgyVoicePreferences.LANGUAGE_AUTO) " · ${AgyVoicePreferences.languageLabel(st.language)}" else ""),
                         color = Color.White.copy(alpha = 0.55f), fontSize = 12.sp, maxLines = 1
                     )
@@ -908,10 +908,10 @@ fun AgyVoiceFloatingPanel(
                     }
                     Column(Modifier.weight(1f).padding(horizontal = 2.dp)) {
                         Text(
-                            st.title.ifBlank { "Antigravity" }, color = Color.White, fontSize = 15.sp,
+                            st.title.ifBlank { "CrackCode" }, color = Color.White, fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis
                         )
-                        Text("Antigravity voice · ${voice.name}", color = Color.White.copy(alpha = 0.55f), fontSize = 11.5.sp, maxLines = 1)
+                        Text("CrackCode voice · ${voice.name}", color = Color.White.copy(alpha = 0.55f), fontSize = 11.5.sp, maxLines = 1)
                     }
                     if (clock != null) {
                         Surface(shape = RoundedCornerShape(50), color = Color.White.copy(alpha = 0.08f)) {

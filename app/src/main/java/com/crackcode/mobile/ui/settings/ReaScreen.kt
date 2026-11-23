@@ -587,7 +587,7 @@ private fun ManualSetupCard(state: ReaManager.State, cardBg: Color, cardBorder: 
                 TextButton(onClick = { open = !open }) { Text(if (open) "Hide" else "Show", fontSize = 12.5.sp) }
             }
             if (!open) {
-                Hint("Prefer the terminal, or setting up Claude Code, OpenCode or Codex? These are the same steps as commands.")
+                Hint("Prefer the terminal, or setting up CrackCode, CrackCode or CrackCode? These are the same steps as commands.")
                 return@Column
             }
             steps.forEach { (label, command) ->

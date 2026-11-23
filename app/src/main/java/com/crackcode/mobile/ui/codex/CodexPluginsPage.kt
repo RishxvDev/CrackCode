@@ -117,9 +117,9 @@ private fun parsePluginList(result: JsonElement): CxPluginData {
 
 /** "method not found" from an older Codex: the plugin commands came with newer versions. */
 private fun friendly(e: Throwable): String {
-    val msg = e.message ?: "Codex did not answer"
+    val msg = e.message ?: "CrackCode did not answer"
     return if (msg.contains("method not found", ignoreCase = true) || msg.contains("unknown variant", ignoreCase = true))
-        "This Codex is too old to manage plugins. Update it in Settings → Codex → Account & CLI." else msg
+        "This CrackCode is too old to manage plugins. Update it in Settings → CrackCode → Account & CLI." else msg
 }
 
 /**
@@ -175,7 +175,7 @@ fun CodexPluginsPage(backend: CodexChatBackend) {
         if (p.marketplacePath != null) put("marketplacePath", p.marketplacePath) else put("remoteMarketplaceName", p.marketplace)
     }) { res ->
         val apps = (res as? JsonObject)?.a("appsNeedingAuth").orEmpty().mapNotNull { (it as? JsonObject)?.str("name") }
-        "${p.title} installed. Start a new chat to use it." + if (apps.isNotEmpty()) " Sign in to ${apps.joinToString()} when Codex asks." else ""
+        "${p.title} installed. Start a new chat to use it." + if (apps.isNotEmpty()) " Sign in to ${apps.joinToString()} when CrackCode asks." else ""
     }
 
     Column(Modifier.fillMaxSize()) {
@@ -301,7 +301,7 @@ fun CodexPluginsPage(backend: CodexChatBackend) {
                                     ) {
                                         Column(Modifier.weight(1f)) {
                                             Text(m.title, fontWeight = FontWeight.SemiBold, fontSize = 13.5.sp)
-                                            Hint("${m.plugins.size} plugin(s)" + (if (builtIn) " · built into Codex" else "") + (if (m.title != m.name) " · ${m.name}" else ""))
+                                            Hint("${m.plugins.size} plugin(s)" + (if (builtIn) " · built into CrackCode" else "") + (if (m.title != m.name) " · ${m.name}" else ""))
                                         }
                                         Icon(if (open) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, if (open) "Hide plugins" else "Show plugins")
                                     }

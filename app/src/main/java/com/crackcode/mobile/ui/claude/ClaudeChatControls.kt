@@ -217,7 +217,7 @@ fun ClaudeControlsStrip(
             current = mode,
             modes = ClaudeChatBackend.PERMISSION_MODES.filter { (value, _) -> value != "auto" || autoSupported },
             note = if (autoSupported) {
-                "Auto asks only for risky actions. For fewer prompts without giving up checks, turn on Sandbox commands in Settings → Claude Code → Permissions."
+                "Auto asks only for risky actions. For fewer prompts without giving up checks, turn on Sandbox commands in Settings → CrackCode → Permissions."
             } else {
                 "This model has no Auto mode; chats on it start in Manual."
             },
@@ -399,11 +399,11 @@ fun ClaudeModelSheet(
             }
 
             if (planGroups.isEmpty() || signedOut) {
-                SheetSectionLabel(if (customSections.isEmpty()) "Model" else "Claude", trailing = if (customSections.isEmpty()) null else "your Claude plan")
+                SheetSectionLabel(if (customSections.isEmpty()) "Model" else "CrackCode", trailing = if (customSections.isEmpty()) null else "your CrackCode plan")
             }
             if (signedOut) {
                 Text(
-                    "Sign in to Claude Code (Settings → Claude Code → Account) to use Claude's models.",
+                    "Sign in to CrackCode (Settings → CrackCode → Account) to use CrackCode's models.",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     modifier = Modifier.padding(horizontal = 4.dp)
@@ -414,12 +414,12 @@ fun ClaudeModelSheet(
                         if (refreshing) {
                             androidx.compose.material3.CircularProgressIndicator(Modifier.size(22.dp), strokeWidth = 2.dp, color = ClaudeAccent)
                             Spacer(Modifier.height(10.dp))
-                            Text("Loading Claude's models…", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                            Text("Claude Code is starting to list them; this can take a moment.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                            Text("Loading CrackCode's models…", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                            Text("CrackCode is starting to list them; this can take a moment.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                         } else {
                             Text("No models loaded", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                             Text(
-                                modelsError ?: "Claude Code has not listed its models yet.",
+                                modelsError ?: "CrackCode has not listed its models yet.",
                                 fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                             )
@@ -483,7 +483,7 @@ fun ClaudeModelSheet(
             val info = models.find { it.value == selected }
             val levels = info?.supportedEffortLevels.orEmpty()
             if (levels.isNotEmpty()) {
-                SheetSectionLabel("Effort", trailing = "how hard Claude works on each reply")
+                SheetSectionLabel("Effort", trailing = "how hard CrackCode works on each reply")
                 SegmentedSelector(
                     options = (listOf<String?>(null) + levels).map { it to effortLabel(it).replace("Extra high", "X-high") },
                     selected = effort,
@@ -574,7 +574,7 @@ fun ClaudeUsageDialog(account: ClaudeAccountManager, backend: ClaudeChatBackend,
             text = {
                 Text(
                     "This chat runs on ${backend.modelLabel(selected)}, a custom provider. Plan usage and cost are only shown for " +
-                        "Claude's own models; check the provider's dashboard for this chat's usage.",
+                        "CrackCode's own models; check the provider's dashboard for this chat's usage.",
                     fontSize = 13.sp
                 )
             },
@@ -595,7 +595,7 @@ fun ClaudeUsageDialog(account: ClaudeAccountManager, backend: ClaudeChatBackend,
                 Text("Usage", fontWeight = FontWeight.Bold)
                 val plan = (usage?.subscription_type ?: status?.auth?.subscriptionType)?.let { com.crackcode.mobile.ui.agents.claudePlanLabel(it) }
                 Text(
-                    listOfNotNull("Claude Code", plan?.let { "$it plan" }).joinToString(" · "),
+                    listOfNotNull("CrackCode", plan?.let { "$it plan" }).joinToString(" · "),
                     fontSize = 12.sp,
                     color = ClaudeAccent
                 )
@@ -665,7 +665,7 @@ fun ClaudeProviderSwitchDialog(backend: ClaudeChatBackend) {
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("This chat runs on ${pending.fromLabel}. Moving it to ${pending.toLabel} is not a good idea:", fontSize = 13.5.sp)
-                Text("• Claude Code is stopped and started again for this chat.", fontSize = 13.sp, color = muted)
+                Text("• CrackCode is stopped and started again for this chat.", fontSize = 13.sp, color = muted)
                 Text(
                     "• The whole conversation" + (pending.resendTokens?.let { " (about ${compactTokens(it)} tokens)" } ?: "") +
                         " is sent to the new provider again, without cache, so the next reply costs far more than usual.",

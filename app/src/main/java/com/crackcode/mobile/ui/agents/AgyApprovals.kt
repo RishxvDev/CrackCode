@@ -51,7 +51,7 @@ fun agyApprovalItems(
             scope("In this workspace", "Don't ask again in this project", PermissionScopes.PROJECT),
             scope("Everywhere", "Don't ask again anywhere", PermissionScopes.GLOBAL)
         ),
-        denyPlaceholder = "Tell Antigravity what to do instead (optional)",
+        denyPlaceholder = "Tell CrackCode what to do instead (optional)",
         onDeny = { onReject(call, approval.messageId, it) }
     )
 }

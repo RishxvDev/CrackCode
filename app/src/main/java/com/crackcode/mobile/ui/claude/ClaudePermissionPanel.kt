@@ -58,7 +58,7 @@ fun claudeApprovalItems(pending: List<ClaudeTranscript.PendingPermission>, backe
                 always = p.suggestions.orEmpty().mapIndexedNotNull { i, s ->
                     (s as? JsonObject)?.let { ApprovalChoice(describeSuggestion(it)) { backend.approveToolAlways(p.toolUseId, i) } }
                 },
-                denyPlaceholder = "Tell Claude what to do instead (optional)",
+                denyPlaceholder = "Tell CrackCode what to do instead (optional)",
                 onDeny = { backend.rejectToolById(p.toolUseId, it) }
             )
         }

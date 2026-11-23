@@ -28,9 +28,9 @@ enum class PikuPalette(
         "Mint",
         Color(0xFFB5FFA8), Color(0xFFECFFE9),
         Color(0xFFA5FF52), Color(0xFF81EE77),
-        Color(0xFF6F6F6F), Color(0xFF939393),
+        Color(0xFFCFFFC2), Color(0xFFFFFFFF),
         Color(0xFFE8FFE5), Color(0xFFEBFFDA),
-        Color(0xFF424242), Color(0xFF000000), Color(0xFFFFFFFF),
+        Color(0xFF424242), Color(0xFF1F3D1A), Color(0xFFFFFFFF),
     ),
     BLUSH(
         "Blush",
@@ -66,7 +66,8 @@ object PikuPaletteManager {
     fun init(context: Context) {
         if (prefs != null) return
         prefs = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        current = PikuPalette.fromId(prefs?.getString(KEY, null))
+        // Fixed green CrackCode look on every launch; saved palettes stay untouched in storage.
+        current = PikuPalette.MINT
     }
 
     fun select(palette: PikuPalette) {

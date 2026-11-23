@@ -80,7 +80,7 @@ fun AgyVoiceCallSettingsCard(modifier: Modifier = Modifier) {
                 Spacer(Modifier.height(6.dp))
                 Text(
                     "The Voice call tile in Quick Settings and the \"Voice call\" shortcut (long-press the CrackCode icon) call " +
-                        "Antigravity in the last chat that had a call, or a new chat the first time. When CrackCode is " +
+                        "CrackCode in the last chat that had a call, or a new chat the first time. When CrackCode is " +
                         "running the call starts without opening it; otherwise the app opens and calls once the server is up. " +
                         "During a call, a tap on the tile ends it.",
                     fontSize = 12.5.sp, color = subtleText()

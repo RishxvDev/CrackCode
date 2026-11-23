@@ -100,12 +100,12 @@ import kotlinx.coroutines.launch
 private val QUICK = listOf(
     Triple("openai", "ChatGPT / OpenAI", "ChatGPT Plus / Pro, or an API key"),
     Triple("github-copilot", "GitHub Copilot", "Your Copilot subscription"),
-    Triple("claude-agent", "Claude subscription", "Uses Claude Code's login"),
+    Triple("CrackCode-agent", "CrackCode subscription", "Uses CrackCode's login"),
     Triple("xai", "SuperGrok / xAI", "Grok subscription or API key"),
-    Triple("opencode", "OpenCode Zen", "OpenCode Console account"),
-    Triple("opencode-go", "OpenCode Go", "OpenCode's plan · key"),
+    Triple("opencode", "CrackCode Zen", "CrackCode Console account"),
+    Triple("CrackCode-go", "CrackCode Go", "CrackCode's plan · key"),
     Triple("openrouter", "OpenRouter", "Hundreds of models · key"),
-    Triple("anthropic", "Anthropic API", "Claude models · key")
+    Triple("anthropic", "Anthropic API", "CrackCode models · key")
 )
 
 private fun toast(msg: String, ok: Boolean = true) = AppToastHelper.showToast(msg, if (ok) ChatToastType.SUCCESS else ChatToastType.ERROR)
@@ -152,7 +152,7 @@ fun OpenCodeProvidersPage(backend: OpenCodeChatBackend) {
             Column(Modifier.weight(1f)) {
                 Text("Your providers", fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 Text(
-                    "Sign in with a subscription (ChatGPT, GitHub Copilot, SuperGrok, Claude…) or an API key. " +
+                    "Sign in with a subscription (ChatGPT, GitHub Copilot, SuperGrok, CrackCode…) or an API key. " +
                         "Their models then show in the model picker; ${models.size} are available now.",
                     fontSize = 11.5.sp, lineHeight = 15.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -164,7 +164,7 @@ fun OpenCodeProvidersPage(backend: OpenCodeChatBackend) {
 
         val connected = integrations.filter { it.connected }
         if (connected.isEmpty() && error == null && !loading) {
-            Text("Nothing connected yet: OpenCode's free models work without an account.", fontSize = 12.sp,
+            Text("Nothing connected yet: CrackCode's free models work without an account.", fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f), modifier = Modifier.padding(top = 8.dp))
         }
         connected.forEach { integ ->
@@ -599,8 +599,8 @@ private fun ProviderSignInSheet(backend: OpenCodeChatBackend, integ: OpenCodeAut
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            if (integ.connections.any { it.method == "key" }) "Saved by OpenCode on the server. It replaces the key saved for ${integ.name} now (one key per provider)."
-                            else "Saved by OpenCode on the server.",
+                            if (integ.connections.any { it.method == "key" }) "Saved by CrackCode on the server. It replaces the key saved for ${integ.name} now (one key per provider)."
+                            else "Saved by CrackCode on the server.",
                             fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                     }

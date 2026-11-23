@@ -120,7 +120,7 @@ private const val P_SPARKLE = 1
 private const val P_Z = 2
 private const val P_GLINT = 3 // slow sparkle rising from the antenna while the agent works
 private const val SLEEP_AFTER_S = 60f // falls asleep after this long untouched
-private const val PIKU_ART_SCALE = 0.7f // whole mascot size: change this one value
+private const val PIKU_ART_SCALE = 0.6f // whole mascot size: change this one value
 
 private val MascotInk = PikuOutline
 private val MascotText = Color(0xFF424242)

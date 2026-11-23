@@ -87,7 +87,7 @@ fun bundledSdkZip(context: Context): ByteArray {
                 zip.closeEntry()
             } else children.sorted().forEach { add("$asset/$it", "$entry/$it") }
         }
-        add("extension-docs", "antigem-plugin-sdk")
+        add("extension-docs", "CrackCode-plugin-sdk")
     }
     return out.toByteArray()
 }
