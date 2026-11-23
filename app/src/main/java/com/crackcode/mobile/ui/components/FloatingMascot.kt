@@ -3,7 +3,6 @@ package com.crackcode.mobile.ui.components
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.crackcode.mobile.R
-import com.crackcode.mobile.theme.PikuGreen
 import com.crackcode.mobile.theme.PikuOutline
 
 import androidx.compose.animation.AnimatedVisibility
@@ -71,7 +70,6 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.graphics.graphicsLayer
 import android.provider.Settings
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
@@ -172,14 +170,14 @@ fun FloatingMascot(
     val sim = remember(density) { MascotSim(density) }
     val art = remember(density) { MascotArt(density, context) }
 
-    SideEffect {
-        val scale = Settings.Global.getFloat(
+    val reducedMotion = remember(context) {
+        Settings.Global.getFloat(
             context.contentResolver,
             Settings.Global.ANIMATOR_DURATION_SCALE,
             1f
-        )
-        sim.reducedMotion = scale == 0f
+        ) == 0f
     }
+    SideEffect { sim.reducedMotion = reducedMotion }
 
     val haptic = LocalHapticFeedback.current
     SideEffect {
@@ -366,14 +364,14 @@ fun PikuPreview(
         }
     }
     val art = remember(density) { MascotArt(density, context) }
-    SideEffect {
-        val scale = Settings.Global.getFloat(
+    val reducedMotion = remember(context) {
+        Settings.Global.getFloat(
             context.contentResolver,
             Settings.Global.ANIMATOR_DURATION_SCALE,
             1f
-        )
-        sim.reducedMotion = scale == 0f
+        ) == 0f
     }
+    SideEffect { sim.reducedMotion = reducedMotion }
     val haptic = LocalHapticFeedback.current
     SideEffect { sim.hapticLight = { haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove) } }
     LaunchedEffect(sim) { runMascotLoop(sim) }
