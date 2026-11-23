@@ -2233,6 +2233,7 @@ All files created here persist inside the application.
                 pb.environment()["PREFIX"] = prefixDir.absolutePath
                 pb.environment()["HOME"] = homeDir.absolutePath
                 pb.environment()["PATH"] = "${binDir.absolutePath}:/system/bin"
+                pb.environment()["LD_LIBRARY_PATH"] = libDir.absolutePath
                 val process = pb.start()
                 process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
                 log("Generated fresh OpenSSH host keys via ssh-keygen -A")
@@ -2273,6 +2274,8 @@ All files created here persist inside the application.
             env["TERMUX_MAIN_PACKAGE_NAME"] = context.packageName
             env["TERMUX_APK_RELEASE"] = "GITHUB"
             env["TERMUX_APP_PID"] = android.os.Process.myPid().toString()
+            // New Termux bootstraps keep a RUNPATH for /data/data/com.termux; on this app the libraries live here.
+            env["LD_LIBRARY_PATH"] = lib.absolutePath
             env["ANDROID_DATA"] = "/data"
             env["ANDROID_ROOT"] = "/system"
             env["LANG"] = "en_US.UTF-8"
@@ -2456,6 +2459,7 @@ All files created here persist inside the application.
         env["HOME"] = homeDir.absolutePath
         env["TMPDIR"] = tmpDir.absolutePath
         env["PATH"] = "${homeDir.absolutePath}/.local/bin:${binDir.absolutePath}:${prefixDir.absolutePath}/bin:/system/bin:/system/xbin"
+        env["LD_LIBRARY_PATH"] = File(prefixDir, "lib").absolutePath
         env["TERM"] = "xterm-256color"
         env["COLORTERM"] = "truecolor"
         env["LANG"] = "en_US.UTF-8"
@@ -2514,6 +2518,7 @@ All files created here persist inside the application.
         env["HOME"] = homeDir.absolutePath
         env["TMPDIR"] = tmpDir.absolutePath
         env["PATH"] = "${homeDir.absolutePath}/.local/bin:${binDir.absolutePath}:${prefixDir.absolutePath}/bin:/system/bin:/system/xbin"
+        env["LD_LIBRARY_PATH"] = File(prefixDir, "lib").absolutePath
         env["DEBIAN_FRONTEND"] = "noninteractive"
         env["TERM"] = "xterm-256color"
         env["COLORTERM"] = "truecolor"

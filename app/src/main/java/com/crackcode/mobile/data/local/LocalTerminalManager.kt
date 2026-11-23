@@ -226,6 +226,7 @@ class LocalPtySession(
                 } catch (_: Exception) {}
 
                 envMap["PREFIX"] = prefix.absolutePath
+                envMap["LD_LIBRARY_PATH"] = File(prefix, "lib").absolutePath
                 envMap["HOME"] = home.absolutePath
                 envMap["PATH"] = "${home.absolutePath}/.local/bin:${bin.absolutePath}:${bin.absolutePath}/applets:/system/bin:/system/xbin"
                 envMap["TMPDIR"] = tmp.absolutePath

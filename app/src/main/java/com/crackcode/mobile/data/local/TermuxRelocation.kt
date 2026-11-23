@@ -346,6 +346,7 @@ object TermuxRelocation {
             put("PREFIX", prefix)
             put("TMPDIR", "$prefix/tmp")
             put("PATH", "$prefix/bin:/system/bin")
+            put("LD_LIBRARY_PATH", "$prefix/lib")
             remove("LD_PRELOAD")
         }
         val proc = pb.start()
