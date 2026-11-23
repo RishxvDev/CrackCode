@@ -1,6 +1,8 @@
 name: Build CrackCode Debug APK
 
 on:
+  push:
+    branches: [build-test]
   workflow_dispatch:
 
 permissions:
