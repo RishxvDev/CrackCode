@@ -1,4 +1,6 @@
 import groovy.json.JsonSlurper
+import java.io.FileOutputStream
+import java.net.URL
 
 val versionFile = rootProject.file("version.json")
 val parsedVersion = if (versionFile.exists()) {
@@ -376,11 +378,11 @@ val downloadBundledBootstrap = tasks.register("downloadBundledBootstrap") {
       repeat(3) {
         if (done) return@repeat
         try {
-          val conn = java.net.URL(bundledBootstrapUrl).openConnection()
+          val conn = URL(bundledBootstrapUrl).openConnection()
           conn.connectTimeout = 30_000
           conn.readTimeout = 300_000
           conn.getInputStream().use { input ->
-            java.io.FileOutputStream(outFile).use { output -> input.copyTo(output) }
+            FileOutputStream(outFile).use { output -> input.copyTo(output) }
           }
           done = true
         } catch (t: Throwable) {
