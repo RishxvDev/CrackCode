@@ -18,7 +18,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import com.crackcode.mobile.theme.isAppInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -198,7 +197,6 @@ fun ChatInputBar(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
-    val isDark = isAppInDarkTheme()
 
     // Audio recording & Speech-to-Text state
     var recordMode by remember { mutableStateOf(AudioRecordMode.VOICE_NOTE) }
