@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.NoteAdd
 import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Extension
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.FolderOpen
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -138,7 +139,11 @@ private fun openCodeAgentDescription(a: com.crackcode.mobile.data.agent.opencode
 
 /** OpenCode chat controls above the input: agent (Build / Plan), approval mode, and the retry / compaction notice. */
 @Composable
-fun OpenCodeControlsStrip(backend: OpenCodeChatBackend) {
+fun OpenCodeControlsStrip(
+    backend: OpenCodeChatBackend,
+    onOpenProjectSwitch: (() -> Unit)? = null,
+    onOpenFileManager: (() -> Unit)? = null
+) {
     val agents by backend.agents.collectAsState()
     val agent by backend.agent.collectAsState()
     val mode by backend.permissionMode.collectAsState()
@@ -187,6 +192,26 @@ fun OpenCodeControlsStrip(backend: OpenCodeChatBackend) {
                     selected = a.id == agent,
                     icon = openCodeAgentIcon(a.id),
                     onClick = { backend.selectAgent(a.id); agentSheet = false }
+                )
+            }
+            if (onOpenProjectSwitch != null) {
+                com.crackcode.mobile.ui.claude.PickerOption(
+                    title = "Project switch",
+                    description = "Choose the folder this chat works in.",
+                    color = OpenCodeAccent,
+                    selected = false,
+                    icon = Icons.Outlined.FolderOpen,
+                    onClick = { agentSheet = false; onOpenProjectSwitch?.invoke() }
+                )
+            }
+            if (onOpenFileManager != null) {
+                com.crackcode.mobile.ui.claude.PickerOption(
+                    title = "File manager switch",
+                    description = "Browse and manage the project's files.",
+                    color = OpenCodeAccent,
+                    selected = false,
+                    icon = Icons.Outlined.Folder,
+                    onClick = { agentSheet = false; onOpenFileManager?.invoke() }
                 )
             }
             SheetNote("Switching applies to the next message of this chat. New chats use the agent from Settings → CrackCode → Permissions.")

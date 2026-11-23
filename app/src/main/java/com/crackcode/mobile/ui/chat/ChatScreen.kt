@@ -2648,10 +2648,21 @@ fun ChatScreen(
                     )
                 }
                 if (isOpenCodeChat) {
-                    com.crackcode.mobile.ui.opencode.OpenCodeControlsStrip(openCodeBackend)
+                    com.crackcode.mobile.ui.opencode.OpenCodeControlsStrip(
+                        openCodeBackend,
+                        onOpenProjectSwitch = { showProjectPickerDialog = true },
+                        onOpenFileManager = { onNavigateToFiles?.invoke() }
+                    )
                 }
                 if (isCodexChat) {
                     com.crackcode.mobile.ui.codex.CodexControlsStrip(codexBackend)
+                }
+                // STEP 2: CrackCode chat's Build chip menu — project switch and file manager
+                if (isAgyChat && !isReadOnlyChat) {
+                    CrackCodeBuildChip(
+                        onOpenProjectSwitch = { showProjectPickerDialog = true },
+                        onOpenFileManager = { onNavigateToFiles?.invoke() }
+                    )
                 }
 
                 // Jarvis chat: its command strip (mission, teams' tasks, voice replies, autopilot)
@@ -3920,3 +3931,47 @@ internal fun resolveChatFileLink(path: String, workspaceUri: String?): String {
     return "/" + parts.joinToString("/")
 }
 
+
+/** STEP 2: the CrackCode chat's Build chip — a small menu for project switch and the file manager. */
+@Composable
+private fun CrackCodeBuildChip(
+    onOpenProjectSwitch: () -> Unit,
+    onOpenFileManager: () -> Unit
+) {
+    var sheet by remember { mutableStateOf(false) }
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 2.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        com.crackcode.mobile.ui.claude.ControlChip(
+            text = "Build",
+            icon = Icons.Outlined.SmartToy,
+            color = com.crackcode.mobile.ui.components.AgyAccent,
+            onClick = { sheet = true }
+        )
+    }
+    if (sheet) {
+        com.crackcode.mobile.ui.claude.ClaudePickerSheet(
+            "Build", "project and files for this chat", { sheet = false },
+            agent = com.crackcode.mobile.domain.model.AgentKind.AGY
+        ) {
+            com.crackcode.mobile.ui.claude.PickerOption(
+                title = "Project switch",
+                description = "Choose the folder this chat works in.",
+                color = com.crackcode.mobile.ui.components.AgyAccent,
+                selected = false,
+                icon = Icons.Outlined.FolderOpen,
+                onClick = { sheet = false; onOpenProjectSwitch() }
+            )
+            com.crackcode.mobile.ui.claude.PickerOption(
+                title = "File manager switch",
+                description = "Browse and manage the project's files.",
+                color = com.crackcode.mobile.ui.components.AgyAccent,
+                selected = false,
+                icon = Icons.Outlined.Folder,
+                onClick = { sheet = false; onOpenFileManager() }
+            )
+        }
+    }
+}

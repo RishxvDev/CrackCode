@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
 
             val requestedMode by chatViewModel.requestedViewMode.collectAsState()
             val initialViewMode = remember {
-                when (chatViewModel.requestedViewMode.value) {
+                val mode = when (chatViewModel.requestedViewMode.value) {
                     "IDE" -> AppViewMode.IDE
                     "TERMINAL" -> AppViewMode.TERMINAL
                     "BROWSER" -> AppViewMode.BROWSER
@@ -128,12 +128,23 @@ class MainActivity : ComponentActivity() {
                     "RUN" -> AppViewMode.RUN
                     else -> AppViewMode.CHAT
                 }
+                // STEP 2: Terminal / Notes / Browser screens hidden; land on the chat instead
+                if (!com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS &&
+                    (mode == AppViewMode.TERMINAL || mode == AppViewMode.BROWSER || mode == AppViewMode.NOTES)
+                ) AppViewMode.CHAT else mode
             }
             var currentViewMode by remember { mutableStateOf(initialViewMode) }
             var previousViewMode by remember { mutableStateOf(AppViewMode.CHAT) }
 
             LaunchedEffect(requestedMode) {
                 requestedMode?.let { mode ->
+                    // STEP 2: Terminal / Notes / Browser navigation hidden; keep the chat open
+                    if (!com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS &&
+                        (mode == "TERMINAL" || mode == "BROWSER" || mode == "NOTES")
+                    ) {
+                        chatViewModel.consumeRequestedViewMode()
+                        return@let
+                    }
                     when (mode) {
                         "IDE" -> {
                             previousViewMode = currentViewMode
@@ -331,16 +342,22 @@ class MainActivity : ComponentActivity() {
                                             currentViewMode = AppViewMode.IDE
                                         },
                                         onNavigateToTerminal = {
-                                            previousViewMode = currentViewMode
-                                            currentViewMode = AppViewMode.TERMINAL
+                                            if (com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS) {
+                                                previousViewMode = currentViewMode
+                                                currentViewMode = AppViewMode.TERMINAL
+                                            }
                                         },
                                         onNavigateToBrowser = {
-                                            previousViewMode = currentViewMode
-                                            currentViewMode = AppViewMode.BROWSER
+                                            if (com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS) {
+                                                previousViewMode = currentViewMode
+                                                currentViewMode = AppViewMode.BROWSER
+                                            }
                                         },
                                         onNavigateToNotes = {
-                                            previousViewMode = currentViewMode
-                                            currentViewMode = AppViewMode.NOTES
+                                            if (com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS) {
+                                                previousViewMode = currentViewMode
+                                                currentViewMode = AppViewMode.NOTES
+                                            }
                                         },
                                         onNavigateToFiles = {
                                             previousViewMode = currentViewMode
@@ -370,12 +387,16 @@ class MainActivity : ComponentActivity() {
                                             // Connect with terminal / chat execution
                                         },
                                         onNavigateToTerminal = {
-                                            previousViewMode = currentViewMode
-                                            currentViewMode = AppViewMode.TERMINAL
+                                            if (com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS) {
+                                                previousViewMode = currentViewMode
+                                                currentViewMode = AppViewMode.TERMINAL
+                                            }
                                         },
                                         onNavigateToBrowser = {
-                                            previousViewMode = currentViewMode
-                                            currentViewMode = AppViewMode.BROWSER
+                                            if (com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS) {
+                                                previousViewMode = currentViewMode
+                                                currentViewMode = AppViewMode.BROWSER
+                                            }
                                         }
                                     )
                                 }

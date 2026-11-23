@@ -24,4 +24,7 @@ object UiToggles {
     const val PIKU_PALETTE_PICKER = false
     const val CHAT_TEXT_SCALING = false
     const val CHAT_HEADER_ICONS = false
+
+    /** STEP 2: extra full-screen nav (Terminal / Notes / Browser) hidden; floating switcher already off. */
+    const val EXTRA_NAV_SCREENS = false
 }
