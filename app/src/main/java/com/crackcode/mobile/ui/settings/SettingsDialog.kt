@@ -87,7 +87,7 @@ import com.crackcode.mobile.data.daemon.IdeApiClient
 enum class SettingsSection(val title: String, val subtitle: String) {
     MAIN("Settings & Preferences", "Configure your CrackCode experience"),
     THEMES("Themes", "Light and dark mode, and the theme gallery"),
-    APPEARANCE("Appearance", "Chat text size, agent steps, message stats, header icons, the app switcher and Piku"),
+    APPEARANCE("Appearance", "Chat text size, agent steps, message stats, header icons and Piku"),
     STEM_RENDERING("STEM & diagrams", "Chemistry, graphs, geometry, simulations, circuits and offline Mermaid in chats"),
     SERVERS("Where agents run", "This phone (CrackCode or Ubuntu chroot) or your server, and how the app reaches it"),
     CONNECT_PC("Connect to PC", "Use the agents on your PC (CrackCode in VS Code) from this phone"),
@@ -976,8 +976,8 @@ private fun MainSettingsMenu(
                     if (openCodeState == com.crackcode.mobile.data.agent.opencode.OpenCodeState.READY) QuotaGreen else c.warning) else null,
                 if (codex != null && codexOn) row(SettingsSection.CODEX, Icons.Outlined.Terminal, com.crackcode.mobile.ui.components.CodexAccent, codexState?.label,
                     if (codexState == com.crackcode.mobile.data.agent.codex.CodexState.READY) QuotaGreen else c.warning) else null,
-                row(SettingsSection.JARVIS, Icons.Outlined.RecordVoiceOver, c.accentTeal, if (jarvisOn) "On" else "Off",
-                    if (jarvisOn) QuotaGreen else null)
+                if (com.crackcode.mobile.UiToggles.JARVIS) row(SettingsSection.JARVIS, Icons.Outlined.RecordVoiceOver, c.accentTeal, if (jarvisOn) "On" else "Off",
+                    if (jarvisOn) QuotaGreen else null) else null
             ),
             listOf(
                 row(SettingsSection.WEBVIEW_EXTENSIONS, Icons.Outlined.Extension, c.accentAlt),
@@ -1049,12 +1049,12 @@ private fun AntigravitySettingsMenu(
     SettingsRowList(
         cardBg = cardBg,
         groups = listOf(
-            listOf(
+            listOfNotNull(
                 SettingsRowItem(Icons.Outlined.Terminal, GeminiBlue, SettingsSection.AGY_CLI.title, cliValue, cliColor) { onNavigate(SettingsSection.AGY_CLI) },
                 SettingsRowItem(Icons.Outlined.Cloud, GeminiBlue, SettingsSection.AGY_CLOUD.title,
                     if (cloudOn) "On" else "Off", if (cloudOn) QuotaGreen else null) { onNavigate(SettingsSection.AGY_CLOUD) },
-                SettingsRowItem(Icons.Outlined.HeadsetMic, GeminiBlue, SettingsSection.AGY_VOICE.title,
-                    if (voiceBubbleOn) "Floating on" else null, if (voiceBubbleOn) QuotaGreen else null) { onNavigate(SettingsSection.AGY_VOICE) }
+                if (com.crackcode.mobile.UiToggles.VOICE) SettingsRowItem(Icons.Outlined.HeadsetMic, GeminiBlue, SettingsSection.AGY_VOICE.title,
+                    if (voiceBubbleOn) "Floating on" else null, if (voiceBubbleOn) QuotaGreen else null) { onNavigate(SettingsSection.AGY_VOICE) } else null
             ),
             listOf(
                 SettingsRowItem(Icons.Outlined.Hub, GeminiBlue, SettingsSection.MCP.title, mcpValue, mcpColor) { onNavigate(SettingsSection.MCP) },
@@ -1767,6 +1767,7 @@ private fun AppearanceSubScreen(
         )
 
         // Floating App Switcher Card
+        if (com.crackcode.mobile.UiToggles.FLOATING_SWITCHER) {
         Surface(
             shape = RoundedCornerShape(14.dp),
             color = cardBg,
@@ -2024,6 +2025,7 @@ private fun AppearanceSubScreen(
                     Text("Reset Screen Position to Right-Center", fontSize = 12.sp)
                 }
             }
+        }
         }
 
         // Piku: the floating pixel buddy (on by default; first offered by the one-time "Meet Piku" dialog)
@@ -2416,7 +2418,7 @@ private fun ChatHeaderIconsCard(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Shortcut buttons in the chat's top bar, next to the project name. Turn any on or off (all off is fine) and set their order, left to right.",
+                text = "Shortcut buttons in the chat's top bar. Turn any on or off (all off is fine) and set their order, left to right.",
                 fontSize = 11.5.sp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
@@ -2425,7 +2427,7 @@ private fun ChatHeaderIconsCard(
             HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
             Spacer(modifier = Modifier.height(10.dp))
 
-            val allAvailable = listOf("newchat", "terminal", "browser", "notes", "files", "run")
+            val allAvailable = listOf("newchat", "run") // terminal, browser, notes and files entries are hidden (Step 2)
             val currentItems = items.filter { it in allAvailable }
             val displayedList = currentItems + allAvailable.filterNot { currentItems.contains(it) }
 

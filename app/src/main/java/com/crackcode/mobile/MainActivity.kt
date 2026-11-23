@@ -85,12 +85,12 @@ class MainActivity : ComponentActivity() {
         com.crackcode.mobile.data.remote.AndroidLocalBridgeServer.instance.start(this)
         com.crackcode.mobile.data.jarvis.JarvisController.attach(application, chatViewModel)
         // Jarvis over other apps (Settings → Jarvis → Screen & look → Float over other apps)
-        com.crackcode.mobile.ui.jarvis.JarvisFloating.attach(this)
+        if (com.crackcode.mobile.UiToggles.JARVIS) com.crackcode.mobile.ui.jarvis.JarvisFloating.attach(this)
         com.crackcode.mobile.data.agent.ChatCompletionMonitor.start(application, chatViewModel)
         com.crackcode.mobile.data.memory.MemorySync.start(chatViewModel)
         handleIncomingFileIntent(intent)
-        handleJarvisIntent(intent)
-        handleVoiceCallIntent(intent)
+        if (com.crackcode.mobile.UiToggles.JARVIS) handleJarvisIntent(intent)
+        if (com.crackcode.mobile.UiToggles.VOICE) handleVoiceCallIntent(intent)
         // Voice call tile / shortcut: the floating call window stays away while this screen is up; the long-press menu
         // of the app icon gets "Voice call"
         lifecycle.addObserver(androidx.lifecycle.LifecycleEventObserver { _, event ->
@@ -101,8 +101,8 @@ class MainActivity : ComponentActivity() {
             }
         })
         com.crackcode.mobile.data.voice.AgyVoicePreferences.init(this)
-        com.crackcode.mobile.data.voice.VoiceCallLauncher.publishShortcut(this)
-        com.crackcode.mobile.ui.voice.AgyVoiceBubble.attach(this)
+        if (com.crackcode.mobile.UiToggles.VOICE) com.crackcode.mobile.data.voice.VoiceCallLauncher.publishShortcut(this)
+        if (com.crackcode.mobile.UiToggles.VOICE) com.crackcode.mobile.ui.voice.AgyVoiceBubble.attach(this)
 
         setContent {
             val initialThemeMode = remember { chatViewModel.authPreferences.getThemeModeSync() }
@@ -552,6 +552,7 @@ class MainActivity : ComponentActivity() {
                                         switcherLastSeenMode = currentViewMode
                                     }
                                 }
+                                if (com.crackcode.mobile.UiToggles.FLOATING_SWITCHER) {
                                 com.crackcode.mobile.ui.components.FloatingSwitcherWidget(
                                     currentViewMode = currentViewMode,
                                     orientation = floatingSwitcherOrientation,
@@ -611,6 +612,7 @@ class MainActivity : ComponentActivity() {
                                         onDismiss = { showSwitcherToolsInstall = false }
                                     )
                                 }
+                                }
 
                                 // Commands running: the screen stays on, and on other screens a bubble shows them (tap → Run)
                                 com.crackcode.mobile.ui.run.RunBubbleHost(isRunScreen = currentViewMode == AppViewMode.RUN)
@@ -656,7 +658,7 @@ class MainActivity : ComponentActivity() {
                                 com.crackcode.mobile.ui.components.FloatingVideoPlayerOverlay()
 
                                 // Jarvis: voice orb (only when Jarvis is turned on in Settings)
-                                com.crackcode.mobile.ui.jarvis.JarvisOverlay()
+                                if (com.crackcode.mobile.UiToggles.JARVIS) com.crackcode.mobile.ui.jarvis.JarvisOverlay()
 
                                 // Real-time floating live diagnostics overlay (JVM Threads, OkHttp queues, connections, lag)
                                 if (isFloatingDiagnosticsEnabled) {
@@ -716,8 +718,8 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIncomingFileIntent(intent)
-        handleJarvisIntent(intent)
-        handleVoiceCallIntent(intent)
+        if (com.crackcode.mobile.UiToggles.JARVIS) handleJarvisIntent(intent)
+        if (com.crackcode.mobile.UiToggles.VOICE) handleVoiceCallIntent(intent)
     }
 
     /**

@@ -944,7 +944,7 @@ fun ChatScreen(
     val expandedStepGroups = openStepGroups.keys.toSet()
     val feedItems = remember(messages, selectedModelId, modelNameOf, voiceCallItems, groupAgentSteps, expandedStepGroups) {
         // the date and model dividers are always on
-        val items = ChatFeedCache.buildFeedItems(messages, selectedModelId, dividers = true, modelName = modelNameOf, voiceCalls = voiceCallItems)
+        val items = ChatFeedCache.buildFeedItems(messages, selectedModelId, dividers = true, modelName = modelNameOf, voiceCalls = if (com.crackcode.mobile.UiToggles.VOICE) voiceCallItems else emptyList())
         StepGroups.apply(items, groupAgentSteps, expandedStepGroups, messages)
     }
 
@@ -1385,7 +1385,7 @@ fun ChatScreen(
         drawerContent = {
             ChatHistoryDrawer(
                 conversations = conversations,
-                jarvisEnabled = jarvisEnabled,
+                jarvisEnabled = com.crackcode.mobile.UiToggles.JARVIS && jarvisEnabled,
                 jarvisConversations = jarvisConversations,
                 onNewJarvisChat = { agent ->
                     val currentId = currentConv?.id
@@ -1709,11 +1709,10 @@ fun ChatScreen(
                             // shortcut icons chosen in Settings > Appearance > Chat Header Icons (default: just New chat)
                             val headerShortcuts = chatHeaderItems.filter { id ->
                                 when (id) {
-                                    "newchat", "ide", "terminal", "browser" -> true
-                                    "notes" -> onNavigateToNotes != null
-                                    "files" -> onNavigateToFiles != null
+                                    "newchat", "ide" -> true
                                     // the Run panel lives in the main window, not in the floating chat
                                     "run" -> !isInFloatingWindow
+                                    // terminal, browser, notes and files entries are hidden (Step 2)
                                     else -> false
                                 }
                             }
@@ -2081,7 +2080,7 @@ fun ChatScreen(
                                             )
                                         }
                                     }
-                                    else -> if (isJarvisTextChat) {
+                                    else -> if (com.crackcode.mobile.UiToggles.JARVIS && isJarvisTextChat) {
                                         com.crackcode.mobile.ui.jarvis.JarvisChatWelcome { example ->
                                             inputState.setTextAndPlaceCursorAtEnd(example)
                                         }
@@ -2743,7 +2742,7 @@ fun ChatScreen(
                 }
 
                 // Jarvis chat: its command strip (mission, teams' tasks, voice replies, autopilot)
-                if (jarvisEnabled && currentConv != null && (isJarvisTextChat || jarvisConversations.any { it.id == currentConv?.id })) {
+                if (com.crackcode.mobile.UiToggles.JARVIS && jarvisEnabled && currentConv != null && (isJarvisTextChat || jarvisConversations.any { it.id == currentConv?.id })) {
                     val jarvisToolsMissing = remember(messages) {
                         messages.lastOrNull { it.role == com.crackcode.mobile.domain.model.MessageRole.ASSISTANT }?.content
                             ?.contains(com.crackcode.mobile.data.jarvis.JarvisSkill.MCP_MISSING) == true
@@ -2853,13 +2852,13 @@ fun ChatScreen(
                     speechManager = if (isClaudeChat) viewModel.claudeVoice else if (isCodexChat) viewModel.codexVoice else viewModel.speechManager,
                     // Claude and Codex cannot take audio: a voice note becomes text
                     voiceNotesAsText = isClaudeChat || isCodexChat,
-                    voiceEnabled = !isOpenCodeChat,
+                    voiceEnabled = com.crackcode.mobile.UiToggles.VOICE && !isOpenCodeChat,
                     cascadeId = activeConversationKey,
                     focusRequester = chatInputFocusRequester,
                     queuedMessages = queuedMessages,
                     onSendQueuedNow = { viewModel.sendQueuedNow(it) },
                     onDeleteQueued = { viewModel.deleteQueued(it) },
-                    onStartVoiceCall = if (isAgyChat) onStartVoiceCall else null,
+                    onStartVoiceCall = if (com.crackcode.mobile.UiToggles.VOICE && isAgyChat) onStartVoiceCall else null,
                     voiceCallActive = voiceCall.active
                 )
             }

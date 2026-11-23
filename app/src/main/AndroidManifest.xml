@@ -12,13 +12,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
@@ -285,62 +283,6 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/automation_accessibility_service" />
         </service>
-
-        <!-- Jarvis hands-free mode: keeps the microphone available while it listens for the wake phrase -->
-        <service
-            android:name="com.crackcode.mobile.data.jarvis.JarvisService"
-            android:exported="false"
-            android:foregroundServiceType="microphone" />
-
-        <!-- Antigravity voice call: keeps the microphone available while a call runs in the background -->
-        <service
-            android:name="com.crackcode.mobile.data.voice.AgyVoiceCallService"
-            android:exported="false"
-            android:foregroundServiceType="microphone" />
-
-        <!-- Jarvis Quick Settings tile: tap to talk from anywhere -->
-        <service
-            android:name="com.crackcode.mobile.data.jarvis.JarvisTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_jarvis_mic"
-            android:label="Jarvis"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <!-- Jarvis tile / shortcut: invisible screen that starts Jarvis listening while it is in front, then closes -->
-        <activity
-            android:name="com.crackcode.mobile.data.jarvis.JarvisTalkActivity"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden" />
-
-        <!-- Voice call Quick Settings tile: one tap calls Antigravity in the last chat that had a call -->
-        <service
-            android:name="com.crackcode.mobile.data.voice.VoiceCallTileService"
-            android:exported="true"
-            android:icon="@drawable/ic_voice_call"
-            android:label="Voice call"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <!-- Voice call tile / shortcut: invisible screen that starts the call while it is in front, then closes -->
-        <activity
-            android:name="com.crackcode.mobile.data.voice.VoiceCallLaunchActivity"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:taskAffinity=""
-            android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden" />
 
         <!-- Holds the ADB pairing notification (code entry) while the user is in Developer options -->
         <service
