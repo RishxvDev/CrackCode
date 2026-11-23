@@ -985,8 +985,8 @@ private fun MainSettingsMenu(
                 checkpointsRow
             ),
             listOfNotNull(
-                row(SettingsSection.TERMINAL, Icons.Outlined.Terminal, c.accentIndigo,
-                    if (useSshTerminal || com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode) "SSH" else "Local"),
+                if (com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS) row(SettingsSection.TERMINAL, Icons.Outlined.Terminal, c.accentIndigo,
+                    if (useSshTerminal || com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode) "SSH" else "Local") else null,
                 githubRow,
                 deviceTools.adb,
                 deviceTools.automation,
@@ -8830,8 +8830,8 @@ private fun AboutSubScreen(
             }
         }
 
-        // 3. Updates Card
-        Card(
+        // 3. Updates Card (STEP 5: hidden — the updater points at the upstream repo, not CrackCode)
+        if (com.crackcode.mobile.UiToggles.APP_UPDATER) Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
             colors = CardDefaults.cardColors(containerColor = cardBg),
@@ -9119,7 +9119,7 @@ private fun AboutSubScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/santoshkurmi/antigem"))
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/RishxvDev/CrackCode"))
                             context.startActivity(intent)
                         }
                 ) {
@@ -9146,7 +9146,7 @@ private fun AboutSubScreen(
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
-                                    text = "github.com/santoshkurmi/antigem",
+                                    text = "github.com/RishxvDev/CrackCode",
                                     fontSize = 11.sp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -9167,7 +9167,7 @@ private fun AboutSubScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/santoshkurmi/antigem/releases"))
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/RishxvDev/CrackCode/releases"))
                             context.startActivity(intent)
                         }
                 ) {

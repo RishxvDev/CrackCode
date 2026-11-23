@@ -27,4 +27,7 @@ object UiToggles {
 
     /** STEP 2: extra full-screen nav (Terminal / Notes / Browser) hidden; floating switcher already off. */
     const val EXTRA_NAV_SCREENS = false
+
+    /** STEP 5: in-app updater hidden (it points at the upstream repo, not CrackCode). */
+    const val APP_UPDATER = false
 }
