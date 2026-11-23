@@ -22,7 +22,7 @@ object SlashCommandsCache {
     private val mutex = Mutex()
     private var inMemoryCache: List<SlashCommandItem>? = null
 
-    // Standard built-in Antigravity slash commands
+    // Standard built-in CrackCode slash commands
     val BUILTIN_COMMANDS = listOf(
         SlashCommandItem("goal", "/goal", "Run a long-running task overnight and be extra thorough until the goal is achieved", "command"),
         SlashCommandItem("schedule", "/schedule", "Schedule a one-shot timer or recurring cron job", "command"),
@@ -34,11 +34,14 @@ object SlashCommandsCache {
         SlashCommandItem("boost", "/boost", "Deep thinking, strategic planning, and verification for complex tasks", "command"),
         SlashCommandItem("terminal", "/terminal", "Open terminal session or execute local shell commands", "command"),
         SlashCommandItem("ide", "/ide", "Open the code editor IDE", "command")
-    )
+    ).filter { cmd ->
+        // STEP 4: commands for the hidden Terminal / Browser screens stay out of the "/" menu
+        com.crackcode.mobile.UiToggles.EXTRA_NAV_SCREENS || (cmd.name != "terminal" && cmd.name != "browser")
+    }
     private val BUILTIN_COMMANDS_SORTED get() = BUILTIN_COMMANDS.sortedBy { it.name.lowercase() }
 
     private val _commands = kotlinx.coroutines.flow.MutableStateFlow(BUILTIN_COMMANDS_SORTED)
-    /** Antigravity's "/" menu: its skills (from the hub) and built-in commands; updated by every fetch. */
+    /** CrackCode's "/" menu: its skills (from the hub) and built-in commands; updated by every fetch. */
     val commands: kotlinx.coroutines.flow.StateFlow<List<SlashCommandItem>> = _commands
 
     /**
