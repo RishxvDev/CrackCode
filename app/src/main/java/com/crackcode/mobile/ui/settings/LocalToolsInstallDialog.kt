@@ -930,10 +930,10 @@ fun LocalToolsInstallDialog(
                                 onClick = {
                                     when (selectedSourceType) {
                                         0 -> {
-                                            LocalEnvironmentManager.launchInstall(context, authPreferences, BootstrapSource.Auto)
+                                            LocalEnvironmentManager.launchInstall(context, authPreferences, LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.Auto))
                                         }
                                         1 -> {
-                                            LocalEnvironmentManager.launchInstall(context, authPreferences, BootstrapSource.BaseMinimum)
+                                            LocalEnvironmentManager.launchInstall(context, authPreferences, LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.BaseMinimum))
                                         }
                                         2 -> {
                                             if (selectedFileUri != null) {
@@ -1041,10 +1041,10 @@ fun LocalToolsInstallDialog(
                                 Button(
                                     onClick = {
                                         when (selectedSourceType) {
-                                            0 -> LocalEnvironmentManager.launchInstall(context, authPreferences, BootstrapSource.Auto)
-                                            1 -> LocalEnvironmentManager.launchInstall(context, authPreferences, BootstrapSource.BaseMinimum)
+                                            0 -> LocalEnvironmentManager.launchInstall(context, authPreferences, LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.Auto))
+                                            1 -> LocalEnvironmentManager.launchInstall(context, authPreferences, LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.BaseMinimum))
                                             2 -> {
-                                                val source = selectedFileUri?.let { BootstrapSource.LocalZipUri(it) } ?: BootstrapSource.Auto
+                                                val source = selectedFileUri?.let { BootstrapSource.LocalZipUri(it) } ?: LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.Auto)
                                                 LocalEnvironmentManager.launchInstall(context, authPreferences, source)
                                             }
                                         }

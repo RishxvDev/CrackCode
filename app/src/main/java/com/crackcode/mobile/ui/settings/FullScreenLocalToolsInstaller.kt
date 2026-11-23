@@ -103,7 +103,7 @@ fun FullScreenLocalToolsInstaller(
 
     fun installFull() {
         lastMirror = selectedMirror
-        LocalEnvironmentManager.launchInstall(context, authPreferences, BootstrapSource.Auto(selectedMirror))
+        LocalEnvironmentManager.launchInstall(context, authPreferences, LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.Auto(selectedMirror)))
     }
 
     fun installSelected(fallbackToAuto: Boolean) {
@@ -111,7 +111,7 @@ fun FullScreenLocalToolsInstaller(
             0 -> installFull()
             1 -> {
                 lastMirror = null
-                LocalEnvironmentManager.launchInstall(context, authPreferences, BootstrapSource.BaseMinimum)
+                LocalEnvironmentManager.launchInstall(context, authPreferences, LocalEnvironmentManager.preferredBootstrapSource(context, BootstrapSource.BaseMinimum))
             }
             2 -> {
                 val uri = selectedFileUri

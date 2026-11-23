@@ -33,6 +33,12 @@ val targetAbi = (findProperty("abi") as String?)?.trim()?.ifEmpty { null } ?: "a
 require(targetAbi == "arm64" || targetAbi == "x86_64") { "-Pabi must be arm64 or x86_64, not $targetAbi" }
 val isX86 = targetAbi == "x86_64"
 
+// STEP 6: preinstalled minimal Termux bootstrap; pinned release, so install needs no download on the phone.
+val bundledBootstrapAsset = if (isX86) "bootstrap-x86_64.zip" else "bootstrap-aarch64.zip"
+val bundledBootstrapUrl =
+  "https://github.com/termux/termux-packages/releases/download/bootstrap-2026.11.15-r1%2Bapt.android-7/$bundledBootstrapAsset"
+val bundledBootstrapDir = layout.buildDirectory.dir("generated/bootstrapAssets/$targetAbi")
+
 // The rooted Ubuntu chroot runs a Linux build of the bridge (~4 MB), so the normal arm64 release leaves it out and the
 // chroot one carries it: `-Pchroot=true` (CrackCode-v<version>-chroot.apk). The x86_64 APK always has it (there is one
 // x86_64 APK). Without the flag debug builds have it and release builds don't; `-Pchroot=false` leaves it out of debug
@@ -73,6 +79,8 @@ android {
 
     // the glibc runtime of this build's CPU (assets/glibc-min-<abi>.tar.xz)
     sourceSets.getByName("main").assets.srcDir("src/abi/$targetAbi/assets")
+    // STEP 6: the preinstalled bootstrap zip, produced by downloadBundledBootstrap
+    sourceSets.getByName("main").assets.srcDir(bundledBootstrapDir.get().asFile)
 
     signingConfigs {
         create("release") {
@@ -357,8 +365,37 @@ val copyScriptsToAssets = tasks.register<Copy>("copyScriptsToAssets") {
   into(layout.projectDirectory.dir("src/main/assets/bin"))
 }
 
+// STEP 6: download the pinned minimal bootstrap once (Gradle output cache), then package it as an app asset.
+val downloadBundledBootstrap = tasks.register("downloadBundledBootstrap") {
+  val outFile = bundledBootstrapDir.get().file(bundledBootstrapAsset).asFile
+  outputs.file(outFile)
+  doLast {
+    if (!outFile.exists() || outFile.length() < 10L * 1024 * 1024) {
+      outFile.parentFile.mkdirs()
+      var done = false
+      repeat(3) {
+        if (done) return@repeat
+        try {
+          val conn = java.net.URL(bundledBootstrapUrl).openConnection()
+          conn.connectTimeout = 30_000
+          conn.readTimeout = 300_000
+          conn.getInputStream().use { input ->
+            java.io.FileOutputStream(outFile).use { output -> input.copyTo(output) }
+          }
+          done = true
+        } catch (t: Throwable) {
+          if (outFile.exists()) outFile.delete()
+        }
+      }
+      if (!done || !outFile.exists() || outFile.length() < 10L * 1024 * 1024) {
+        error("STEP 6: could not download the preinstalled bootstrap from $bundledBootstrapUrl")
+      }
+    }
+  }
+}
+
 tasks.named("preBuild") {
-  dependsOn(compressAgyIdeBridge, deleteLegacyLinuxBridgeAsset, copyScriptsToAssets)
+  dependsOn(compressAgyIdeBridge, deleteLegacyLinuxBridgeAsset, copyScriptsToAssets, downloadBundledBootstrap)
 }
 
 

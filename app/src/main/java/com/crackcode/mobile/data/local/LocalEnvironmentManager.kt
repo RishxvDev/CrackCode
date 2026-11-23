@@ -59,6 +59,8 @@ sealed class BootstrapSource {
         companion object Default : Auto()
     }
     object BaseMinimum : BootstrapSource()
+    /** STEP 6: the minimal rootfs shipped inside this APK; no download on the phone. */
+    object Bundled : BootstrapSource()
     data class DirectUrl(val url: String) : BootstrapSource()
     data class LocalZipUri(val uri: android.net.Uri) : BootstrapSource()
 }
@@ -527,6 +529,17 @@ object LocalEnvironmentManager {
         }
         return "aarch64"
     }
+
+    /** STEP 6: true when this APK carries the preinstalled minimal bootstrap for this CPU. */
+    fun hasBundledBootstrap(context: Context): Boolean = try {
+        context.applicationContext.assets.list("")?.contains("bootstrap-${getBootstrapArch()}.zip") == true
+    } catch (_: Exception) {
+        false
+    }
+
+    /** Prefer the bundled archive; fall back to the caller's source only when it is missing. */
+    fun preferredBootstrapSource(context: Context, fallback: BootstrapSource): BootstrapSource =
+        if (hasBundledBootstrap(context)) BootstrapSource.Bundled else fallback
 
     fun getDeviceHardwareInfo(): DeviceHardwareInfo {
         val arch = getBootstrapArch()
@@ -1025,6 +1038,44 @@ object LocalEnvironmentManager {
                         }
                     } catch (e: Exception) {
                         val errorMsg = "Direct download failed: ${e.localizedMessage ?: e.message}"
+                        updateInstallNotification(appContext, "Installation Failed", errorMsg, -2, ongoing = false, force = true)
+                        _installerState.value = LocalInstallerState.Error(errorMessage = errorMsg, canRetry = true)
+                        return@withContext false
+                    }
+                }
+
+                is BootstrapSource.Bundled -> {
+                    _installerState.value = LocalInstallerState.Downloading(
+                        bytesDownloaded = 0L,
+                        totalBytes = 35 * 1024 * 1024L,
+                        progressFraction = 0.1f,
+                        speedText = "Preparing preinstalled rootfs...",
+                        currentPackageName = "bootstrap-$arch.zip"
+                    )
+                    updateInstallNotification(appContext, "Installing Linux Rootfs", "Preparing preinstalled rootfs...", -1, force = true)
+
+                    try {
+                        appContext.assets.open("bootstrap-$arch.zip").use { input ->
+                            FileOutputStream(tempZipFile).use { output -> input.copyTo(output) }
+                        }
+                        finalDownloadedSize = tempZipFile.length()
+                        if (finalDownloadedSize < MIN_BOOTSTRAP_SIZE_BYTES) {
+                            val errorMsg = "Preinstalled archive is only ${formatFileSize(finalDownloadedSize)} (< 10 MB)."
+                            tempZipFile.delete()
+                            updateInstallNotification(appContext, "Installation Failed", errorMsg, -2, ongoing = false, force = true)
+                            _installerState.value = LocalInstallerState.Error(errorMessage = errorMsg, canRetry = true)
+                            return@withContext false
+                        }
+                        if (!validateArchiveIntegrity(tempZipFile)) {
+                            val errorMsg = "Preinstalled archive is not a valid archive."
+                            tempZipFile.delete()
+                            updateInstallNotification(appContext, "Installation Failed", errorMsg, -2, ongoing = false, force = true)
+                            _installerState.value = LocalInstallerState.Error(errorMessage = errorMsg, canRetry = true)
+                            return@withContext false
+                        }
+                        downloadSucceeded = true
+                    } catch (e: Exception) {
+                        val errorMsg = "Preinstalled archive is missing: ${e.localizedMessage ?: e.message}"
                         updateInstallNotification(appContext, "Installation Failed", errorMsg, -2, ongoing = false, force = true)
                         _installerState.value = LocalInstallerState.Error(errorMessage = errorMsg, canRetry = true)
                         return@withContext false
