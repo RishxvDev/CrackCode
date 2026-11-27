@@ -164,7 +164,7 @@ fun OpenCodeProvidersPage(backend: OpenCodeChatBackend) {
 
         val connected = integrations.filter { it.connected }
         if (connected.isEmpty() && error == null && !loading) {
-            Text("Nothing connected yet: CrackCode's free models work without an account.", fontSize = 12.sp,
+            Text("Nothing connected yet: CrackCode with OpenCode has free models that work without an account.", fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f), modifier = Modifier.padding(top = 8.dp))
         }
         connected.forEach { integ ->

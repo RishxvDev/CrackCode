@@ -405,8 +405,16 @@ class OpenCodeChatBackend(
                                 )
                             }
                             .sortedWith(compareBy({ !it.isDefault }, { it.baseName.lowercase() }, { it.displayName.lowercase() }))
-                        _allModels.value = list
-                        defaultModelId = defaultId
+                        // CrackCode with OpenCode: lead with a free model as "Big Pickle" — no account or key needed.
+                        val freeModels = list.filter { it.description.contains("free", ignoreCase = true) }
+                        val pickle = freeModels.firstOrNull { it.id.contains("pickle", ignoreCase = true) }
+                            ?: freeModels.firstOrNull()
+                        val shown = if (pickle == null) list else list.map { m ->
+                            if (m.id == pickle.id) m.copy(displayName = "Big Pickle", isDefault = true)
+                            else m.copy(isDefault = false)
+                        }.sortedWith(compareBy({ !it.isDefault }, { it.baseName.lowercase() }, { it.displayName.lowercase() }))
+                        _allModels.value = shown
+                        defaultModelId = pickle?.id ?: defaultId
                         publishModels()
                     }
                     .onFailure { _modelsError.value = it.message }

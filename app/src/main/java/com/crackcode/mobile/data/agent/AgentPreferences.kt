@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * Which agents the app runs. Antigravity is on and Claude Code off until the user picks on first launch; at least
- * one always stays on. The bridge is started with the matching flags (see [bridgeFlags]).
+ * Which agents the app runs. CrackCode and OpenCode are on by default; Claude and Codex stay off until the user
+ * turns them on in Settings → Agents. At least one always stays on. The bridge is started with the matching flags.
  */
 class AgentPreferences(context: Context) {
     private val prefs = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -37,10 +37,11 @@ class AgentPreferences(context: Context) {
 
         private fun key(agent: AgentKind) = "enabled_" + agent.name.lowercase()
 
-        private fun default(agent: AgentKind) = agent == AgentKind.AGY
+        private fun default(agent: AgentKind) = agent == AgentKind.AGY || agent == AgentKind.OPENCODE
 
         private fun read(prefs: android.content.SharedPreferences): Set<AgentKind> =
-            AgentKind.entries.filter { prefs.getBoolean(key(it), default(it)) }.toSet().ifEmpty { setOf(AgentKind.AGY) }
+            AgentKind.entries.filter { prefs.getBoolean(key(it), default(it)) }.toSet()
+                .ifEmpty { setOf(AgentKind.AGY, AgentKind.OPENCODE) }
 
         /** The first-launch agent choice was made, read synchronously (the server does not start before it). */
         fun hasChosenSync(context: Context): Boolean =

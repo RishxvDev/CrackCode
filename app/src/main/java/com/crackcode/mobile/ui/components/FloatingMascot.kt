@@ -146,17 +146,15 @@ private enum class Mood { NORMAL, HAPPY, LOVE, SURPRISED, DIZZY, SLEEP, ANGRY, T
 private enum class Trick { NONE, WANDER, WAVE, HOP, SPIN, DANCE, LOOK_AROUND, YAWN }
 
 /**
- * The app-wide overlay: shows Piku only once the one-time intro was answered (so it never pops up during setup)
- * and while it is enabled in Settings → Appearance.
+ * The app-wide overlay: Piku is on from the first frame and stays visible while enabled in Settings → Appearance.
  */
 @Composable
 fun PikuOverlay(
     prefs: com.crackcode.mobile.data.preferences.AuthPreferences,
     agentWorking: StateFlow<Boolean>
 ) {
-    val enabled by prefs.isPikuEnabled.collectAsState(initial = false)
-    val introSeen by prefs.hasSeenPikuIntro.collectAsState(initial = false)
-    if (enabled && introSeen) FloatingMascot(agentWorking = agentWorking)
+    val enabled by prefs.isPikuEnabled.collectAsState(initial = true)
+    if (enabled) FloatingMascot(agentWorking = agentWorking)
 }
 
 @Composable

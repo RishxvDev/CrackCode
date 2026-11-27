@@ -40,7 +40,7 @@ val CodexAccent = Color(0xFF8B5CF6)
 fun AgentKind.label(): String = when (this) {
     AgentKind.AGY -> "CrackCode"
     AgentKind.CLAUDE -> "CrackCode"
-    AgentKind.OPENCODE -> "CrackCode"
+    AgentKind.OPENCODE -> "OpenCode"
     AgentKind.CODEX -> "CrackCode"
 }
 
@@ -63,7 +63,7 @@ fun AgentPicker(
     agents: Collection<AgentKind> = AgentKind.entries,
     statusColors: Map<AgentKind, Color> = emptyMap()
 ) {
-    val visible = agents.filter { it == AgentKind.AGY } // CrackCode only
+    val visible = agents.filter { it == AgentKind.AGY || it == AgentKind.OPENCODE } // CrackCode + OpenCode only
     if (visible.isEmpty()) return
     val shape = RoundedCornerShape(20.dp)
     Row(

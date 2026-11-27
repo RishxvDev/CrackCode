@@ -1243,8 +1243,8 @@ class AuthPreferences(private val context: Context) {
         context.dataStore.edit { it[IS_GEMMY_ENABLED] = enabled }
     }
 
-    /** The one-time "Meet Piku" dialog was answered; Piku only appears after that. */
-    val hasSeenPikuIntro: Flow<Boolean> = context.dataStore.data.map { it[HAS_SEEN_GEMMY_INTRO] ?: false }
+    /** Piku is treated as introduced from the first launch, so the buddy shows as soon as the app opens. */
+    val hasSeenPikuIntro: Flow<Boolean> = context.dataStore.data.map { it[HAS_SEEN_GEMMY_INTRO] ?: true }
 
     suspend fun setHasSeenPikuIntro(seen: Boolean) {
         context.dataStore.edit { it[HAS_SEEN_GEMMY_INTRO] = seen }

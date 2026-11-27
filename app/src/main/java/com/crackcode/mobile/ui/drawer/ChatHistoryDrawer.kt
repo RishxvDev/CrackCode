@@ -888,11 +888,14 @@ fun ChatHistoryDrawer(
                 ) {
                     val allItems = buildList {
                         add(null to "All")
-                        visibleAgents.filter { it == com.crackcode.mobile.domain.model.AgentKind.AGY }.forEach { agent ->
+                        visibleAgents.filter {
+                            it == com.crackcode.mobile.domain.model.AgentKind.AGY ||
+                                it == com.crackcode.mobile.domain.model.AgentKind.OPENCODE
+                        }.forEach { agent ->
                             val label = when (agent) {
                                 com.crackcode.mobile.domain.model.AgentKind.AGY -> "CrackCode"
                                 com.crackcode.mobile.domain.model.AgentKind.CLAUDE -> "CrackCode"
-                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "OpenCode"
                                 com.crackcode.mobile.domain.model.AgentKind.CODEX -> "CrackCode"
                             }
                             add(agent to label)

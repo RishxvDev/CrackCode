@@ -59,6 +59,11 @@ private val AGENT_OPTIONS = listOf(
         AgentKind.AGY,
         "CrackCode",
         "CrackCode's built-in coding agent: CrackCode and CrackCode models on your plan."
+    ),
+    AgentOption(
+        AgentKind.OPENCODE,
+        "OpenCode",
+        "CrackCode with OpenCode: free models work without an account or API key."
     )
 )
 

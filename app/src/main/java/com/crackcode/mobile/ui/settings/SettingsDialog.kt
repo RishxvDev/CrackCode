@@ -331,7 +331,7 @@ fun SettingsDialog(
     onAgyCancelSignIn: () -> Unit = {},
     /** Opens on this page (e.g. Jarvis asked to show it); also switches to it while the dialog is open. */
     initialSection: SettingsSection? = null,
-    enabledAgents: Set<com.crackcode.mobile.domain.model.AgentKind> = setOf(com.crackcode.mobile.domain.model.AgentKind.AGY),
+    enabledAgents: Set<com.crackcode.mobile.domain.model.AgentKind> = setOf(com.crackcode.mobile.domain.model.AgentKind.AGY, com.crackcode.mobile.domain.model.AgentKind.OPENCODE),
     isApplyingAgents: Boolean = false,
     onApplyAgents: (Set<com.crackcode.mobile.domain.model.AgentKind>) -> Unit = {},
     /** Opens a project cloned from Settings → GitHub (the dialog closes itself). */
@@ -865,7 +865,7 @@ private fun MainSettingsMenu(
     claude: com.crackcode.mobile.ui.claude.ClaudeSettingsDeps? = null,
     openCode: com.crackcode.mobile.data.agent.opencode.OpenCodeChatBackend? = null,
     codex: com.crackcode.mobile.data.agent.codex.CodexChatBackend? = null,
-    enabledAgents: Set<com.crackcode.mobile.domain.model.AgentKind> = setOf(com.crackcode.mobile.domain.model.AgentKind.AGY),
+    enabledAgents: Set<com.crackcode.mobile.domain.model.AgentKind> = setOf(com.crackcode.mobile.domain.model.AgentKind.AGY, com.crackcode.mobile.domain.model.AgentKind.OPENCODE),
     onNavigate: (SettingsSection) -> Unit
 ) {
     val agyOn = com.crackcode.mobile.domain.model.AgentKind.AGY in enabledAgents
@@ -960,12 +960,12 @@ private fun MainSettingsMenu(
                             when (it) {
                                 com.crackcode.mobile.domain.model.AgentKind.AGY -> "CrackCode"
                                 com.crackcode.mobile.domain.model.AgentKind.CLAUDE -> "CrackCode"
-                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "CrackCode"
+                                com.crackcode.mobile.domain.model.AgentKind.OPENCODE -> "OpenCode"
                                 com.crackcode.mobile.domain.model.AgentKind.CODEX -> "CrackCode"
                             }
                         }
                     claudeOn -> "CrackCode"
-                    openCodeOn -> "CrackCode"
+                    openCodeOn -> "OpenCode"
                     codexOn -> "CrackCode"
                     else -> "CrackCode"
                 }),
