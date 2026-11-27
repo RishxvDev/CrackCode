@@ -18,6 +18,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.crackcode.mobile.theme.GeminiTheme
 import com.crackcode.mobile.ui.chat.ChatScreen
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         private var instanceRef: java.lang.ref.WeakReference<MainActivity>? = null
+        private val autoBootstrapStarted = java.util.concurrent.atomic.AtomicBoolean(false)
 
         val currentInstance: MainActivity?
             get() = instanceRef?.get()?.takeIf { !it.isFinishing && !it.isDestroyed }
@@ -51,6 +53,37 @@ class MainActivity : ComponentActivity() {
     }
 
     private val chatViewModel: ChatViewModel by lazy { ChatViewModelHolder.get(application) }
+
+    /**
+     * The full-screen installer is hidden in this build. On a fresh install there is no local
+     * runtime yet, so autoStartOnAppLaunch() defers and the server stays stopped. Install the
+     * bundled bootstrap silently once; the installer itself starts the bridge on success.
+     */
+    private fun ensureLocalEnvironmentInstalled() {
+        if (!autoBootstrapStarted.compareAndSet(false, true)) return
+        val app = applicationContext
+        if (com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode ||
+            com.crackcode.mobile.data.local.LocalEnvironmentManager.isInstalled(app) ||
+            !com.crackcode.mobile.data.local.LocalEnvironmentManager.hasBundledBootstrap(app)
+        ) return
+
+        val marker = java.io.File(app.filesDir, "auto_bootstrap_started")
+        if (marker.exists()) return
+        runCatching { marker.writeText("1") }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val source = com.crackcode.mobile.data.local.LocalEnvironmentManager.preferredBootstrapSource(
+                app,
+                com.crackcode.mobile.data.local.BootstrapSource.Bundled
+            )
+            val installed = com.crackcode.mobile.data.local.LocalEnvironmentManager.installLocalEnvironment(
+                app,
+                chatViewModel.authPreferences,
+                source
+            )
+            if (!installed) runCatching { marker.delete() }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +108,7 @@ class MainActivity : ComponentActivity() {
             com.crackcode.mobile.data.service.CrackCodeService.start(this)
         }
         com.crackcode.mobile.data.local.LocalServerManager.autoStartOnAppLaunch(this)
+        ensureLocalEnvironmentInstalled()
         com.crackcode.mobile.data.daemon.IdeDaemonManager.init(this)
         com.crackcode.mobile.ui.browser.BrowserSessionManager.instance.init(this)
         com.crackcode.mobile.data.local.LocalTerminalBridge.instance.init(this)
@@ -271,6 +305,7 @@ class MainActivity : ComponentActivity() {
                                 showPermissionsDialog = false
                                 com.crackcode.mobile.data.service.CrackCodeService.start(context)
                                 com.crackcode.mobile.data.local.LocalServerManager.autoStartOnAppLaunch(context)
+                                ensureLocalEnvironmentInstalled()
                             }
                         )
                     } else if (showFullScreenInstaller) {
