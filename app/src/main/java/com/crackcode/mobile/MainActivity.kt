@@ -78,7 +78,10 @@ class MainActivity : ComponentActivity() {
             if (com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode ||
                 com.crackcode.mobile.data.local.LocalEnvironmentManager.isInstalled(app) ||
                 !com.crackcode.mobile.data.local.LocalEnvironmentManager.hasBundledBootstrap(app)
-            ) return@launch
+            ) {
+                chatViewModel.markSetupDone()
+                return@launch
+            }
 
             val marker = java.io.File(app.filesDir, "auto_bootstrap_started")
             if (marker.exists()) return@launch
@@ -96,6 +99,7 @@ class MainActivity : ComponentActivity() {
             if (installed) {
                 // Hidden terminal: install the CLI tools without any UI option or accept prompt.
                 com.crackcode.mobile.data.local.LocalEnvironmentManager.installCliTools(app)
+                chatViewModel.markSetupDone()
             } else runCatching { marker.delete() }
         }
     }

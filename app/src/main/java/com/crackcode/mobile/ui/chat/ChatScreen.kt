@@ -537,6 +537,7 @@ fun ChatScreen(
     // Per-agent health for the status dot, accounts, new-chat picker and empty chat (only enabled agents)
     val enabledAgents by viewModel.enabledAgents.collectAsState()
     val hasChosenAgents by viewModel.hasChosenAgents.collectAsState()
+    val setupDone by viewModel.setupDone.collectAsState()
     val isApplyingAgents by viewModel.isApplyingAgents.collectAsState()
     val claudeStartup by claudeBackend.startupStatus.collectAsState()
     val claudeModelList by claudeBackend.availableModels.collectAsState()
@@ -3072,7 +3073,8 @@ fun ChatScreen(
     // First-launch setup, one full-screen step at a time: the agents, then the terminal icon (that one waits for the
     // agent choice so the two never show at once). The steps are numbered while both are still to do.
     // First frame: choose the agents; the setup (bootstrap + CLI tools) starts only after this choice.
-    val agentStepPending = com.crackcode.mobile.UiToggles.AGENT_CHOICE_ONBOARDING && !hasChosenAgents
+    // The step stays until setup finishes, so an already-saved choice cannot skip setup on an installed app.
+    val agentStepPending = com.crackcode.mobile.UiToggles.AGENT_CHOICE_ONBOARDING && (!hasChosenAgents || !setupDone)
     val launcherStepPending = com.crackcode.mobile.UiToggles.TERMINAL_LAUNCHER_ONBOARDING &&
         !hasSeenTerminalLauncherOnboarding && !isInFloatingWindow
     var setupSteps by remember { mutableStateOf(0) }

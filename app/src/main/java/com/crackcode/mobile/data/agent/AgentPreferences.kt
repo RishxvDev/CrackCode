@@ -20,6 +20,16 @@ class AgentPreferences(context: Context) {
     /** The first-launch agent choice was made. */
     val hasChosen: StateFlow<Boolean> = _hasChosen.asStateFlow()
 
+    private val _setupDone = MutableStateFlow(prefs.getBoolean(KEY_SETUP_DONE, false))
+    /** Bootstrap + hidden terminal setup finished after the startup choice. */
+    val setupDone: StateFlow<Boolean> = _setupDone.asStateFlow()
+
+    /** Called only after the choice has been saved and setup has actually completed. */
+    fun markSetupDone() {
+        prefs.edit().putBoolean(KEY_SETUP_DONE, true).apply()
+        _setupDone.value = true
+    }
+
     /** Saves the agent selection (ignored when empty). */
     fun setEnabled(agents: Set<AgentKind>) {
         if (agents.isEmpty()) return
@@ -34,6 +44,7 @@ class AgentPreferences(context: Context) {
     companion object {
         private const val PREFS = "agent_prefs"
         private const val KEY_CHOSEN = "agents_chosen"
+        private const val KEY_SETUP_DONE = "setup_done"
 
         private fun key(agent: AgentKind) = "enabled_" + agent.name.lowercase()
 

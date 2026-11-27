@@ -99,6 +99,10 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     val enabledAgents: StateFlow<Set<AgentKind>> = agentPrefs.enabled
     /** The first-launch agent choice was made. */
     val hasChosenAgents: StateFlow<Boolean> = agentPrefs.hasChosen
+    /** Bootstrap + hidden terminal setup finished; the startup step closes only after this. */
+    val setupDone: StateFlow<Boolean> = agentPrefs.setupDone
+
+    fun markSetupDone() = agentPrefs.markSetupDone()
 
     private val _isApplyingAgents = MutableStateFlow(false)
     /** The bridge is restarting for a new agent selection. */
