@@ -160,8 +160,8 @@ fun AppPermissionsDialog(
 
     val textPrimary = if (isDark) TextPrimaryDark else TextPrimaryLight
     val textSecondary = if (isDark) TextSecondaryDark else TextSecondaryLight
-    val allowedCount = listOf(hasNotification, hasStorage, hasAudio).count { it }
-    val progress by animateFloatAsState(allowedCount / 3f, label = "permProgress")
+    val allowedCount = listOf(hasNotification, hasStorage).count { it }
+    val progress by animateFloatAsState(allowedCount / 2f, label = "permProgress")
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -236,7 +236,7 @@ fun AppPermissionsDialog(
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = "$allowedCount of 3 allowed",
+                        text = "$allowedCount of 2 allowed",
                         fontSize = 12.5.sp,
                         color = textSecondary
                     )

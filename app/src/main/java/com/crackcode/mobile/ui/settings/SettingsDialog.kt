@@ -507,6 +507,7 @@ fun SettingsDialog(
                         onNavigate = { currentSection = it }
                     )
 
+                    SettingsSection.THEMES -> Unit // theme switching removed; row is hidden
                     SettingsSection.APPEARANCE -> AppearanceSubScreen(
                         chatFontScale = chatFontScale,
                         floatingSwitcherOrientation = floatingSwitcherOrientation,
