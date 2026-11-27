@@ -327,7 +327,6 @@ object LocalServerManager {
         if (AuthPreferences.currentRemoteMode) {
             // The server is another machine managed over SSH: no local bootstrap needed
             if (hasInitialAutoStarted) return
-            if (!com.crackcode.mobile.data.agent.AgentPreferences.hasChosenSync(context)) return
             hasInitialAutoStarted = true
             com.crackcode.mobile.data.remote.RemoteServerManager.autoStart(context)
             return
@@ -347,11 +346,7 @@ object LocalServerManager {
             Log.d(TAG, "[ServerManager] No server executable found in home directory, skipping autoStartOnAppLaunch")
             return
         }
-        if (!com.crackcode.mobile.data.agent.AgentPreferences.hasChosenSync(context)) {
-            // the server starts with the agent flags: wait for the first-launch agent choice
-            Log.d(TAG, "[ServerManager] Agents not chosen yet, deferring auto-start until the choice is made")
-            return
-        }
+        // Agent flags come from the saved defaults; no first-launch choice is needed to start the server.
         hasInitialAutoStarted = true
         startServer(context, forceRestart = false)
     }

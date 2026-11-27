@@ -116,9 +116,7 @@ fun ChatHistoryDrawer(
     onTerminateInstance: (String) -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
     onOpenSettings: () -> Unit,
-    /** Opens the floating theme picker (a palette button next to Settings; hidden when null). */
-    onOpenThemes: (() -> Unit)? = null,
-    /** Connect to PC's button next to Themes (only while the feature is on; null hides it). */
+    /** Connect to PC's button next to Settings (only while the feature is on; null hides it). */
     pcButton: (@Composable () -> Unit)? = null,
     onLogin: () -> Unit = {},
     onLogout: () -> Unit = {},
@@ -1302,23 +1300,6 @@ fun ChatHistoryDrawer(
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                         modifier = Modifier.padding(8.dp).size(20.dp)
                     )
-                }
-
-                // Themes: a floating picker over the sidebar and chat, to try themes and see them live
-                if (onOpenThemes != null) {
-                    Surface(
-                        onClick = onOpenThemes,
-                        shape = RoundedCornerShape(8.dp),
-                        color = Color.Transparent,
-                        modifier = Modifier.padding(end = 4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Palette,
-                            contentDescription = "Themes",
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                            modifier = Modifier.padding(8.dp).size(20.dp)
-                        )
-                    }
                 }
 
                 // Mini Apps: the grid of on-device apps in ~/mini-apps

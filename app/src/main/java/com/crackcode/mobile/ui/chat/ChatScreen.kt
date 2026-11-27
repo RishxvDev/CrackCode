@@ -293,8 +293,6 @@ fun ChatScreen(
     val sshUser by viewModel.termuxSshUser.collectAsState(initial = "root")
     val sshPass by viewModel.termuxSshPass.collectAsState(initial = "root")
     val themeMode by viewModel.themeMode.collectAsState(initial = viewModel.authPreferences.getThemeModeSync())
-    // the floating theme picker opened from the sidebar's palette button
-    var showThemePanel by remember { mutableStateOf(false) }
     // Connect to PC: the side bar's PC button and its sheet
     val pcContext = LocalContext.current
     LaunchedEffect(Unit) { com.crackcode.mobile.data.pc.PcConnect.init(pcContext) }
@@ -1465,8 +1463,6 @@ fun ChatScreen(
                     showSettingsDialog = true
                     scope.launch { drawerState.close() }
                 },
-                // the sidebar stays open: the picker floats over it so the new look shows on the sidebar and the chat
-                onOpenThemes = { showThemePanel = !showThemePanel },
                 pcButton = if (pcConnectEnabled) ({ com.crackcode.mobile.ui.pc.PcDrawerButton(onClick = { showPcSheet = true }) }) else null,
                 agyEnabled =com.crackcode.mobile.domain.model.AgentKind.AGY in enabledAgents,
                 accountsButton = {
@@ -2257,10 +2253,10 @@ fun ChatScreen(
                                     }
                                 },
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.surface,
+                            color = Color.Black,
                             tonalElevation = 6.dp,
                             shadowElevation = 6.dp,
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
+                            border = BorderStroke(1.dp, Color.Black)
                         ) {
                             Box(
                                 contentAlignment = Alignment.Center,
@@ -2269,7 +2265,7 @@ fun ChatScreen(
                                 Icon(
                                     imageVector = if (showUpArrow) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                                     contentDescription = if (showUpArrow) "Jump to Top" else "Jump to Bottom",
-                                    tint = ClaudeTerracotta,
+                                    tint = Color.White,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -3816,15 +3812,6 @@ fun ChatScreen(
         )
     }
 
-    // Floating theme picker: above the sidebar and the chat, touches outside it still reach them
-    if (showThemePanel) {
-        com.crackcode.mobile.ui.settings.ThemeQuickPanel(
-            themeMode = themeMode,
-            onSetThemeMode = { viewModel.setThemeMode(it) },
-            onClose = { showThemePanel = false },
-            modifier = Modifier.align(Alignment.BottomCenter).zIndex(9999f)
-        )
-    }
     } // End of Box
     } // End of CompositionLocalProvider
 } // End of fun ChatScreen

@@ -73,8 +73,8 @@ class MainActivity : ComponentActivity() {
 
         if (com.crackcode.mobile.ui.components.PermissionUtils.hasNotificationPermission(this)) {
             com.crackcode.mobile.data.service.CrackCodeService.start(this)
-            com.crackcode.mobile.data.local.LocalServerManager.autoStartOnAppLaunch(this)
         }
+        com.crackcode.mobile.data.local.LocalServerManager.autoStartOnAppLaunch(this)
         com.crackcode.mobile.data.daemon.IdeDaemonManager.init(this)
         com.crackcode.mobile.ui.browser.BrowserSessionManager.instance.init(this)
         com.crackcode.mobile.data.local.LocalTerminalBridge.instance.init(this)
@@ -734,8 +734,8 @@ class MainActivity : ComponentActivity() {
         instanceRef = java.lang.ref.WeakReference(this)
         if (com.crackcode.mobile.ui.components.PermissionUtils.hasNotificationPermission(this)) {
             com.crackcode.mobile.data.service.CrackCodeService.start(this)
-            com.crackcode.mobile.data.local.LocalServerManager.autoStartOnAppLaunch(this)
         }
+        com.crackcode.mobile.data.local.LocalServerManager.autoStartOnAppLaunch(this)
     }
 
     override fun onNewIntent(intent: Intent) {

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -87,19 +87,25 @@ fun PikuChatHeader(
                 .padding(start = 8.dp, end = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .clickable { if (showBack) onBack() else onMenu() },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    imageVector = if (showBack) Icons.AutoMirrored.Filled.ArrowBack else Icons.Filled.Menu,
-                    contentDescription = if (showBack) "Back" else "Open sessions",
-                    tint = PikuUi.Ink,
-                    modifier = Modifier.size(26.dp),
-                )
+            if (showBack) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.Black)
+                        .clickable { onBack() },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White,
+                        modifier = Modifier.size(26.dp),
+                    )
+                }
+            } else {
+                // the three-line sessions button is hidden; the drawer still opens by swiping from the edge
+                Spacer(Modifier.size(40.dp))
             }
             Text(
                 text = title.uppercase(),

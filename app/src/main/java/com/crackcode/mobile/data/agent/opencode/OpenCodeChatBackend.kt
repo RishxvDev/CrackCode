@@ -133,6 +133,8 @@ class OpenCodeChatBackend(
     private val _cliJob = MutableStateFlow<OpenCodeCliJob?>(null)
     /** The last install / update of OpenCode started from the app. */
     val cliJob: StateFlow<OpenCodeCliJob?> = _cliJob.asStateFlow()
+    /** One automatic CLI install per app session; the app's bundled bootstrap has no OpenCode CLI. */
+    private var cliInstallAttempted = false
 
     private val _connectedProviders = MutableStateFlow<List<String>>(emptyList())
     /** Names of the built-in providers that have a saved key (OpenCode's own free models need none). */
@@ -312,6 +314,11 @@ class OpenCodeChatBackend(
             .onSuccess { st ->
                 _status.value = st
                 _state.value = if (st.installed) OpenCodeState.READY else OpenCodeState.NOT_INSTALLED
+                if (st.installed) cliInstallAttempted = false
+                else if (!cliInstallAttempted) {
+                    cliInstallAttempted = true
+                    startCliJob("install")
+                }
             }
             .onFailure { e ->
                 _state.value = when {

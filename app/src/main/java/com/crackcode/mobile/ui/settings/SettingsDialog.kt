@@ -507,13 +507,6 @@ fun SettingsDialog(
                         onNavigate = { currentSection = it }
                     )
 
-                    SettingsSection.THEMES -> ThemesSubScreen(
-                        themeMode = themeMode,
-                        cardBg = cardBg,
-                        cardBorder = cardBorder,
-                        onSetThemeMode = onSetThemeMode
-                    )
-
                     SettingsSection.APPEARANCE -> AppearanceSubScreen(
                         chatFontScale = chatFontScale,
                         floatingSwitcherOrientation = floatingSwitcherOrientation,
@@ -939,7 +932,6 @@ private fun MainSettingsMenu(
         cardBg = cardBg,
         groups = listOf(
             listOf(
-                row(SettingsSection.THEMES, Icons.Outlined.Palette, c.accentPink, com.crackcode.mobile.theme.ThemeManager.current.name),
                 row(SettingsSection.APPEARANCE, Icons.Outlined.Tune, c.accentAlt),
                 stemRow,
                 // where agents run (Termux, Ubuntu chroot or a server), and whether the app reaches it

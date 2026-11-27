@@ -1544,7 +1544,7 @@ object LocalEnvironmentManager {
             )
             log("Verification output: ${testRes.output.trim()}")
 
-            if (!testRes.output.contains("GEMINI_LOCAL_TOOLS_OK")) {
+            if (testRes.exitCode != 0 || !testRes.output.contains("GEMINI_LOCAL_TOOLS_OK")) {
                 val errorMsg = "Shell verification test failed: ${testRes.output}"
                 log("❌ $errorMsg")
                 cleanupFailedInstall(appContext, authPreferences)
@@ -1579,11 +1579,7 @@ object LocalEnvironmentManager {
             )
             updateInstallNotification(appContext, "Installation Complete", "Termux Linux environment is verified and ready!", 100, ongoing = false, force = true)
             log("✅ Local environment ready and verified! Total space: ${getFormattedDiskSpace(appContext)}")
-            if (wasChroot && com.crackcode.mobile.data.agent.AgentPreferences.hasChosenSync(appContext)) {
-                LocalServerManager.startServer(appContext, forceRestart = true)
-            } else {
-                LocalTerminalManager.autoLaunchServerIfReady(appContext)
-            }
+            LocalServerManager.startServer(appContext, forceRestart = true)
             return@withContext true
 
         } catch (e: Exception) {

@@ -71,12 +71,6 @@ object PermissionUtils {
         }
     }
 
-    fun hasAudioPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.RECORD_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-    }
 }
 
 @Composable
@@ -89,7 +83,6 @@ fun AppPermissionsDialog(
 
     var hasNotification by remember { mutableStateOf(PermissionUtils.hasNotificationPermission(context)) }
     var hasStorage by remember { mutableStateOf(PermissionUtils.hasStoragePermission(context)) }
-    var hasAudio by remember { mutableStateOf(PermissionUtils.hasAudioPermission(context)) }
 
     BackHandler(enabled = hasNotification) {
         onDismissOrCompleted()
@@ -101,7 +94,6 @@ fun AppPermissionsDialog(
             if (event == Lifecycle.Event.ON_RESUME) {
                 hasNotification = PermissionUtils.hasNotificationPermission(context)
                 hasStorage = PermissionUtils.hasStoragePermission(context)
-                hasAudio = PermissionUtils.hasAudioPermission(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -132,12 +124,6 @@ fun AppPermissionsDialog(
                 } catch (_: Exception) {}
             }
         }
-    }
-
-    val audioLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        hasAudio = granted || PermissionUtils.hasAudioPermission(context)
     }
 
     val storageLegacyLauncher = rememberLauncherForActivityResult(
@@ -303,19 +289,6 @@ fun AppPermissionsDialog(
                             required = false,
                             isGranted = hasStorage,
                             onAllow = { requestStorage() }
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(start = 68.dp),
-                            color = AppColors.border.copy(alpha = if (isDark) 0.25f else 0.6f)
-                        )
-                        PermissionRow(
-                            icon = Icons.Outlined.Mic,
-                            accent = GeminiPurple,
-                            title = "Microphone",
-                            subtitle = "Dictate messages and voice notes",
-                            required = false,
-                            isGranted = hasAudio,
-                            onAllow = { audioLauncher.launch(Manifest.permission.RECORD_AUDIO) }
                         )
                     }
                 }
