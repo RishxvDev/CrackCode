@@ -342,11 +342,15 @@ object LocalServerManager {
             Log.d(TAG, "[ServerManager] Bootstrap not installed yet, deferring auto-start until installation completes")
             return
         }
+        if (!com.crackcode.mobile.data.agent.AgentPreferences.hasChosenSync(context)) {
+            Log.d(TAG, "[ServerManager] First-launch agent choice pending, deferring auto-start until setup is confirmed")
+            return
+        }
         if (!hasServerScript(context)) {
             Log.d(TAG, "[ServerManager] No server executable found in home directory, skipping autoStartOnAppLaunch")
             return
         }
-        // Agent flags come from the saved defaults; no first-launch choice is needed to start the server.
+        // The first-launch choice has been saved; start the bridge with the selected agents.
         hasInitialAutoStarted = true
         startServer(context, forceRestart = false)
     }

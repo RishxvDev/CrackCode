@@ -114,20 +114,22 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun applyAgents(agents: Set<AgentKind>) {
         if (agents.isEmpty()) return
+        // CrackCode and OpenCode always run together: the startup choice can only add to them.
+        val effective = agents + setOf(AgentKind.AGY, AgentKind.OPENCODE)
         val before = enabledAgents.value
         val firstChoice = !hasChosenAgents.value
-        agentPrefs.setEnabled(agents)
-        if (newChatAgent.value !in agents) claudePrefs.setNewChatAgent(if (AgentKind.AGY in agents) AgentKind.AGY else agents.first())
-        if (AgentKind.CLAUDE in agents) {
+        agentPrefs.setEnabled(effective)
+        if (newChatAgent.value !in effective) claudePrefs.setNewChatAgent(AgentKind.AGY)
+        if (AgentKind.CLAUDE in effective) {
             claudeBackend.start()
             claudeAccount.refreshStatus()
         } else {
             claudeBackend.stop()
         }
-        if (AgentKind.OPENCODE in agents) openCodeBackend.start() else openCodeBackend.stop()
-        if (AgentKind.CODEX in agents) codexBackend.start() else codexBackend.stop()
+        if (AgentKind.OPENCODE in effective) openCodeBackend.start() else openCodeBackend.stop()
+        if (AgentKind.CODEX in effective) codexBackend.start() else codexBackend.stop()
         val cur = store.currentConversation.value
-        if (cur == null || cur.agent !in agents) startNewChat()
+        if (cur == null || cur.agent !in effective) startNewChat()
         if (firstChoice) {
             // first launch: the server waited for this choice and now starts with it. If something started it already
             // (with the default agents, i.e. Antigravity only), restart it so the chosen agents run.
@@ -140,7 +142,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             } else {
                 server.autoStartOnAppLaunch(getApplication())
             }
-        } else if (before != agents) {
+        } else if (before != effective) {
             // stop the server completely, then restart the app: it starts the server again with the new agents
             viewModelScope.launch {
                 _isApplyingAgents.value = true

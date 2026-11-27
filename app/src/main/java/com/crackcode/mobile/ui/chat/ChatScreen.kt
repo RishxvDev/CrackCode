@@ -3071,8 +3071,8 @@ fun ChatScreen(
     // asked once the local environment (rootfs) is installed, before the local server starts
     // First-launch setup, one full-screen step at a time: the agents, then the terminal icon (that one waits for the
     // agent choice so the two never show at once). The steps are numbered while both are still to do.
-    val agentStepPending = com.crackcode.mobile.UiToggles.AGENT_CHOICE_ONBOARDING && !hasChosenAgents &&
-        (isLocalToolsInstalled || com.crackcode.mobile.data.local.LocalEnvironmentManager.isInstalled(context) || AuthPreferences.currentRemoteMode)
+    // First frame: choose the agents; the setup (bootstrap + CLI tools) starts only after this choice.
+    val agentStepPending = com.crackcode.mobile.UiToggles.AGENT_CHOICE_ONBOARDING && !hasChosenAgents
     val launcherStepPending = com.crackcode.mobile.UiToggles.TERMINAL_LAUNCHER_ONBOARDING &&
         !hasSeenTerminalLauncherOnboarding && !isInFloatingWindow
     var setupSteps by remember { mutableStateOf(0) }

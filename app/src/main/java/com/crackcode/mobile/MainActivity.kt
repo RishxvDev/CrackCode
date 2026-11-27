@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import com.crackcode.mobile.theme.GeminiTheme
 import com.crackcode.mobile.ui.chat.ChatScreen
@@ -70,16 +71,19 @@ class MainActivity : ComponentActivity() {
     private fun ensureLocalEnvironmentInstalled() {
         if (!autoBootstrapStarted.compareAndSet(false, true)) return
         val app = applicationContext
-        if (com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode ||
-            com.crackcode.mobile.data.local.LocalEnvironmentManager.isInstalled(app) ||
-            !com.crackcode.mobile.data.local.LocalEnvironmentManager.hasBundledBootstrap(app)
-        ) return
-
-        val marker = java.io.File(app.filesDir, "auto_bootstrap_started")
-        if (marker.exists()) return
-        runCatching { marker.writeText("1") }
-
         lifecycleScope.launch(Dispatchers.IO) {
+            // Setup begins only after the first-launch CrackCode / OpenCode choice is saved.
+            // Nothing is installed or started before that selection.
+            chatViewModel.hasChosenAgents.first { it }
+            if (com.crackcode.mobile.data.preferences.AuthPreferences.currentRemoteMode ||
+                com.crackcode.mobile.data.local.LocalEnvironmentManager.isInstalled(app) ||
+                !com.crackcode.mobile.data.local.LocalEnvironmentManager.hasBundledBootstrap(app)
+            ) return@launch
+
+            val marker = java.io.File(app.filesDir, "auto_bootstrap_started")
+            if (marker.exists()) return@launch
+            runCatching { marker.writeText("1") }
+
             val source = com.crackcode.mobile.data.local.LocalEnvironmentManager.preferredBootstrapSource(
                 app,
                 com.crackcode.mobile.data.local.BootstrapSource.Bundled

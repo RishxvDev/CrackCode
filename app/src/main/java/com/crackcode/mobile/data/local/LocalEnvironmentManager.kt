@@ -1583,7 +1583,10 @@ object LocalEnvironmentManager {
             )
             updateInstallNotification(appContext, "Installation Complete", "Termux Linux environment is verified and ready!", 100, ongoing = false, force = true)
             log("✅ Local environment ready and verified! Total space: ${getFormattedDiskSpace(appContext)}")
-            LocalServerManager.startServer(appContext, forceRestart = true)
+            // Never bring the bridge up before the first-launch CrackCode / OpenCode choice.
+            if (com.crackcode.mobile.data.agent.AgentPreferences.hasChosenSync(appContext)) {
+                LocalServerManager.startServer(appContext, forceRestart = true)
+            }
             return@withContext true
 
         } catch (e: Exception) {

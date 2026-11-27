@@ -16,7 +16,7 @@ object UiToggles {
 
     /** STEP 1: first-run install / agent-pick / terminal-icon onboarding. Code kept, UI hidden. */
     const val FIRST_RUN_INSTALLER = false
-    const val AGENT_CHOICE_ONBOARDING = false
+    const val AGENT_CHOICE_ONBOARDING = true
     const val TERMINAL_LAUNCHER_ONBOARDING = false
 
     /** STEP 1: UI customisation hidden; themes stay System / Light / Dark. */
