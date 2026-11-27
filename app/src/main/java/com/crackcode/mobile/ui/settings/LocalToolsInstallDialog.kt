@@ -169,9 +169,9 @@ fun LocalToolsInstallDialog(
 
                 Text(
                     text = when (installerState) {
-                        is LocalInstallerState.Success -> "Termux-compatible shell, coreutils & toolchain are now active."
+                        is LocalInstallerState.Success -> "terminal-compatible shell, coreutils & toolchain are now active."
                         is LocalInstallerState.Error -> "Failed to configure local environment. You can retry below."
-                        is LocalInstallerState.Idle -> "Select how you would like to download and install the Termux rootfs:"
+                        is LocalInstallerState.Idle -> "Select how you would like to download and install the terminal rootfs:"
                         else -> "Downloading and unpacking native Linux toolchain inside your app sandbox."
                     },
                     fontSize = 12.5.sp,
@@ -500,7 +500,7 @@ fun LocalToolsInstallDialog(
                                             }
                                         }
                                         Text(
-                                            text = "Downloads clean official Termux base bootstrap (${LocalEnvironmentManager.getBootstrapArch()}) with essential coreutils",
+                                            text = "Downloads clean official terminal base bootstrap (${LocalEnvironmentManager.getBootstrapArch()}) with essential coreutils",
                                             fontSize = 11.5.sp,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -537,7 +537,7 @@ fun LocalToolsInstallDialog(
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Text(
-                                text = "Found Termux Bootstrap Package",
+                                text = "Found terminal Bootstrap Package",
                                 fontSize = 13.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -958,7 +958,7 @@ fun LocalToolsInstallDialog(
                                 Text(
                                     text = when (selectedSourceType) {
                                         0 -> "Download & Install CrackCode (~350MB)"
-                                        1 -> "Download Base Termux (~33MB)"
+                                        1 -> "Download Base terminal (~33MB)"
                                         else -> if (selectedFileUri != null) "Install Local ZIP" else "Choose ZIP"
                                     },
                                     color = Color.White,

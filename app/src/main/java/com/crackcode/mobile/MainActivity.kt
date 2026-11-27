@@ -6,17 +6,25 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,7 +89,10 @@ class MainActivity : ComponentActivity() {
                 chatViewModel.authPreferences,
                 source
             )
-            if (!installed) runCatching { marker.delete() }
+            if (installed) {
+                // Hidden terminal: install the CLI tools without any UI option or accept prompt.
+                com.crackcode.mobile.data.local.LocalEnvironmentManager.installCliTools(app)
+            } else runCatching { marker.delete() }
         }
     }
 
@@ -754,6 +765,27 @@ class MainActivity : ComponentActivity() {
                                         updateInfo = updateInfo,
                                         onDismiss = { pendingUpdateInfo = null }
                                     )
+                                }
+
+                                // Hidden terminal: compact log screen, visible only while the CLI tools install.
+                                // No option, no accept prompt - it just reports progress and disappears.
+                                val cliInstalling by com.crackcode.mobile.data.local.LocalEnvironmentManager.cliInstalling.collectAsState()
+                                if (cliInstalling) {
+                                    val cliLogLines by com.crackcode.mobile.data.local.LocalEnvironmentManager.installerLogs.collectAsState()
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth().padding(bottom = 96.dp),
+                                        contentAlignment = Alignment.BottomCenter
+                                    ) {
+                                        Text(
+                                            text = cliLogLines.takeLast(7).joinToString("\n"),
+                                            color = Color(0xFF00E676),
+                                            fontSize = 11.sp,
+                                            lineHeight = 14.sp,
+                                            modifier = Modifier
+                                                .background(Color(0xD9000000))
+                                                .padding(10.dp)
+                                        )
+                                    }
                                 }
                             }
                         }

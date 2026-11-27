@@ -113,6 +113,10 @@ object LocalEnvironmentManager {
     private val _installerLogs = MutableStateFlow<List<String>>(emptyList())
     val installerLogs: StateFlow<List<String>> = _installerLogs.asStateFlow()
 
+    /** True while the hidden terminal is installing the npm CLI tools (drives the compact log screen). */
+    private val _cliInstalling = MutableStateFlow(false)
+    val cliInstalling: StateFlow<Boolean> = _cliInstalling.asStateFlow()
+
     private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private fun setupInstallNotificationChannel(context: Context) {
@@ -2342,6 +2346,50 @@ All files created here persist inside the application.
                 output = "Execution failed: ${e.localizedMessage ?: e.message}",
                 durationMs = durationMs
             )
+        }
+    }
+
+    /**
+     * Installs the two command-line tools in the hidden terminal (no user-facing option, no accept prompt):
+     * the CrackCode chat CLI and OpenCode. Every output line goes to [installerLogs] so the compact log
+     * screen can show progress. This is additive: the bridge stays up regardless of the npm result.
+     */
+    suspend fun installCliTools(context: Context): Boolean = withContext(Dispatchers.IO) {
+        _cliInstalling.value = true
+        log("terminal: preparing tools...")
+        try {
+            val app = context.applicationContext
+            val nodeCheck = executeCommand(
+                "command -v npm >/dev/null 2>&1 || pkg install -y nodejs",
+                context = app,
+                timeoutSeconds = 900,
+                onOutputLine = { log(it) }
+            )
+            if (nodeCheck.exitCode != 0) {
+                log("terminal: nodejs/npm could not be installed")
+                return@withContext false
+            }
+            var allOk = true
+            for (command in listOf("npm install -g crackcode", "npm install -g opencode-ai")) {
+                log("$ $command")
+                val result = executeCommand(
+                    command,
+                    context = app,
+                    timeoutSeconds = 900,
+                    onOutputLine = { log(it) }
+                )
+                if (result.exitCode == 0) log("terminal: OK - $command")
+                else {
+                    log("terminal: FAILED - $command")
+                    allOk = false
+                }
+            }
+            allOk
+        } catch (e: Exception) {
+            log("terminal: ${e.message ?: "install error"}")
+            false
+        } finally {
+            _cliInstalling.value = false
         }
     }
 

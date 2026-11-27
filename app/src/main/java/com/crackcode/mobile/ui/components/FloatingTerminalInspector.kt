@@ -109,7 +109,7 @@ fun FloatingTerminalInspector(
                 val hudLabel = when {
                     runningCommandsCount > 0 -> "$runningCommandsCount running"
                     tabs.size > 1 -> "${tabs.size} sessions"
-                    else -> "Termux"
+                    else -> "terminal"
                 }
 
                 Text(
@@ -223,7 +223,7 @@ private fun TerminalInspectorDialogContent(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Termux SSH Terminal",
+                    text = "terminal SSH",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White

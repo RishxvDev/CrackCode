@@ -486,7 +486,7 @@ private fun SourcePicker(
             icon = Icons.Outlined.Bolt,
             title = "Minimal",
             tag = "~33 MB",
-            description = "Clean Termux base for ${LocalEnvironmentManager.getBootstrapArch()}: core utilities and the package manager.",
+            description = "Clean terminal base for ${LocalEnvironmentManager.getBootstrapArch()}: core utilities and the package manager.",
             selected = selected == 1,
             onClick = { onSelect(1) }
         )
